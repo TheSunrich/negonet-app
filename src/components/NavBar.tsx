@@ -1,6 +1,7 @@
 import React from 'react'
 import '../styles/principal.css';
 import logoimg from '../assets/imgs/negonet logo.png';
+import { Link } from 'react-router-dom';
 
 const NavBar = () => {
     return (
@@ -14,16 +15,16 @@ const NavBar = () => {
                     <div className="collapse navbar-collapse" id="navbarSupportedContent">
                         <ul className="navbar-nav me-auto mb-2 mb-lg-0">
                             <li className="nav-item">
-                                <a className="nav-link active" aria-current="page" href="#">NegoNet</a>
+                                <Link to="/" relative="path" className="nav-link">NegoNet</Link>
                             </li>
                             <li className="nav-item">
-                                <a className="nav-link" href="#">Página Principal</a>
+                                <Link to="/login" relative="path" className="nav-link">Página Principa</Link>
                             </li>
                             <li className="nav-item">
                                 <a className="nav-link" href="#">Agenda una Cita</a>
                             </li>
                             <li className="nav-item">
-                                <a className="nav-link" href="#">Iniciar Sesión</a>
+                                <Link to="/login" relative="path" className="nav-link">Iniciar Sesión</Link>
                             </li>
                             <li className="nav-item">
                                 <a className="nav-link" href="#">Dar Servicio</a>

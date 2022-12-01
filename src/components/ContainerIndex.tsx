@@ -30,7 +30,7 @@ const ContainerIndex = () => {
                                     <div className='row'>
                                         <div className='col'>
                                             <select className="form-select notrounded" aria-label="Default select example">
-                                                <option selected>Seleccionar Categoría</option>
+                                                <option>Seleccionar Categoría</option>
                                                 <option value="1">One</option>
                                                 <option value="2">Two</option>
                                                 <option value="3">Three</option>
@@ -38,7 +38,7 @@ const ContainerIndex = () => {
                                         </div>
                                         <div className='col'>
                                             <select className="form-select notrounded" aria-label="Default select example">
-                                                <option selected>Seleccionar Especialidad</option>
+                                                <option>Seleccionar Especialidad</option>
                                                 <option value="1">One</option>
                                                 <option value="2">Two</option>
                                                 <option value="3">Three</option>
