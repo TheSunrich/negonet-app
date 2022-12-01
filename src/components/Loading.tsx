@@ -25,7 +25,7 @@ const Loading = () => {
             console.log(user.displayName);
         } else {
             setCurrentSate(4);
-            console.log("No hay nadie autenticado...");
+            return <Navigate to="/login"/>
         }
     }
     if(state == 3){
