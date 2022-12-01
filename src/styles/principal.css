@@ -99,6 +99,9 @@
 .blankspace50{
     height: 50px;
 }
-.height420{
-    height: 420px !important;
+.height480{
+    height: 480px !important;
+}
+.loadpage{
+    height: 480px !important;
 }

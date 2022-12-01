@@ -17,9 +17,7 @@ export interface User {
 export interface Address {
     city?: string;
     state?: string;
-    country?: string;
     zip?: string;
-    street?: string;
-    number?: string;
-    suburb?: string;
+    address1?: string;
+    address2?: string;
 }
