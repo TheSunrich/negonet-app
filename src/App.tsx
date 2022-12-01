@@ -10,9 +10,8 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import Footer from './components/Footer';
 import 'animate.css';
 import Registro from './public/Registro';
+import Loading from './components/Loading';
 function App() {
-  const [count, setCount] = useState(0)
-
   return (
     <>
       <BrowserRouter>
@@ -21,6 +20,7 @@ function App() {
           <Route path='/' element={<ContainerIndex />} />
           <Route path='/login' element={<Login />} />
           <Route path='/register' element={<Registro />} />
+          <Route path='/loading' element={<Loading />} />
         </Routes>
         <Footer/>
       </BrowserRouter>

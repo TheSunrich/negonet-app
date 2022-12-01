@@ -2,8 +2,14 @@ import React, { useState, useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate, useParams } from 'react-router-dom';
 import { User } from '../models/UserModel';
+import { auth } from '../utils/firebase';
+import { GoogleAuthProvider, onAuthStateChanged, signInWithPopup, signInWithRedirect } from 'firebase/auth';
+
 function Registro() {
-    let userData: User
+    let userData: User = {
+        email: "",
+        firstName: ""
+    }
     const [user, setUser] = useState(userData);
     console.log(user);
     const handleChange = e => {
@@ -11,6 +17,23 @@ function Registro() {
             ...user,
             [e.target.name]: e.target.value
         })
+    }
+    const [textoregistro, setTexto] = useState("Regístrate, es gratis");
+    useEffect(() => {
+        onAuthStateChanged(auth, handleUserStateChanged);
+    }, []);
+    function handleUserStateChanged(u) {
+        if (u) {
+            console.log(u);
+            setUser({
+                email: u.email,
+                firstName: u.displayName
+            })
+            setTexto("Debes completar el registro para continuar")            
+
+        } else {
+            console.log("No hay nadie autenticado...");
+        }
     }
     const handleSubmit = (e) => {
         user.isService = true;
@@ -20,11 +43,11 @@ function Registro() {
         <>
             <div onSubmit={handleSubmit} className='row container-fluid justify-content-center text-dark'>
                 <div className='row col-md-6 mt-4 mb-5'>
-                    <h4>Regístrate, es gratis</h4>
+                    <h4>{textoregistro}</h4>
                     <form className="row g-3 border-top">
                         <div className="col-md-6">
                             <label className="form-label">Nombre <b className='obligatorio'>*</b></label>
-                            <input name='firstName' onChange={handleChange} type="text" className="form-control" />
+                            <input name='firstName' onChange={handleChange} type="text" className="form-control" value={user.firstName} />
                         </div>
                         <div className="col-md-6">
                             <label className="form-label">Apellidos <b className='obligatorio'>*</b></label>
@@ -44,7 +67,7 @@ function Registro() {
                         </div>
                         <div className="col-md-6">
                             <label className="form-label">Correo <b className='obligatorio'>*</b></label>
-                            <input name='email' onChange={handleChange} type="text" className="form-control" placeholder="Apartment, studio, or floor" />
+                            <input name='email' onChange={handleChange} type="text" className="form-control" placeholder="Apartment, studio, or floor" value={user.email} />
                         </div>
                         <div className="col-md-6">
                             <label className="form-label">Contraseña <b className='obligatorio'>*</b></label>

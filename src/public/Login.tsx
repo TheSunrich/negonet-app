@@ -1,9 +1,57 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import logoimg from '../assets/imgs/servicios.png';
 import googlelogo from '../assets/imgs/google.png';
-import { Link } from 'react-router-dom';
+import { Link, useLocation, useParams, Navigate } from 'react-router-dom';
+import { auth } from '../utils/firebase';
+import { GoogleAuthProvider, onAuthStateChanged, signInWithPopup, signInWithRedirect } from 'firebase/auth';
 
 function Login() {
+
+    const [currentUser, setCurrentUser] = useState(null);
+    /*
+    0: inicializado
+    1: loading
+    2: login completo
+    3: login pero sin registro
+    4: no hay nadie logueado
+    */
+    const [state, setCurrentSate] = useState(0);
+
+    useEffect(() => {
+        setCurrentSate(1);
+        onAuthStateChanged(auth, handleUserStateChanged);
+    }, []);
+
+    function handleUserStateChanged(user){
+        if(user){
+            setCurrentSate(3);
+            console.log(user.displayName);
+        }else{
+            setCurrentSate(4);
+            console.log("No hay nadie autenticado...");
+        }
+    }
+    async function handleOnClick() {
+        const googleProvider = new GoogleAuthProvider();
+        await signInWithGoogle(googleProvider);
+
+        async function signInWithGoogle(googleProvider) {
+            try {
+                const res = await signInWithRedirect(auth, googleProvider);
+                console.log(res)
+            } catch (error) {
+                console.error(error);
+            }
+        }
+    }
+
+    if(state == 1){
+        return <Navigate to="/loading"/>
+    }
+    if(state == 3){
+        return <Navigate to="/register"/>
+    }
+
     return (
         <>
             <div className='row container-fluid justify-content-center text-dark logincontainer'>
@@ -36,7 +84,7 @@ function Login() {
                                 Regístrate
                             </Link>
                             <div id="emailHelp" className="form-text text-center textopregunta mt-3s">o</div>
-                            <button className='btn btn-light'>
+                            <button type='button' onClick={handleOnClick} className='btn btn-light'>
                                 <img src={googlelogo} width="20"></img> Ingresa con Google
                             </button>
                         </div>

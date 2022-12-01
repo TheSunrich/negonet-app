@@ -1,7 +1,7 @@
 import { initializeApp } from "firebase/app";
-import { getFirestore } from "firebase/firestore";
+import { getFirestore, collection, addDoc, getDocs, doc, getDoc, query, where, setDoc, deleteDoc } from "firebase/firestore";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
-
+import { getStorage, ref, uploadBytes, getDownloadURL, getBytes } from 'firebase/storage';
 const firebaseConfig = {
     apiKey: "AIzaSyAD64vbbFCLso2nennhePArHrvykiZ8GXo",
     authDomain: "negonet-1fb9c.firebaseapp.com",
@@ -15,5 +15,5 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 const auth = getAuth(app);
-
-export { db, auth };
+const storage = getFirestore(app);
+export { db, auth, app };
