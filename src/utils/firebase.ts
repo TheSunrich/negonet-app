@@ -38,3 +38,22 @@ export async function existsUser(email){
     console.log(users)
     return users.length > 0 ? users[0].uid : null;
 }
+
+export async function registerNewUser(user){
+    try {
+        const collectionRef = collection(db, 'user');
+        const docRef = doc(collectionRef, user.uid);
+        await setDoc(docRef, user);
+    } catch (error) {
+    }
+}
+
+export async function updateUser(user) {
+    try {
+        const collectionRef = collection(db, 'user');
+        const docRef = doc(collectionRef, user.uid);
+        await setDoc(docRef, user);
+    } catch (error) {
+        
+    }
+}

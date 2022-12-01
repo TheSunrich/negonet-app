@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { auth, userExists } from '../utils/firebase';
+import { auth, registerNewUser, userExists } from '../utils/firebase';
 import { GoogleAuthProvider, onAuthStateChanged, signInWithPopup, signInWithRedirect } from 'firebase/auth';
 import { useNavigate } from 'react-router-dom';
 
@@ -18,6 +18,12 @@ export default function AuthProvider({
                 if (isRegistered) {
                     onUserLoggedIn(user);
                 } else {
+                    await registerNewUser({
+                        uid: user.uid,
+                        imageUrl: '',
+                        email: '',
+                        processCompleted: false
+                    });
                     onUserNotRegistered(user);
                 }
             } else {

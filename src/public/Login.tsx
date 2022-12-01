@@ -90,7 +90,6 @@ function Login() {
             </>
         )
     }
-
     return <AuthProvider
         onUserLoggedIn={handleUserLoggedIn}
         onUserNotRegistered={handleUserUserNotRegistered}

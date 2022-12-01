@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate, useParams } from 'react-router-dom';
 import { User } from '../models/UserModel';
-import { auth, existsUser } from '../utils/firebase';
+import { auth, existsUser, updateUser } from '../utils/firebase';
 import { GoogleAuthProvider, onAuthStateChanged, signInWithPopup, signInWithRedirect } from 'firebase/auth';
 import AuthProvider from '../components/AuthProvider';
 import Loading from '../components/Loading';
@@ -51,6 +51,10 @@ export default function Registro() {
             setSate(5);
         }else{
             console.log(user);
+            const tmp = {...user};
+            tmp.email = user.email;
+            tmp.processCompleted = true;
+            await updateUser(tmp);
         }
         
         console.log(user)
@@ -61,7 +65,8 @@ export default function Registro() {
     function handleUserUserNotRegistered(user) {
         setUser({
             email: user.email,
-            firstName: user.displayName
+            firstName: user.displayName,
+            uid: user.uid
         })
         //navigate("/register");
         setSate(3);
@@ -69,12 +74,14 @@ export default function Registro() {
     function handleUserNotLoggedIn(user) {
         navigate("/login");
     }
-    if (state === 3) {
+    if (state === 3 || state === 5) {
         return (
             <>
                 <div onSubmit={handleSubmit} className='row container-fluid justify-content-center text-dark'>
                     <div className='row col-md-6 mt-4 mb-5'>
                         <h4>{textoregistro}</h4>
+                        {state === 5 ?
+                        <p>El correo ya existe</p>: ''}
                         <form className="row g-3 border-top">
                             <div className="col-md-6">
                                 <label className="form-label">Nombre <b className='obligatorio'>*</b></label>
