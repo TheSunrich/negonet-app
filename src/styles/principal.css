@@ -4,6 +4,9 @@
 /*html, body{
     background-color: #16a5ba;
 }*/
+.mainbg{
+    background-color: #16a5ba;
+}
 .containerbg{
     background-image: url('../assets/imgs/medico.webp');
     background-size: 35% auto;
