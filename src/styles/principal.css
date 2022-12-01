@@ -1,0 +1,82 @@
+.bar{
+    background-color: #1392c4;
+}
+html, body{
+    background-color: #16a5ba;
+}
+.containerbg{
+    background-image: url('../assets/imgs/medico.webp');
+    background-size: 35% auto;
+    background-repeat: no-repeat;
+    background-position: left;
+    height: 450px;
+    background-color: #16a5ba;
+}
+.titulosearch{
+    color: white;
+}
+.containertext{
+    background-color: #ffffff;
+    height: 550px;
+}
+.containerwhite{
+    background-color: #16a5ba;
+    height: 600px;
+}
+.containercolor{
+    background-color: #8df8b7;
+    height: 550px;
+}
+.containerfinal{
+    margin-top: -55px;
+    background-color: #8df8b7;
+    height: 350px;
+}
+.containerfooter{
+    background-color: #53dec0;
+    height: 50px;
+}
+.imgservicio{
+    width: 450px;
+    margin: 30px;
+}
+.font{
+    font-family: 'Oswald', sans-serif;
+}
+.formbusqueda{
+    margin-top: 80px;
+}
+
+.notrounded{
+    border-radius: 0px !important;
+}
+.divinclinado{
+    -ms-transform: skewY(20deg);
+    -webkit-transform: skewY(20deg);
+    transform: skewY(4deg);
+}
+.divinclinado2{
+    -ms-transform: skewY(20deg);
+    -webkit-transform: skewY(20deg);
+    transform: skewY(-4deg);
+}
+
+.divtextinclinado{
+    -ms-transform: skewY(-4deg);
+    -webkit-transform: skewY(-4deg);
+    transform: skewY(-4deg);
+    padding-left: 10px;
+    padding-right: 10px;
+    padding-top: 70px;
+}
+
+.contents{
+    margin-top: 40px;
+}
+.imgcircle{
+    width: 50%;
+}
+
+.icontext{
+    color: #16a5ba;
+}
