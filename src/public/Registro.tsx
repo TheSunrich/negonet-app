@@ -2,9 +2,7 @@ import React, { useState, useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate, useParams } from 'react-router-dom';
 import { User } from '../models/UserModel';
-
 function Registro() {
-
     let userData: User
     const [user, setUser] = useState(userData);
     console.log(user);
@@ -72,7 +70,7 @@ function Registro() {
                             </select>
                         </div>
                         <div className="col-md-2">
-                            <label className="form-label">Código Postal <b className='obligatorio'>*</b></label>
+                            <label className="form-label">CP <b className='obligatorio'>*</b></label>
                             <input name='zip' onChange={handleChange} type="text" className="form-control" />
                         </div>
                         <div className="col-12">
