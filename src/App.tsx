@@ -7,6 +7,8 @@ import NavBar from './components/NavBar';
 import ContainerIndex from './components/ContainerIndex';
 import Login from './public/Login';
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
+import Footer from './components/Footer';
+import 'animate.css';
 function App() {
   const [count, setCount] = useState(0)
 
@@ -18,6 +20,7 @@ function App() {
           <Route path='/' element={<ContainerIndex />} />
           <Route path='/login' element={<Login />} />
         </Routes>
+        <Footer/>
       </BrowserRouter>
     </>
   )

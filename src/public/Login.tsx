@@ -5,7 +5,7 @@ import googlelogo from '../assets/imgs/google.png';
 function Login() {
     return (
         <>
-            <div className='row container-fluid justify-content-center text-dark'>
+            <div className='row container-fluid justify-content-center text-dark logincontainer'>
                 <div className='row col-md-6 mt-5'>
                     <div className='col-md-6 rounded-start text-center align-self-center'>
                         <img src={logoimg} width="350"></img>

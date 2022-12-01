@@ -18,7 +18,7 @@ const NavBar = () => {
                                 <Link to="/" relative="path" className="nav-link">NegoNet</Link>
                             </li>
                             <li className="nav-item">
-                                <Link to="/login" relative="path" className="nav-link">Página Principa</Link>
+                                <Link to="/login" relative="path" className="nav-link">Página Principal</Link>
                             </li>
                             <li className="nav-item">
                                 <a className="nav-link" href="#">Agenda una Cita</a>
@@ -28,6 +28,9 @@ const NavBar = () => {
                             </li>
                             <li className="nav-item">
                                 <a className="nav-link" href="#">Dar Servicio</a>
+                            </li>
+                            <li className="nav-item">
+                                <a className="nav-link" href="#">Contáctanos</a>
                             </li>
                         </ul>
                     </div>
