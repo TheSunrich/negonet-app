@@ -9,6 +9,7 @@ import Login from './public/Login';
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import Footer from './components/Footer';
 import 'animate.css';
+import Registro from './public/Registro';
 function App() {
   const [count, setCount] = useState(0)
 
@@ -19,6 +20,7 @@ function App() {
         <Routes>
           <Route path='/' element={<ContainerIndex />} />
           <Route path='/login' element={<Login />} />
+          <Route path='/register' element={<Registro />} />
         </Routes>
         <Footer/>
       </BrowserRouter>

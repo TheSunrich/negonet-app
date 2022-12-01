@@ -1,12 +1,13 @@
 import React from 'react'
 import logoimg from '../assets/imgs/servicios.png';
 import googlelogo from '../assets/imgs/google.png';
+import { Link } from 'react-router-dom';
 
 function Login() {
     return (
         <>
             <div className='row container-fluid justify-content-center text-dark logincontainer'>
-                <div className='row col-md-7 mt-5 height420'>
+                <div className='row col-md-7 mt-5 height480'>
                     <div className='col-md-6 rounded-start text-center align-self-center'>
                         <img src={logoimg} width="380"></img>
                     </div>
@@ -26,11 +27,15 @@ function Login() {
                         </div>
                         <div className=' text-center'>
                             <button className='btn btn-primary'>
-                            <i className="bi bi-door-open-fill"></i> Iniciar Sesión
+                                <i className="bi bi-door-open-fill"></i> Iniciar Sesión
                             </button>
                         </div>
                         <div id="emailHelp" className="form-text text-center mt-3 textopregunta">¿No tienes una cuenta?</div>
                         <div className='text-center'>
+                            <Link to="/register" className='link text-info mt-2'>
+                                Regístrate
+                            </Link>
+                            <div id="emailHelp" className="form-text text-center textopregunta mt-3s">o</div>
                             <button className='btn btn-light'>
                                 <img src={googlelogo} width="20"></img> Ingresa con Google
                             </button>
