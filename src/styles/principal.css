@@ -96,3 +96,9 @@
 .justifytext{
     text-align: justify;
 }
+.blankspace50{
+    height: 50px;
+}
+.height420{
+    height: 420px !important;
+}

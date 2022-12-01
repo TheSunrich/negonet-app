@@ -6,11 +6,11 @@ function Login() {
     return (
         <>
             <div className='row container-fluid justify-content-center text-dark logincontainer'>
-                <div className='row col-md-6 mt-5'>
+                <div className='row col-md-7 mt-5 height420'>
                     <div className='col-md-6 rounded-start text-center align-self-center'>
-                        <img src={logoimg} width="350"></img>
+                        <img src={logoimg} width="380"></img>
                     </div>
-                    <div className='col-md-6 bg-light rounded   '>
+                    <div className='col-md-6 bg-light rounded'>
                         <div className='mb-3 mt-3 text-center'>
                             <h4>Iniciar Sesión</h4>
                         </div>
@@ -29,8 +29,8 @@ function Login() {
                             <i className="bi bi-door-open-fill"></i> Iniciar Sesión
                             </button>
                         </div>
-                        <div id="emailHelp" className="form-text text-center mt-3 mb-2 textopregunta">¿No tienes una cuenta?</div>
-                        <div className='text-center mb-2'>
+                        <div id="emailHelp" className="form-text text-center mt-3 textopregunta">¿No tienes una cuenta?</div>
+                        <div className='text-center'>
                             <button className='btn btn-light'>
                                 <img src={googlelogo} width="20"></img> Ingresa con Google
                             </button>
@@ -38,7 +38,9 @@ function Login() {
                     </div>
                 </div>
             </div>
+            <div className='container-fluid blankspace50'>
 
+            </div>
         </>
     )
 }
