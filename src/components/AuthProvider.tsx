@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { auth, registerNewUser, existsUser } from '../utils/firebase';
+import { auth, registerNewUser, existsUser, getUser } from '../utils/firebase';
 import { GoogleAuthProvider, onAuthStateChanged, signInWithPopup, signInWithRedirect } from 'firebase/auth';
 import { useNavigate } from 'react-router-dom';
 
@@ -16,7 +16,8 @@ export default function AuthProvider({
             if (user) {
                 const isRegistered = await existsUser(user.email);
                 if (isRegistered) {
-                    onUserLoggedIn(user);
+                    const exists = await getUser(user.uid);
+                    onUserLoggedIn(exists);
                 } else {
                     await registerNewUser({
                         uid: user.uid,

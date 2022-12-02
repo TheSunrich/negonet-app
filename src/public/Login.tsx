@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import logoimg from '../assets/imgs/servicios.png';
 import googlelogo from '../assets/imgs/google.png';
 import { Link, useLocation, useParams, Navigate } from 'react-router-dom';
-import { auth, userExists } from '../utils/firebase';
+import { auth, existsUser, userExists } from '../utils/firebase';
 import { GoogleAuthProvider, onAuthStateChanged, signInWithPopup, signInWithRedirect } from 'firebase/auth';
 import { useNavigate } from 'react-router-dom';
 import AuthProvider from '../components/AuthProvider';
@@ -37,14 +37,21 @@ function Login() {
             ...credentials,
             [e.target.name]: e.target.value
         })
-        console.log(credentials)
     }
     async function handleOnLogin() {
-        
+        console.log(credentials)
+        const exists = await existsUser(credentials.email);
+        console.log(exists)
+        if(exists){
+            console.log("El usuario es correcto");
+            setCurrentSate(5);
+        }else{
+            console.log("No existe el usuario");
+        }
     }
     const navigate = useNavigate();
     function handleUserLoggedIn(user) {
-        navigate("/");
+        navigate("/main");
     }
     function handleUserUserNotRegistered(user) {
         navigate("/register");
@@ -69,15 +76,15 @@ function Login() {
                             <hr></hr>
                             <div className="mb-3">
                                 <label className="form-label"><i className="bi bi-person-circle"></i> Usuario <b className='obligatorio'>*</b></label>
-                                <input name='email' onChange={handleChange} type="email" className="form-control" placeholder="nombre@ejemplo.com" />
+                                <input name='email' onKeyUp={handleChange} type="email" className="form-control" placeholder="nombre@ejemplo.com" />
                             </div>
                             <div className="mb-3">
                                 <label className="form-label"><i className="bi bi-incognito"></i> Contraseña <b className='obligatorio'>*</b></label>
-                                <input name='password' onChange={handleChange} type="password" className="form-control" placeholder="********" />
+                                <input name='password' onKeyUp={handleChange} type="password" className="form-control" placeholder="********" />
                                 <div id="emailHelp" className="form-text text-center textopregunta  ">Recuerda que NegoNet no pedirá en ningún momento tus credenciales de acceso.</div>
                             </div>
                             <div className=' text-center'>
-                                <button className='btn btn-primary'>
+                                <button onClick={handleOnLogin} className='btn btn-primary'>
                                     <i className="bi bi-door-open-fill"></i> Iniciar Sesión
                                 </button>
                             </div>

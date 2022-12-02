@@ -8,10 +8,11 @@
     background-color: #16a5ba;
 }
 .containerbg{
-    background-image: url('../assets/imgs/medico.webp');
-    background-size: 35% auto;
+    background-image: url('../assets/imgs/electricista1.png');
+    background-size: 25% auto;
     background-repeat: no-repeat;
     background-position: left;
+    background-position-x: 100px;
     height: 450px;
     background-color: #16a5ba;
 }
@@ -104,4 +105,7 @@
 }
 .loadpage{
     height: 480px !important;
+}
+.barwidth{
+    height: 100vh;
 }
