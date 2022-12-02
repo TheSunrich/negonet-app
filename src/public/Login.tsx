@@ -51,7 +51,7 @@ function Login() {
     }
     const navigate = useNavigate();
     function handleUserLoggedIn(user) {
-        navigate("/");
+        navigate("/main");
     }
     function handleUserUserNotRegistered(user) {
         navigate("/register");

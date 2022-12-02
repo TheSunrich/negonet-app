@@ -2,6 +2,7 @@ import React from 'react'
 import servicios from '../assets/imgs/servicios.png'
 import cocinero from '../assets/imgs/cocinero.jpg'
 import carpintero from '../assets/imgs/carpintero.png'
+import electricista from '../assets/imgs/electricista1.png';
 import maestra from '../assets/imgs/maestra.jpg'
 
 const ContainerIndex = () => {

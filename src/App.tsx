@@ -11,6 +11,7 @@ import Footer from './components/Footer';
 import 'animate.css';
 import Registro from './public/Registro';
 import Loading from './components/Loading';
+import MainPage from './private/MainPage';
 function App() {
   return (
     <>
@@ -21,6 +22,7 @@ function App() {
           <Route path='/login' element={<Login />} />
           <Route path='/register' element={<Registro />} />
           <Route path='/loading' element={<Loading />} />
+          <Route path='/main' element={<MainPage/>} />
         </Routes>
         <Footer/>
       </BrowserRouter>
