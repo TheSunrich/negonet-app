@@ -106,3 +106,6 @@
 .loadpage{
     height: 480px !important;
 }
+.barwidth{
+    height: 100vh;
+}

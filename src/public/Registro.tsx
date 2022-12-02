@@ -23,7 +23,7 @@ export default function Registro() {
     }
     let addressData: Address = {}
     const [user, setUser] = useState(userData);
-    const [address, setAddress] = useState(addressData)
+    const [address, setAddress] = useState(addressData);
     function handleChange(e) {
         setUser({
             ...user,
@@ -61,7 +61,9 @@ export default function Registro() {
             setTexto("Debes completar el registro para continuar")
 
         } else {
+            setSate(4);
             console.log("No hay nadie autenticado...");
+            console.log(state)
         }
     }
     async function handleSubmit(e) {
@@ -121,9 +123,9 @@ export default function Registro() {
         setSate(3);
     }
     function handleUserNotLoggedIn(user) {
-        navigate("/login");
+        setSate(4);
     }
-    if (state === 3 || state === 5) {
+    if (state === 3 || state === 4 || state === 5) {
         return (
             <>
                 <div onSubmit={handleSubmit} className='row container-fluid justify-content-center text-dark'>

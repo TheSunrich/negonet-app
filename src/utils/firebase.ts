@@ -27,7 +27,6 @@ export async function userExists(uid: any) {
 }
 
 export async function existsUser(email){
-    console.log(email)
     const users = [];
     const docsRef = collection(db, 'user');
     const q = query(docsRef, where('email', "==", email));
@@ -36,8 +35,13 @@ export async function existsUser(email){
     querySnapshot.forEach((doc) => {
         users.push(doc.data());
     });
-    console.log(users)
     return users.length > 0 ? users[0].uid : null;
+}
+
+export async function getUser(uid){
+    const docRef = doc(db, 'user', uid);
+    const res = await getDoc(docRef);
+    return res.data();
 }
 
 export async function registerNewUser(user){

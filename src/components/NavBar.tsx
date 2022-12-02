@@ -2,8 +2,10 @@ import React from 'react'
 import '../styles/principal.css';
 import logoimg from '../assets/imgs/negonet logo.png';
 import { Link } from 'react-router-dom';
+import { Outlet } from 'react-router-dom';
+import Footer from './Footer';
 
-const NavBar = () => {
+const NavBar = ({ children }) => {
     return (
         <>
             <nav className="navbar navbar-expand-lg navbar-dark bar">
@@ -36,6 +38,8 @@ const NavBar = () => {
                     </div>
                 </div>
             </nav>
+            <Outlet />
+            <Footer/>
         </>
     )
 }
