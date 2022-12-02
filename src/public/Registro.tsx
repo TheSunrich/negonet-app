@@ -19,9 +19,7 @@ export default function Registro() {
         firstName: "",
         address: {}
     }
-    let addressData: Address = {
-
-    }
+    let addressData: Address = {}
     const [user, setUser] = useState(userData);
     const [address, setAddress] = useState(addressData)
     function handleChange(e){
@@ -119,11 +117,11 @@ export default function Registro() {
                             </div>
                             <div className="col-md-6">
                                 <label className="form-label">Correo <b className='obligatorio'>*</b></label>
-                                <input name='email' onChange={handleChange} type="text" className="form-control" placeholder="Apartment, studio, or floor" value={user.email} />
+                                <input name='email' onChange={handleChange} type="email" className="form-control" placeholder="Apartment, studio, or floor" value={user.email} />
                             </div>
                             <div className="col-md-6">
                                 <label className="form-label">Contraseña <b className='obligatorio'>*</b></label>
-                                <input name='password' onChange={handleChange} type="text" className="form-control" />
+                                <input name='password' onChange={handleChange} type="password" className="form-control" />
                             </div>
                             <div className="col-md-12">
                                 <label className="form-label">Dirección 1 <b className='obligatorio'>*</b></label>
@@ -146,7 +144,7 @@ export default function Registro() {
                             </div>
                             <div className="col-md-2">
                                 <label className="form-label">CP <b className='obligatorio'>*</b></label>
-                                <input name='zip' onChange={handleAddressChange} type="text" className="form-control" />
+                                <input name='zip' onChange={handleAddressChange} type="number" className="form-control" />
                             </div>
                             <div className="col-12">
                                 <div className="form-check">

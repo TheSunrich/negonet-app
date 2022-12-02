@@ -18,7 +18,7 @@ function Login() {
     5: El usuario existe
     */
     const [state, setCurrentSate] = useState(0);
-
+    const [credentials, setCurrentCredentials] = useState({email:"", password:""});
     async function handleOnClick() {
         const googleProvider = new GoogleAuthProvider();
         await signInWithGoogle(googleProvider);
@@ -31,6 +31,16 @@ function Login() {
                 console.error(error);
             }
         }
+    }
+    async function handleChange(e){
+        setCurrentCredentials({
+            ...credentials,
+            [e.target.name]: e.target.value
+        })
+        console.log(credentials)
+    }
+    async function handleOnLogin() {
+        
     }
     const navigate = useNavigate();
     function handleUserLoggedIn(user) {
@@ -59,11 +69,11 @@ function Login() {
                             <hr></hr>
                             <div className="mb-3">
                                 <label className="form-label"><i className="bi bi-person-circle"></i> Usuario <b className='obligatorio'>*</b></label>
-                                <input type="email" className="form-control" placeholder="nombre@ejemplo.com" />
+                                <input name='email' onChange={handleChange} type="email" className="form-control" placeholder="nombre@ejemplo.com" />
                             </div>
                             <div className="mb-3">
                                 <label className="form-label"><i className="bi bi-incognito"></i> Contraseña <b className='obligatorio'>*</b></label>
-                                <input type="password" className="form-control" placeholder="********" />
+                                <input name='password' onChange={handleChange} type="password" className="form-control" placeholder="********" />
                                 <div id="emailHelp" className="form-text text-center textopregunta  ">Recuerda que NegoNet no pedirá en ningún momento tus credenciales de acceso.</div>
                             </div>
                             <div className=' text-center'>
