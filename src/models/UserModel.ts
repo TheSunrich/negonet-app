@@ -1,5 +1,5 @@
 export interface User {
-    id?: number;
+    uid?: number;
     name?: string;
     firstName?: string;
     lastName?: string;
@@ -11,7 +11,7 @@ export interface User {
     address?: Address,
     phone?: string;
     birthDay?: Date;
-
+    processCompleted?: boolean;
 }
 
 export interface Address {

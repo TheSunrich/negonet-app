@@ -15,5 +15,46 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 const auth = getAuth(app);
-const storage = getFirestore(app);
+const storage = getStorage(app);
 export { db, auth, app };
+
+export async function userExists(uid: any) {
+    const docRef = doc(db, 'user', uid);
+    const res = await getDoc(docRef);
+    console.log(res);
+    console.log(res.exists());
+    return res.exists();
+}
+
+export async function existsUser(email){
+    console.log(email)
+    const users = [];
+    const docsRef = collection(db, 'user');
+    const q = query(docsRef, where('email', "==", email));
+    const querySnapshot = await getDocs(q);
+
+    querySnapshot.forEach((doc) => {
+        users.push(doc.data());
+    });
+    console.log(users)
+    return users.length > 0 ? users[0].uid : null;
+}
+
+export async function registerNewUser(user){
+    try {
+        const collectionRef = collection(db, 'user');
+        const docRef = doc(collectionRef, user.uid);
+        await setDoc(docRef, user);
+    } catch (error) {
+    }
+}
+
+export async function updateUser(user) {
+    try {
+        const collectionRef = collection(db, 'user');
+        const docRef = doc(collectionRef, user.uid);
+        await setDoc(docRef, user);
+    } catch (error) {
+        
+    }
+}
