@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate, useParams } from 'react-router-dom';
-import { User } from '../models/UserModel';
+import { User, Address } from '../models/UserModel';
 import { auth, existsUser, updateUser } from '../utils/firebase';
 import { GoogleAuthProvider, onAuthStateChanged, signInWithPopup, signInWithRedirect } from 'firebase/auth';
 import AuthProvider from '../components/AuthProvider';
 import Loading from '../components/Loading';
+import moment from 'moment';
 
 export default function Registro() {
     useEffect(() => {
@@ -15,13 +16,23 @@ export default function Registro() {
     const [state, setSate] = useState(0);
     let userData: User = {
         email: "",
-        firstName: ""
+        firstName: "",
+        address: {}
+    }
+    let addressData: Address = {
+
     }
     const [user, setUser] = useState(userData);
-    
+    const [address, setAddress] = useState(addressData)
     function handleChange(e){
         setUser({
             ...user,
+            [e.target.name]: e.target.value
+        })
+    }
+    function handleAddressChange(e){
+        setAddress({
+            ...address,
             [e.target.name]: e.target.value
         })
     }
@@ -41,6 +52,7 @@ export default function Registro() {
         }
     }
     async function handleSubmit(e){
+        console.log("Submit")
         e.preventDefault();
         user.isService = true;
 
@@ -50,10 +62,12 @@ export default function Registro() {
             console.log("El usuario existe")
             setSate(5);
         }else{
-            console.log(user);
+            user.address = address;
+            user.birthDay =  new Date(moment(user.birthDay).toString());
             const tmp = {...user};
             tmp.email = user.email;
             tmp.processCompleted = true;
+            console.log(tmp)
             await updateUser(tmp);
         }
         
@@ -113,26 +127,26 @@ export default function Registro() {
                             </div>
                             <div className="col-md-12">
                                 <label className="form-label">Dirección 1 <b className='obligatorio'>*</b></label>
-                                <input name='address1' onChange={handleChange} type="text" className="form-control" />
+                                <input name='address1' onChange={handleAddressChange} type="text" className="form-control" />
                             </div>
                             <div className="col-md-12">
                                 <label className="form-label">Dirección 2 <b className='obligatorio'>*</b></label>
-                                <input name='address2' onChange={handleChange} type="text" className="form-control" />
+                                <input name='address2' onChange={handleAddressChange} type="text" className="form-control" />
                             </div>
                             <div className="col-md-6">
                                 <label className="form-label">Ciudad <b className='obligatorio'>*</b></label>
-                                <input name='city' onChange={handleChange} type="text" className="form-control" />
+                                <input name='city' onChange={handleAddressChange} type="text" className="form-control" />
                             </div>
                             <div className="col-md-4">
                                 <label className="form-label">Estado <b className='obligatorio'>*</b></label>
-                                <select name='state' onChange={handleChange} className="form-select">
+                                <select name='state' onChange={handleAddressChange} className="form-select">
                                     <option value="">Seleccionar una opción...</option>
                                     <option value="Guanajuato">Guanajuato</option>
                                 </select>
                             </div>
                             <div className="col-md-2">
                                 <label className="form-label">CP <b className='obligatorio'>*</b></label>
-                                <input name='zip' onChange={handleChange} type="text" className="form-control" />
+                                <input name='zip' onChange={handleAddressChange} type="text" className="form-control" />
                             </div>
                             <div className="col-12">
                                 <div className="form-check">
