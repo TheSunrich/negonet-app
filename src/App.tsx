@@ -36,7 +36,7 @@ function App() {
                 <MainPage />
               </PrivateNavBar>
             )} >
-            <Route index element={<MainPage />} />
+            <Route index element={<MainPage/>} />
             <Route path='*' element={<Navigate replace to="/main" />} />
           </Route>
         </Routes>

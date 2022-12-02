@@ -32,6 +32,7 @@ const MainPage = () => {
   }
   function handleUserNotLoggedIn(user) {
     setSate(4);
+    navigate("/login");
   }
   if (state == 2) {
     return (

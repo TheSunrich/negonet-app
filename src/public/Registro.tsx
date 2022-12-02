@@ -144,35 +144,35 @@ export default function Registro() {
                             </div>
                             <div className="col-md-6">
                                 <label className="form-label">Apellidos <b className='obligatorio'>*</b></label>
-                                <input name='lastName' onChange={handleChange} type="text" className="form-control" placeholder="1234 Main St" required />
+                                <input name='lastName' onChange={handleChange} type="text" className="form-control" required />
                             </div>
                             <div className="col-md-4">
                                 <label className="form-label">Teléfono <b className='obligatorio'>*</b></label>
-                                <input name='phone' onChange={handleChange} type="text" className="form-control" placeholder="1234 Main St" required />
+                                <input name='phone' onChange={handleChange} type="text" className="form-control" placeholder="A 10 dígitos" maxLength={10} required />
                             </div>
                             <div className="col-md-4">
                                 <label className="form-label">Fecha de Nacimiento <b className='obligatorio'>*</b></label>
-                                <input name='birthDay' onChange={handleChange} type="date" className="form-control" placeholder="1234 Main St" required />
+                                <input name='birthDay' onChange={handleChange} type="date" className="form-control" required />
                             </div>
                             <div className="col-md-4">
                                 <label className="form-label">CURP <b className='obligatorio'>*</b></label>
-                                <input name='curp' onChange={handleChange} type="text" className="form-control" placeholder="1234 Main St" required />
+                                <input name='curp' onChange={handleChange} type="text" className="form-control" maxLength={18} required />
                             </div>
                             <div className="col-md-6">
                                 <label className="form-label">Correo <b className='obligatorio'>*</b></label>
-                                <input name='email' onChange={handleChange} type="email" className="form-control" placeholder="Apartment, studio, or floor" value={user.email} required />
+                                <input name='email' onChange={handleChange} type="email" className="form-control" placeholder="example@gmail.com" value={user.email} required />
                             </div>
                             <div className="col-md-6">
                                 <label className="form-label">Contraseña <b className='obligatorio'>*</b></label>
-                                <input name='password' onChange={handleChange} type="password" className="form-control" required />
+                                <input name='password' onChange={handleChange} type="password" className="form-control" placeholder="********" required />
                             </div>
                             <div className="col-md-12">
                                 <label className="form-label">Dirección 1 <b className='obligatorio'>*</b></label>
-                                <input name='address1' onChange={handleAddressChange} type="text" className="form-control" required />
+                                <input name='address1' onChange={handleAddressChange} type="text" className="form-control" placeholder='Calle #Número Colonia' required />
                             </div>
                             <div className="col-md-12">
                                 <label className="form-label">Dirección 2</label>
-                                <input name='address2' onChange={handleAddressChange} type="text" className="form-control" />
+                                <input name='address2' onChange={handleAddressChange} type="text" placeholder='Opcional: Calle #Número Colonia' className="form-control" />
                             </div>
                             <div className="col-md-6">
                                 <label className="form-label">Ciudad <b className='obligatorio'>*</b></label>
