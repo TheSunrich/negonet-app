@@ -62,3 +62,11 @@ export async function updateUser(user) {
         
     }
 }
+
+export async function createService(service) {
+    try {
+        const collectionRef = collection(db, 'service');
+        const docRef = addDoc(collectionRef, service);
+    } catch (error) {
+    }
+}

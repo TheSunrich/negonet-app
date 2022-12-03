@@ -89,7 +89,7 @@ const PrivateNavBar = ({ children }) => {
                                 <div className="dropdown">
                                     <a href="#" className="d-flex align-items-center link-light text-decoration-none dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
                                         <img src={user.imageUrl} alt="" width="32" height="32" className="rounded-circle me-2" />
-                                        <strong>{user.email}</strong>
+                                        <strong>{user.firstName}</strong>
                                     </a>
                                     <ul className="dropdown-menu text-small shadow">
                                         <li><a className="dropdown-item" href="#">Contáctanos</a></li>
