@@ -9,10 +9,10 @@ const Loading = () => {
     return (
         <div className='row justify-content-center text-center loadpage container-fluid'>
             <div className='col align-self-center'>
-                <h1>Loading</h1>
+                <h1>Cargando</h1>
                 <br />
                 <div className="spinner-border text-info" role="status">
-                    <span className="visually-hidden">Loading...</span>
+                    <span className="visually-hidden">Cargando...</span>
                 </div>
             </div>
 
