@@ -16,3 +16,17 @@ export interface Address {
     address1?: string;
     address2?: string;
 }
+
+export interface schedule{
+    interval?: number;
+    days?:[{
+        day?:string;
+        hours?:hours;
+    }]
+
+}
+export interface hours{
+    startHour?: string;
+    endHour?: string;
+
+}

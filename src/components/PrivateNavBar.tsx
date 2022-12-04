@@ -51,7 +51,7 @@ const PrivateNavBar = ({ children }) => {
                     <div className='row'>
                         <div className='col-auto bar'>
                             <div className="d-flex flex-column flex-shrink-0 p-3 bar text-light barwidth">
-                                <a href="/" className="d-flex align-items-center link-light text-decoration-none">
+                                <a href="/main" className="d-flex align-items-center link-light text-decoration-none">
                                     <span className="fs-4"><img src={logoimg} width="30" /><b className='ms-3'>Perfil</b></span>
                                 </a>
                                 <hr />
@@ -66,25 +66,37 @@ const PrivateNavBar = ({ children }) => {
                                             Información Personal
                                         </a>
                                     </li>
+                                    {!user.isService ?
+                                        <li className='nav-item'>
+                                            <a href="#" className="nav-link link-light">
+                                                Dar Servicio
+                                            </a>
+                                        </li>
+                                        :""
+                                    }
                                 </ul>
-                                {/*Esta parte es para aquellos usuarios que brindan servicio*/}
-                                <ul className="nav nav-pills bg-light rounded flex-column mt-1">
-                                    <li className='nav-item'>
-                                        <a href="#" className="nav-link link-dark">
-                                            Horarios
-                                        </a>
-                                    </li>
-                                    <li className='nav-item'>
-                                        <a href="#" className="nav-link link-dark">
-                                            Ver Citas
-                                        </a>
-                                    </li>
-                                    <li className='nav-item'>
-                                        <a href="#" className="nav-link link-dark">
-                                            Configurar Servicio
-                                        </a>
-                                    </li>
-                                </ul>
+                                {/*Esta parte es para aquellos usuarios que brindan servicio*/
+                                    user.isService ?
+                                        <ul className="nav nav-pills bg-light rounded flex-column mt-1">
+                                            <li className='nav-item'>
+                                                <a href="#" className="nav-link link-dark">
+                                                    Horarios
+                                                </a>
+                                            </li>
+                                            <li className='nav-item'>
+                                                <a href="#" className="nav-link link-dark">
+                                                    Ver Citas
+                                                </a>
+                                            </li>
+                                            <li className='nav-item'>
+                                                <a href="#" className="nav-link link-dark">
+                                                    Configurar Servicio
+                                                </a>
+                                            </li>
+                                        </ul>
+                                        : ""
+                                }
+
                                 <hr />
                                 <div className="dropdown">
                                     <a href="#" className="d-flex align-items-center link-light text-decoration-none dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
@@ -100,7 +112,7 @@ const PrivateNavBar = ({ children }) => {
                                 </div>
                             </div>
                         </div>
-                        <div className='col-auto'>
+                        <div className='col-10'>
                             <Outlet />
                         </div>
                     </div>

@@ -53,6 +53,15 @@ export default function Registro() {
             [e.target.name]: e.target.value
         })
     }
+    function handleDayChange(e) {
+        if (e.target.checked) {
+        } else {
+        }
+        console.log(e.target.value)
+    }
+    function handleHourChange(e) {
+        
+    }
     function handleServiceAddressChange(e) {
         setAddressService({
             ...addressService,
@@ -295,18 +304,22 @@ export default function Registro() {
                                             <div id="collapseThree" className="accordion-collapse collapse" aria-labelledby="headingThree" data-bs-parent="#accordionExample">
                                                 <div className="accordion-body">
                                                     {/* Intevalo */}
-                                                    <label className="form-label">Selecciona La duración por cada servicio <b className='obligatorio'>*</b></label>
-                                                    <div className="input-group mb-3">  
-                                                        <input type="number" className="form-control" aria-label="Ejemplo: 30" />
-                                                        <span className="input-group-text">minutos</span>
-                                                    </div>
-
+                                                    <select className="mb-3 form-select" aria-label="Default select example">
+                                                        <option value="" disabled>Seleccionar Intervalo...</option>
+                                                        <option value="30">30 minutos</option>
+                                                        <option value="45">45 minutos</option>
+                                                        <option value="60">1 hora</option>
+                                                        <option value="75">1 hora 15 minutos</option>
+                                                        <option value="90">1 hora 30 minutos</option>
+                                                        <option value="105">1 hora 45 minutos</option>
+                                                        <option value="120">2 horas</option>
+                                                    </select>
                                                     {/* Lunes */}
                                                     <div className="row mb-3">
                                                         <div className="col-sm-4">
                                                             <div className="form-check">
                                                                 <label className="form-check-label mt-2">
-                                                                    <input className="form-check-input" type="checkbox" /> Lunes
+                                                                    <input className="form-check-input" type="checkbox" value="Lunes" onChange={handleDayChange}/> Lunes
                                                                 </label>
                                                             </div>
                                                         </div>
@@ -332,7 +345,7 @@ export default function Registro() {
                                                         <div className="col-sm-4">
                                                             <div className="form-check">
                                                                 <label className="form-check-label mt-2">
-                                                                    <input className="form-check-input" type="checkbox" /> Martes
+                                                                    <input className="form-check-input" type="checkbox"  value="Martes" onChange={handleDayChange}/> Martes
                                                                 </label>
                                                             </div>
                                                         </div>
@@ -358,7 +371,7 @@ export default function Registro() {
                                                         <div className="col-sm-4">
                                                             <div className="form-check">
                                                                 <label className="form-check-label mt-2">
-                                                                    <input className="form-check-input" type="checkbox" /> Miércoles
+                                                                    <input className="form-check-input" type="checkbox" value="Miércoles" onChange={handleDayChange}/> Miércoles
                                                                 </label>
                                                             </div>
                                                         </div>
@@ -384,7 +397,7 @@ export default function Registro() {
                                                         <div className="col-sm-4">
                                                             <div className="form-check">
                                                                 <label className="form-check-label mt-2">
-                                                                    <input className="form-check-input" type="checkbox" /> Jueves
+                                                                    <input className="form-check-input" type="checkbox" value="Jueves" onChange={handleDayChange}/> Jueves
                                                                 </label>
                                                             </div>
                                                         </div>
@@ -410,7 +423,7 @@ export default function Registro() {
                                                         <div className="col-sm-4">
                                                             <div className="form-check">
                                                                 <label className="form-check-label mt-2">
-                                                                    <input className="form-check-input" type="checkbox" /> Viernes
+                                                                    <input className="form-check-input" type="checkbox" value="Viernes" onChange={handleDayChange}/> Viernes
                                                                 </label>
                                                             </div>
                                                         </div>
@@ -436,7 +449,7 @@ export default function Registro() {
                                                         <div className="col-sm-4">
                                                             <div className="form-check">
                                                                 <label className="form-check-label mt-2">
-                                                                    <input className="form-check-input" type="checkbox" /> Sábado
+                                                                    <input className="form-check-input" type="checkbox" value="Sábado" onChange={handleDayChange}/> Sábado
                                                                 </label>
                                                             </div>
                                                         </div>
@@ -462,7 +475,7 @@ export default function Registro() {
                                                         <div className="col-sm-4">
                                                             <div className="form-check">
                                                                 <label className="form-check-label mt-2">
-                                                                    <input className="form-check-input" type="checkbox" /> Domingo
+                                                                    <input className="form-check-input" type="checkbox" value="Domingo" onChange={handleDayChange}/> Domingo
                                                                 </label>
                                                             </div>
                                                         </div>
