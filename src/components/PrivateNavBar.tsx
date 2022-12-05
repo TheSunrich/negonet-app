@@ -43,6 +43,11 @@ const PrivateNavBar = ({ children }) => {
         setSate(4);
         navigate("/login");
     }
+
+    function logOut() {
+        console.log("logout")
+        auth.signOut();
+    }
     console.log(imgurl)
     if (state === 2) {
         return (
@@ -107,7 +112,7 @@ const PrivateNavBar = ({ children }) => {
                                         <li><a className="dropdown-item" href="#">Contáctanos</a></li>
                                         <li><a className="dropdown-item" href="#">Aviso de Privacidad</a></li>
                                         <li><hr className="dropdown-divider" /></li>
-                                        <li><a className="dropdown-item" href="#">Cerrar Sesión</a></li>
+                                        <li><a className="dropdown-item" href="#" onClick={logOut}>Cerrar Sesión</a></li>
                                     </ul>
                                 </div>
                             </div>
