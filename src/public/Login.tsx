@@ -25,7 +25,7 @@ function Login() {
 
         async function signInWithGoogle(googleProvider) {
             try {
-                const res = await signInWithRedirect(auth, googleProvider);
+                const res = await signInWithPopup(auth, googleProvider);
                 console.log(res)
             } catch (error) {
                 console.error(error);
@@ -41,9 +41,10 @@ function Login() {
     async function handleOnLogin() {
         console.log(credentials)
         const exists = await existsUser(credentials.email);
+
         console.log(exists)
         if(exists){
-            console.log("El usuario es correcto");
+
             setCurrentSate(5);
         }else{
             console.log("No existe el usuario");
