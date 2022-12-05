@@ -4,7 +4,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { User, Address } from '../models/UserModel';
 import { Service } from '../models/ServiceModel';
 import { auth, createService, existsUser, updateUser } from '../utils/firebase';
-import { GoogleAuthProvider, onAuthStateChanged, signInWithPopup, signInWithRedirect } from 'firebase/auth';
+import { GoogleAuthProvider, onAuthStateChanged, signInWithPopup, signInWithRedirect, signInWithEmailAndPassword, createUserWithEmailAndPassword } from 'firebase/auth';
 import AuthProvider from '../components/AuthProvider';
 import Loading from '../components/Loading';
 import moment from 'moment';
@@ -114,11 +114,33 @@ export default function Registro() {
             tmp.processCompleted = true;
             await updateUser(tmp);
             await createService(service);
+
+            await singInWEmail(user.email, user.password);
+
+            async function singInWEmail(email, password) {
+                
+                try {
+                   const res = await createUserWithEmailAndPassword(auth,email, password)
+                   console.log("Resultado alv",res)
+                   let userTmp = {...user, uid: res.user.uid}
+                   await updateUser(userTmp);
+                }
+                catch (error) {
+                    Swal.fire({
+                        title: 'Error al registrarse',
+                        html: 'Ocurrió un error al registrarse, intenta de nuevo',
+                        icon: 'error'
+                    })
+                    return;
+                } 
+            }
+
+
             Swal.fire({
                 title: 'Cuenta registrada',
-                html: 'Se ha registrado exitósamente la cuenta, clic en OK para continuar',
+                html: 'Se ha registrado exitósamente la cuenta',
                 icon: 'success',
-                confirmButtonText: 'OK',
+                confirmButtonText: 'Continuar',
                 allowOutsideClick: false,
                 allowEnterKey: false,
                 allowEscapeKey: false
@@ -149,9 +171,9 @@ export default function Registro() {
     if (state === 3 || state === 4 || state === 5) {
         return (
             <>
-                <div onSubmit={handleSubmit} className='row container-fluid justify-content-center text-dark'>
+                <div  className='row container-fluid justify-content-center text-dark'>
                     <div className='row col-md-6 mt-4 mb-5'>
-                        <form className="row g-3">
+                        <form onSubmit={handleSubmit} className="row g-3">
                             <div className='col-12'>
                                 <div className="accordion" id="accordionExample">
                                     <div className="accordion-item">
