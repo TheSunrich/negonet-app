@@ -145,6 +145,19 @@ export default function Registro() {
             }
         }
     }
+    function handleHomeService(e){
+        if(e.target.checked){
+            setService({
+                ...service,
+                [e.target.name]: true
+            })
+        }else{
+            setService({
+                ...service,
+                [e.target.name]: false
+            })
+        }
+    }
     function handleStartHourChange(e, element) {
         element.startHour = (e.target.value);
         const result = schedule.days.find(({ day }) => day === element.day);
@@ -181,7 +194,7 @@ export default function Registro() {
             [e.target.name]: e.target.value
         })
     }
-    async function handleCategoryChange(e){
+    async function handleCategoryChange(e) {
         setService({
             ...service,
             [e.target.name]: e.target.value
@@ -190,7 +203,7 @@ export default function Registro() {
             const sp = await getSpecialty(e.target.value)
             setSpecialty(sp);
             setAvailableS(false);
-        }else{
+        } else {
             setAvailableS(true);
         }
     }
@@ -354,7 +367,38 @@ export default function Registro() {
                                                     <label className="form-label">Estado <b className='obligatorio'>*</b></label>
                                                     <select name='state' onChange={handleAddressChange} className="form-select" required>
                                                         <option value="">Seleccionar una opción...</option>
+                                                        <option value="Aguascalientes">Aguascalientes</option>
+                                                        <option value="Baja California">Baja California</option>
+                                                        <option value="Baja California Sur">Baja California Sur</option>
+                                                        <option value="Campeche">Campeche</option>
+                                                        <option value="Chiapas">Chiapas</option>
+                                                        <option value="Chihuahua">Chihuahua</option>
+                                                        <option value="Ciudad de México">Ciudad de México</option>
+                                                        <option value="Coahuila">Coahuila</option>
+                                                        <option value="Colima">Colima</option>
+                                                        <option value="Durango">Durango</option>
                                                         <option value="Guanajuato">Guanajuato</option>
+                                                        <option value="Guerrero">Guerrero</option>
+                                                        <option value="Hidalgo">Hidalgo</option>
+                                                        <option value="Jalisco">Jalisco</option>
+                                                        <option value="México">México</option>
+                                                        <option value="Michoacán">Michoacán</option>
+                                                        <option value="Morelos">Morelos</option>
+                                                        <option value="Nayarit">Nayarit</option>
+                                                        <option value="Nuevo León">Nuevo León</option>
+                                                        <option value="Oaxaca">Oaxaca</option>
+                                                        <option value="Puebla">Puebla</option>
+                                                        <option value="Querétaro">Querétaro</option>
+                                                        <option value="Quintana Roo">Quintana Roo</option>
+                                                        <option value="San Luis Potosí">San Luis Potosí</option>
+                                                        <option value="Sinaloa">Sinaloa</option>
+                                                        <option value="Sonora">Sonora</option>
+                                                        <option value="Tabasco">Tabasco</option>
+                                                        <option value="Tamaulipas">Tamaulipas</option>
+                                                        <option value="Tlaxcala">Tlaxcala</option>
+                                                        <option value="Veracruz">Veracruz</option>
+                                                        <option value="Yucatán">Yucatán</option>
+                                                        <option value="Zacatecas">Zacatecas</option>
                                                     </select>
                                                 </div>
                                                 <div className="col-md-2">
@@ -404,9 +448,16 @@ export default function Registro() {
                                                             }
                                                         </select>
                                                     </div>
-                                                    <div className="col-md-12">
+                                                    <div className="col-md-8">
                                                         <label className="form-label">Nombre del Servicio <b className='obligatorio'>*</b></label>
                                                         <input name='name' onChange={handleServiceChange} type="text" className="form-control" placeholder='Ejemplo: Electricista a Domicilio' required />
+                                                    </div>
+                                                    <div className="col-md-4">
+                                                        <label className="form-label">Precio <b className='obligatorio'>*</b></label>
+                                                        <div className="input-group">
+                                                            <span className="input-group-text" id="basic-addon1">$</span>
+                                                            <input name='price' onChange={handleServiceChange} type="number" className="form-control" placeholder="159" required />
+                                                        </div>
                                                     </div>
                                                     <div className="col-md-12">
                                                         <label className="form-label">Descripción del Servicio <b className='obligatorio'>*</b></label>
@@ -428,12 +479,51 @@ export default function Registro() {
                                                         <label className="form-label">Estado <b className='obligatorio'>*</b></label>
                                                         <select name='state' onChange={handleServiceAddressChange} className="form-select" required>
                                                             <option value="">Seleccionar una opción...</option>
+                                                            <option value="Aguascalientes">Aguascalientes</option>
+                                                            <option value="Baja California">Baja California</option>
+                                                            <option value="Baja California Sur">Baja California Sur</option>
+                                                            <option value="Campeche">Campeche</option>
+                                                            <option value="Chiapas">Chiapas</option>
+                                                            <option value="Chihuahua">Chihuahua</option>
+                                                            <option value="Ciudad de México">Ciudad de México</option>
+                                                            <option value="Coahuila">Coahuila</option>
+                                                            <option value="Colima">Colima</option>
+                                                            <option value="Durango">Durango</option>
                                                             <option value="Guanajuato">Guanajuato</option>
+                                                            <option value="Guerrero">Guerrero</option>
+                                                            <option value="Hidalgo">Hidalgo</option>
+                                                            <option value="Jalisco">Jalisco</option>
+                                                            <option value="México">México</option>
+                                                            <option value="Michoacán">Michoacán</option>
+                                                            <option value="Morelos">Morelos</option>
+                                                            <option value="Nayarit">Nayarit</option>
+                                                            <option value="Nuevo León">Nuevo León</option>
+                                                            <option value="Oaxaca">Oaxaca</option>
+                                                            <option value="Puebla">Puebla</option>
+                                                            <option value="Querétaro">Querétaro</option>
+                                                            <option value="Quintana Roo">Quintana Roo</option>
+                                                            <option value="San Luis Potosí">San Luis Potosí</option>
+                                                            <option value="Sinaloa">Sinaloa</option>
+                                                            <option value="Sonora">Sonora</option>
+                                                            <option value="Tabasco">Tabasco</option>
+                                                            <option value="Tamaulipas">Tamaulipas</option>
+                                                            <option value="Tlaxcala">Tlaxcala</option>
+                                                            <option value="Veracruz">Veracruz</option>
+                                                            <option value="Yucatán">Yucatán</option>
+                                                            <option value="Zacatecas">Zacatecas</option>
                                                         </select>
                                                     </div>
                                                     <div className="col-md-2">
                                                         <label className="form-label">CP <b className='obligatorio'>*</b></label>
                                                         <input name='zip' onChange={handleServiceAddressChange} type="number" className="form-control" required />
+                                                    </div>
+                                                    <div className="col-12">
+                                                        <div className="form-check">
+                                                            <input name='isHomeService' className="form-check-input" type="checkbox" id="homeCheck" onChange={handleHomeService} />
+                                                            <label className="form-check-label">
+                                                                Puedo brindar servicio a Domicilio
+                                                            </label>
+                                                        </div>
                                                     </div>
                                                 </div>
                                             </div>
