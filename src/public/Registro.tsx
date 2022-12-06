@@ -221,6 +221,7 @@ export default function Registro() {
             },
         });
         const exists = await existsUser(user.email);
+        console.log(user)
         if (exists) {
             Swal.fire({
                 title: 'Ya existe la cuenta',
@@ -232,6 +233,7 @@ export default function Registro() {
             user.address = address;
             service.address = addressService;
             service.schedule = schedule;
+            service.userId = user.uid;
             user.birthDay = new Date(moment(user.birthDay).toString());
             const tmp = { ...user };
             tmp.email = user.email;
@@ -244,6 +246,9 @@ export default function Registro() {
                     const res = await createUserWithEmailAndPassword(auth, email, password)
                     let userTmp = { ...user, uid: res.user.uid }
                     await updateUser(userTmp);
+                    service.userId = res.user.uid;
+                    console.log(service)
+                    await createService(service);
                 }
                 catch (error) {
                     Swal.fire({
