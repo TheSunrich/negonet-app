@@ -13,6 +13,12 @@ import Registro from './public/Registro';
 import Loading from './components/Loading';
 import MainPage from './private/MainPage';
 import PrivateNavBar from './components/PrivateNavBar';
+import ReservationPage from './private/ReservationPage';
+import InformationPage from './private/InformationPage';
+import SchedulePage from './private/SchedulePage';
+import AppointmentPage from './private/AppointmentPage';
+import SettingsPage from './private/SettingsPage';
+import AdminPage from './private/AdminPage';
 function App() {
   return (
     <>
@@ -26,8 +32,8 @@ function App() {
             )} >
             <Route index element={<ContainerIndex />} />
             <Route path='/login' element={<Login />} />
-            <Route path='register' element={<Registro />} />
-            <Route path='loading' element={<Loading />} />
+            <Route path='/register' element={<Registro />} />
+            <Route path='/loading' element={<Loading />} />
             <Route path='*' element={<Navigate replace to="/" />} />
           </Route>
           <Route path='/main'
@@ -36,7 +42,13 @@ function App() {
                 <MainPage />
               </PrivateNavBar>
             )} >
-            <Route index element={<MainPage/>} />
+            <Route index element={<MainPage />} />
+            <Route path='/main/reservation' element={<ReservationPage />} />
+            <Route path='/main/admin' element={<AdminPage />} />
+            <Route path='/main/information' element={<InformationPage />} />
+            <Route path='/main/schedule' element={<SchedulePage />} />
+            <Route path='/main/appointment' element={<AppointmentPage />} />
+            <Route path='/main/settings' element={<SettingsPage />} />
             <Route path='*' element={<Navigate replace to="/main" />} />
           </Route>
         </Routes>

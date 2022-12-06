@@ -8,6 +8,7 @@ export interface Service{
     price?: string;
     address?: Address;
     schedule?: Schedule;
+    isHomeService?: boolean;
 }
 
 export interface Address {

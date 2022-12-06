@@ -56,52 +56,38 @@ const PrivateNavBar = ({ children }) => {
                     <div className='row'>
                         <div className='col-auto bar'>
                             <div className="d-flex flex-column flex-shrink-0 p-3 bar text-light barwidth">
-                                <a href="/main" className="d-flex align-items-center link-light text-decoration-none">
+                                <Link to="/main" relative='path' className="d-flex align-items-center link-light text-decoration-none">
                                     <span className="fs-4"><img src={logoimg} width="30" /><b className='ms-3'>Perfil</b></span>
-                                </a>
+                                </Link>
                                 <hr />
                                 <ul className="nav nav-pills flex-column mb-auto">
-                                <li className="nav-item">
-                                        <a href="#" className="nav-link link-light" aria-current="page">
-                                            Servicios
-                                        </a>
+                                    <li className="nav-item">
+                                        <Link to="/main" relative="path" className="nav-link link-light">Servicios</Link>
                                     </li>
                                     <li className="nav-item">
-                                        <a href="#" className="nav-link link-light" aria-current="page">
-                                            Mis Citas
-                                        </a>
+                                        <Link to="/main/reservation" relative="path" className="nav-link link-light">Mis Citas</Link>
                                     </li>
                                     <li className='nav-item'>
-                                        <a href="#" className="nav-link link-light">
-                                            Información Personal
-                                        </a>
+                                        <Link to="/main/information" relative="path" className="nav-link link-light">Información Personal</Link>
                                     </li>
                                     {!user.isService ?
                                         <li className='nav-item'>
-                                            <a href="#" className="nav-link link-light">
-                                                Dar Servicio
-                                            </a>
+                                            <Link to="/main/admin" relative="path" className="nav-link link-light">Dar Servicio</Link>
                                         </li>
-                                        :""
+                                        : ""
                                     }
                                 </ul>
                                 {/*Esta parte es para aquellos usuarios que brindan servicio*/
                                     user.isService ?
                                         <ul className="nav nav-pills bg-light rounded flex-column mt-1">
                                             <li className='nav-item'>
-                                                <a href="#" className="nav-link link-dark">
-                                                    Horarios
-                                                </a>
+                                                <Link to="/main/schedule" relative="path" className="nav-link link-dark">Horarios</Link>
                                             </li>
                                             <li className='nav-item'>
-                                                <a href="#" className="nav-link link-dark">
-                                                    Ver Citas
-                                                </a>
+                                                <Link to="/main/appointment" relative="path" className="nav-link link-dark">Ver Citas</Link>
                                             </li>
                                             <li className='nav-item'>
-                                                <a href="#" className="nav-link link-dark">
-                                                    Configurar Servicio
-                                                </a>
+                                                <Link to="/main/settings" relative="path" className="nav-link link-dark">Configurar Servicio</Link>
                                             </li>
                                         </ul>
                                         : ""
