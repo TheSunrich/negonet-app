@@ -120,7 +120,7 @@ const MainPage = () => {
             </form>
           </div>
         </div>
-        <div className='container-fluid bg-light pt-4 pb-4 text-right'>
+        <div className='container-fluid border bg-light pt-4 pb-4 text-right'>
           {services.length > 0 ?
             <div className='row'>
               {
