@@ -26,7 +26,7 @@ export async function userExists(uid: any) {
     return res.exists();
 }
 
-export async function existsUser(email){
+export async function existsUser(email) {
     const users = [];
     const docsRef = collection(db, 'user');
     const q = query(docsRef, where('email', "==", email));
@@ -38,13 +38,13 @@ export async function existsUser(email){
     return users.length > 0 ? users[0].uid : null;
 }
 
-export async function getUser(uid){
+export async function getUser(uid) {
     const docRef = doc(db, 'user', uid);
     const res = await getDoc(docRef);
     return res.data();
 }
 
-export async function registerNewUser(user){
+export async function registerNewUser(user) {
     try {
         const collectionRef = collection(db, 'user');
         const docRef = doc(collectionRef, user.uid);
@@ -59,7 +59,7 @@ export async function updateUser(user) {
         const docRef = doc(collectionRef, user.uid);
         await setDoc(docRef, user);
     } catch (error) {
-        
+
     }
 }
 
@@ -69,4 +69,34 @@ export async function createService(service) {
         const docRef = addDoc(collectionRef, service);
     } catch (error) {
     }
+}
+
+/*list to get categories and las especialidades (no sé cómo escribirlo jaja)*/
+export async function getCategories() {
+    const categories = [];
+    const docsRef = collection(db, 'category');
+    const q = query(docsRef);
+    const querySnapshot = await getDocs(q);
+    querySnapshot.forEach((doc) => {
+        categories.push({
+            id: doc.id,
+            ...doc.data()
+        });
+    });
+    return categories;
+}
+
+export async function getSpecialty(categoryId) {
+    const specialty = [];
+    const docsRef = collection(db, 'specialty');
+    const q = query(docsRef, where('categoryId', "==", categoryId));
+    const querySnapshot = await getDocs(q);
+
+    querySnapshot.forEach((doc) => {
+        specialty.push({
+            id: doc.id,
+            ...doc.data()
+        });
+    });
+    return specialty;
 }

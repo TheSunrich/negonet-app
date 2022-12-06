@@ -14,6 +14,7 @@ const MainPage = () => {
   const [state, setSate] = useState(0);
   let userData: User;
   const [user, setUser] = useState(userData);
+  const [quotes, getQuotes] = useState()
   function handleUserStateChanged(u) {
     if (u) {
       setUser({

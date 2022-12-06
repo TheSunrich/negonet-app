@@ -1,9 +1,9 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate, useParams } from 'react-router-dom';
 import { User, Address } from '../models/UserModel';
-import { Service } from '../models/ServiceModel';
-import { auth, createService, existsUser, updateUser } from '../utils/firebase';
+import { Schedule, Service } from '../models/ServiceModel';
+import { auth, createService, existsUser, getCategories, getSpecialty, updateUser } from '../utils/firebase';
 import { GoogleAuthProvider, onAuthStateChanged, signInWithPopup, signInWithRedirect, signInWithEmailAndPassword, createUserWithEmailAndPassword } from 'firebase/auth';
 import AuthProvider from '../components/AuthProvider';
 import Loading from '../components/Loading';
@@ -24,22 +24,73 @@ export default function Registro() {
     }
     let addressData: Address = {}
     let serviceData: Service = {}
+    let schedulePredata: Schedule = {
+        interval: 30,
+        days: [
+            {
+                day: "Lunes",
+                startHour: "",
+                endHour: ""
+            },
+            {
+                day: "Martes",
+                startHour: "",
+                endHour: ""
+            },
+            {
+                day: "Miércoles",
+                startHour: "",
+                endHour: ""
+            },
+            {
+                day: "Jueves",
+                startHour: "",
+                endHour: ""
+            },
+            {
+                day: "Viernes",
+                startHour: "",
+                endHour: ""
+            },
+            {
+                day: "Sábado",
+                startHour: "",
+                endHour: ""
+            },
+            {
+                day: "Domingo",
+                startHour: "",
+                endHour: ""
+            }
+        ]
+    }
+    let scheduleData: Schedule = {
+        interval: 30,
+        days: []
+    }
     const [user, setUser] = useState(userData);
     const [address, setAddress] = useState(addressData);
     const [addressService, setAddressService] = useState(addressData);
     const [service, setService] = useState(serviceData);
+    const [schedule, setSchedule] = useState(scheduleData);
+    const [category, setCategories] = useState(null);
+    const [specialty, setSpecialty] = useState([]);
+    const [specialtyAvailable, setAvailableS] = useState(true);
     function handleChange(e) {
         setUser({
             ...user,
             [e.target.name]: e.target.value
         })
     }
-    function handleChangeService(e) {
+    async function handleChangeService(e) {
         if (e.target.checked) {
+            const categories = await getCategories();
+            setCategories(categories)
             setUser({
                 ...user,
                 isService: true
             })
+
         } else {
             setUser({
                 ...user,
@@ -53,35 +104,100 @@ export default function Registro() {
             [e.target.name]: e.target.value
         })
     }
-    function handleDayChange(e) {
-        if (e.target.checked) {
-        } else {
-        }
-        console.log(e.target.value)
+    function getEspecialty(e) {
+
     }
-    function handleHourChange(e) {
-        
+    function handleDayChange(e) {
+        let scheduleday = {};
+        let ids = e.target.value + "s";
+        let ide = e.target.value + "e";
+        const startHour = document.getElementById(ids) as HTMLInputElement;
+        const endHour = document.getElementById(ide) as HTMLInputElement;
+        if (e.target.checked) {
+            startHour.disabled = false;
+            endHour.disabled = false;
+            startHour.required = true;
+            endHour.required = true;
+            const result = schedule.days.find(({ day }) => day === e.target.value);
+            if (result === undefined) {
+                scheduleday = {
+                    day: e.target.value,
+                    hours: {
+                        startHour: "",
+                        endHour: ""
+                    }
+                }
+                schedule.days.push(scheduleday)
+                setSchedule(schedule);
+            }
+        } else {
+            startHour.disabled = true;
+            endHour.disabled = true;
+            startHour.value = "";
+            endHour.value = "";
+            startHour.required = false;
+            endHour.required = false;
+            const result = schedule.days.find(({ day }) => day === e.target.value);
+            if (result != undefined) {
+                let position = schedule.days.indexOf(result);
+                schedule.days.splice(position, 1);
+                setSchedule(schedule);
+            }
+        }
+    }
+    function handleStartHourChange(e, element) {
+        element.startHour = (e.target.value);
+        const result = schedule.days.find(({ day }) => day === element.day);
+        if (result != undefined) {
+            let position = schedule.days.indexOf(result);
+            schedule.days[position] = element;
+            setSchedule(schedule);
+        }
+    }
+    function handleEndHourChange(e, element) {
+        element.endHour = (e.target.value);
+        const result = schedule.days.find(({ day }) => day === element.day);
+        if (result != undefined) {
+            let position = schedule.days.indexOf(result);
+            schedule.days[position] = element;
+            setSchedule(schedule);
+        }
+    }
+    function handleIntervalChange(e) {
+        setSchedule({
+            ...schedule,
+            [e.target.name]: parseInt(e.target.value)
+        })
     }
     function handleServiceAddressChange(e) {
         setAddressService({
             ...addressService,
             [e.target.name]: e.target.value
         })
-        console.log(addressService)
     }
-
-    function handleServiceChange(e) {
+    async function handleServiceChange(e) {
         setService({
             ...service,
             [e.target.name]: e.target.value
         })
-        console.log(service)
+    }
+    async function handleCategoryChange(e){
+        setService({
+            ...service,
+            [e.target.name]: e.target.value
+        })
+        if (e.target.value != "") {
+            const sp = await getSpecialty(e.target.value)
+            setSpecialty(sp);
+            setAvailableS(false);
+        }else{
+            setAvailableS(true);
+        }
     }
     const [textoregistro, setTexto] = useState("Regístrate, es gratis");
 
     function handleUserStateChanged(u) {
         if (u) {
-            console.log(u);
             setUser({
                 email: u.email,
                 firstName: u.displayName
@@ -90,8 +206,6 @@ export default function Registro() {
 
         } else {
             setSate(4);
-            console.log("No hay nadie autenticado...");
-            console.log(state)
         }
     }
     async function handleSubmit(e) {
@@ -117,22 +231,19 @@ export default function Registro() {
         } else {
             user.address = address;
             service.address = addressService;
+            service.schedule = schedule;
             user.birthDay = new Date(moment(user.birthDay).toString());
             const tmp = { ...user };
             tmp.email = user.email;
             tmp.processCompleted = true;
             await updateUser(tmp);
             await createService(service);
-
             await singInWEmail(user.email, user.password);
-
             async function singInWEmail(email, password) {
-                
                 try {
-                   const res = await createUserWithEmailAndPassword(auth,email, password)
-                   console.log("Resultado alv",res)
-                   let userTmp = {...user, uid: res.user.uid}
-                   await updateUser(userTmp);
+                    const res = await createUserWithEmailAndPassword(auth, email, password)
+                    let userTmp = { ...user, uid: res.user.uid }
+                    await updateUser(userTmp);
                 }
                 catch (error) {
                     Swal.fire({
@@ -141,10 +252,8 @@ export default function Registro() {
                         icon: 'error'
                     })
                     return;
-                } 
+                }
             }
-
-
             Swal.fire({
                 title: 'Cuenta registrada',
                 html: 'Se ha registrado exitósamente la cuenta',
@@ -159,7 +268,6 @@ export default function Registro() {
                 }
             })
         }
-
     }
     function handleUserLoggedIn(user) {
         navigate("/main");
@@ -177,10 +285,11 @@ export default function Registro() {
     function handleUserNotLoggedIn(user) {
         setSate(4);
     }
+    const inputRef = useRef(null);
     if (state === 3 || state === 4 || state === 5) {
         return (
             <>
-                <div  className='row container-fluid justify-content-center text-dark'>
+                <div className='row container-fluid justify-content-center text-dark'>
                     <div className='row col-md-6 mt-4 mb-5'>
                         <form onSubmit={handleSubmit} className="row g-3">
                             <div className='col-12'>
@@ -269,16 +378,25 @@ export default function Registro() {
                                                 <div className="row g-3 accordion-body">
                                                     <div className="col-md-6">
                                                         <label className="form-label">Categoría <b className='obligatorio'>*</b></label>
-                                                        <select name='categoryId' onChange={handleServiceChange} className="form-select" required>
+                                                        <select name='categoryId' onChange={handleCategoryChange} className="form-select" required>
                                                             <option value="">Seleccionar una opción...</option>
-                                                            <option value="h2TuZ9yp3gJ3AOSO845F">Gastronomía</option>
+                                                            {
+                                                                category.map(element => (
+                                                                    <option key={element.id} value={element.id}>{element.name}</option>
+                                                                ))
+                                                            }
                                                         </select>
+
                                                     </div>
                                                     <div className="col-md-6">
                                                         <label className="form-label">Especialidad <b className='obligatorio'>*</b></label>
-                                                        <select name='specialtyId' onChange={handleServiceChange} className="form-select" required>
+                                                        <select name='specialtyId' onChange={handleServiceChange} id="specialtyselect" className="form-select" disabled={specialtyAvailable} required>
                                                             <option value="">Seleccionar una opción...</option>
-                                                            <option value="aOp3yB7aUI3Ci8kcHtPe">Repostería</option>
+                                                            {
+                                                                specialty.map(element => (
+                                                                    <option key={element.id} value={element.id}>{element.name}</option>
+                                                                ))
+                                                            }
                                                         </select>
                                                     </div>
                                                     <div className="col-md-12">
@@ -326,7 +444,7 @@ export default function Registro() {
                                             <div id="collapseThree" className="accordion-collapse collapse" aria-labelledby="headingThree" data-bs-parent="#accordionExample">
                                                 <div className="accordion-body">
                                                     {/* Intevalo */}
-                                                    <select className="mb-3 form-select" aria-label="Default select example">
+                                                    <select name='interval' className="mb-3 form-select" aria-label="Default select example" onChange={handleIntervalChange}>
                                                         <option value="" disabled>Seleccionar Intervalo...</option>
                                                         <option value="30">30 minutos</option>
                                                         <option value="45">45 minutos</option>
@@ -337,189 +455,36 @@ export default function Registro() {
                                                         <option value="120">2 horas</option>
                                                     </select>
                                                     {/* Lunes */}
-                                                    <div className="row mb-3">
-                                                        <div className="col-sm-4">
-                                                            <div className="form-check">
-                                                                <label className="form-check-label mt-2">
-                                                                    <input className="form-check-input" type="checkbox" value="Lunes" onChange={handleDayChange}/> Lunes
-                                                                </label>
-                                                            </div>
-                                                        </div>
-                                                        <div className="col-sm-4">
-                                                            <div className="row mb-3">
-                                                                <label className="col-sm-2 col-form-label">Inicio</label>
-                                                                <div className="col-sm-9 offset-sm-1">
-                                                                    <input type="time" className="form-control" />
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                        <div className="col-sm-4">
-                                                            <div className="row mb-3">
-                                                                <label className="col-sm-2 col-form-label">Fin</label>
-                                                                <div className="col-sm-9 offset-sm-1">
-                                                                    <input type="time" className="form-control" />
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    {/* Martes */}
-                                                    <div className="row mb-3">
-                                                        <div className="col-sm-4">
-                                                            <div className="form-check">
-                                                                <label className="form-check-label mt-2">
-                                                                    <input className="form-check-input" type="checkbox"  value="Martes" onChange={handleDayChange}/> Martes
-                                                                </label>
-                                                            </div>
-                                                        </div>
-                                                        <div className="col-sm-4">
-                                                            <div className="row mb-3">
-                                                                <label className="col-sm-2 col-form-label">Inicio</label>
-                                                                <div className="col-sm-9 offset-sm-1">
-                                                                    <input type="time" className="form-control" />
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                        <div className="col-sm-4">
-                                                            <div className="row mb-3">
-                                                                <label className="col-sm-2 col-form-label">Fin</label>
-                                                                <div className="col-sm-9 offset-sm-1">
-                                                                    <input type="time" className="form-control" />
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    {/* Miércoles */}
-                                                    <div className="row mb-3">
-                                                        <div className="col-sm-4">
-                                                            <div className="form-check">
-                                                                <label className="form-check-label mt-2">
-                                                                    <input className="form-check-input" type="checkbox" value="Miércoles" onChange={handleDayChange}/> Miércoles
-                                                                </label>
-                                                            </div>
-                                                        </div>
-                                                        <div className="col-sm-4">
-                                                            <div className="row mb-3">
-                                                                <label className="col-sm-2 col-form-label">Inicio</label>
-                                                                <div className="col-sm-9 offset-sm-1">
-                                                                    <input type="time" className="form-control" />
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                        <div className="col-sm-4">
-                                                            <div className="row mb-3">
-                                                                <label className="col-sm-2 col-form-label">Fin</label>
-                                                                <div className="col-sm-9 offset-sm-1">
-                                                                    <input type="time" className="form-control" />
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    {/* Jueves */}
-                                                    <div className="row mb-3">
-                                                        <div className="col-sm-4">
-                                                            <div className="form-check">
-                                                                <label className="form-check-label mt-2">
-                                                                    <input className="form-check-input" type="checkbox" value="Jueves" onChange={handleDayChange}/> Jueves
-                                                                </label>
-                                                            </div>
-                                                        </div>
-                                                        <div className="col-sm-4">
-                                                            <div className="row mb-3">
-                                                                <label className="col-sm-2 col-form-label">Inicio</label>
-                                                                <div className="col-sm-9 offset-sm-1">
-                                                                    <input type="time" className="form-control" />
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                        <div className="col-sm-4">
-                                                            <div className="row mb-3">
-                                                                <label className="col-sm-2 col-form-label">Fin</label>
-                                                                <div className="col-sm-9 offset-sm-1">
-                                                                    <input type="time" className="form-control" />
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    {/* Viernes */}
-                                                    <div className="row mb-3">
-                                                        <div className="col-sm-4">
-                                                            <div className="form-check">
-                                                                <label className="form-check-label mt-2">
-                                                                    <input className="form-check-input" type="checkbox" value="Viernes" onChange={handleDayChange}/> Viernes
-                                                                </label>
-                                                            </div>
-                                                        </div>
-                                                        <div className="col-sm-4">
-                                                            <div className="row mb-3">
-                                                                <label className="col-sm-2 col-form-label">Inicio</label>
-                                                                <div className="col-sm-9 offset-sm-1">
-                                                                    <input type="time" className="form-control" />
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                        <div className="col-sm-4">
-                                                            <div className="row mb-3">
-                                                                <label className="col-sm-2 col-form-label">Fin</label>
-                                                                <div className="col-sm-9 offset-sm-1">
-                                                                    <input type="time" className="form-control" />
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    {/* Sábado */}
-                                                    <div className="row mb-3">
-                                                        <div className="col-sm-4">
-                                                            <div className="form-check">
-                                                                <label className="form-check-label mt-2">
-                                                                    <input className="form-check-input" type="checkbox" value="Sábado" onChange={handleDayChange}/> Sábado
-                                                                </label>
-                                                            </div>
-                                                        </div>
-                                                        <div className="col-sm-4">
-                                                            <div className="row mb-3">
-                                                                <label className="col-sm-2 col-form-label">Inicio</label>
-                                                                <div className="col-sm-9 offset-sm-1">
-                                                                    <input type="time" className="form-control" />
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                        <div className="col-sm-4">
-                                                            <div className="row mb-3">
-                                                                <label className="col-sm-2 col-form-label">Fin</label>
-                                                                <div className="col-sm-9 offset-sm-1">
-                                                                    <input type="time" className="form-control" />
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    {/* Domingo */}
-                                                    <div className="row mb-3">
-                                                        <div className="col-sm-4">
-                                                            <div className="form-check">
-                                                                <label className="form-check-label mt-2">
-                                                                    <input className="form-check-input" type="checkbox" value="Domingo" onChange={handleDayChange}/> Domingo
-                                                                </label>
-                                                            </div>
-                                                        </div>
-                                                        <div className="col-sm-4">
-                                                            <div className="row mb-3">
-                                                                <label className="col-sm-2 col-form-label">Inicio</label>
-                                                                <div className="col-sm-9 offset-sm-1">
-                                                                    <input type="time" className="form-control" />
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                        <div className="col-sm-4">
-                                                            <div className="row mb-3">
-                                                                <label className="col-sm-2 col-form-label">Fin</label>
-                                                                <div className="col-sm-9 offset-sm-1">
-                                                                    <input type="time" className="form-control" />
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
 
-
+                                                    {
+                                                        schedulePredata.days.map(element => (
+                                                            <div key={element.day} className="row mb-3">
+                                                                <div className="col-sm-4">
+                                                                    <div className="form-check">
+                                                                        <label className="form-check-label mt-2">
+                                                                            <input className="form-check-input" type="checkbox" value={element.day} onChange={handleDayChange} /> {element.day}
+                                                                        </label>
+                                                                    </div>
+                                                                </div>
+                                                                <div className="col-sm-4">
+                                                                    <div className="row mb-3">
+                                                                        <label className="col-sm-2 col-form-label">Inicio</label>
+                                                                        <div className="col-sm-9 offset-sm-1">
+                                                                            <input required disabled={true} id={element.day + "s"} type="time" className="form-control" onChange={(e) => handleStartHourChange(e, element)} defaultValue={element.startHour} />
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                                <div className="col-sm-4">
+                                                                    <div className="row mb-3">
+                                                                        <label className="col-sm-2 col-form-label">Fin</label>
+                                                                        <div className="col-sm-9 offset-sm-1">
+                                                                            <input required disabled={true} id={element.day + "e"} type="time" className="form-control" onChange={(e) => handleEndHourChange(e, element)} defaultValue={element.endHour} />
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        ))
+                                                    }
                                                 </div>
                                             </div>
                                         </div>
