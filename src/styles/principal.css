@@ -1,13 +1,15 @@
-.bar{
+.bar {
     background-color: #1392c4;
 }
+
 /*html, body{
     background-color: #16a5ba;
 }*/
-.mainbg{
+.mainbg {
     background-color: #16a5ba;
 }
-.containerbg{
+
+.containerbg {
     background-image: url('../assets/imgs/electricista1.png');
     background-size: 25% auto;
     background-repeat: no-repeat;
@@ -16,59 +18,71 @@
     height: 450px;
     background-color: #16a5ba;
 }
-.titulosearch{
+
+.titulosearch {
     color: white;
 }
-.containertext{
+
+.containertext {
     background-color: #ffffff;
     height: 550px;
 }
-.containerwhite{
+
+.containerwhite {
     background-color: #16a5ba;
     height: 600px;
     margin-top: 95px;
 }
-.contenttext{
+
+.contenttext {
     height: 500px;
 }
-.containercolor{
+
+.containercolor {
     background-color: #121339;
     height: 550px;
 }
-.containerfinal{
+
+.containerfinal {
     margin-top: -55px;
     background-color: #121339;
     height: 350px;
 }
-.logincontainer{
+
+.logincontainer {
     height: 550px;
 }
-.imgservicio{
+
+.imgservicio {
     width: 450px;
     margin: 30px;
 }
-.font{
+
+.font {
     font-family: 'Oswald', sans-serif;
 }
-.formbusqueda{
+
+.formbusqueda {
     margin-top: 80px;
 }
 
-.notrounded{
+.notrounded {
     border-radius: 0px !important;
 }
-.divinclinado{
+
+.divinclinado {
     -ms-transform: skewY(20deg);
     -webkit-transform: skewY(20deg);
     transform: skewY(4deg);
 }
-.divinclinado2{
+
+.divinclinado2 {
     -ms-transform: skewY(20deg);
     -webkit-transform: skewY(20deg);
     transform: skewY(-4deg);
 }
 
-.divtextinclinado{
+.divtextinclinado {
     -ms-transform: skewY(-4deg);
     -webkit-transform: skewY(-4deg);
     transform: skewY(-4deg);
@@ -77,43 +91,73 @@
     padding-top: 20px;
 }
 
-.contents{
+.contents {
     margin-top: 40px;
 }
-.imgcircle{
+
+.imgcircle {
     width: 50%;
 }
 
-.icontext{
+.icontext {
     color: #16a5ba;
 }
-.obligatorio{
+
+.obligatorio {
     color: red;
 }
 
-.textopregunta{
+.textopregunta {
     font-size: 12px;
 }
-.justifytext{
+
+.justifytext {
     text-align: justify;
 }
-.blankspace50{
+
+.blankspace50 {
     height: 50px;
 }
-.height480{
+
+.height480 {
     height: 480px !important;
 }
-.loadpage{
+
+.loadpage {
     height: 480px !important;
 }
-.barwidth{
+
+.barwidth {
     height: 100vh;
 }
-.img{
+
+.img {
+    height: 200px;
+}
+
+.info {
     height: 100px;
 }
-.imgshadow{
+
+.imgshadow {
     background-color: #0000008a;
     width: 100%;
-    height: 100px;
+    height: 200px;
+}
+
+.hover:hover {
+    cursor: pointer;
+}
+
+.btn-gradient {
+    background: rgb(0, 88, 194);
+    background: linear-gradient(90deg, rgba(0, 88, 194, 1) 0%, rgba(0, 154, 185, 1) 54%, rgba(0, 145, 126, 1) 100%);
+    color: white;
+}
+
+.btn-gradient:hover {
+    background: rgb(0, 94, 207);
+    background: linear-gradient(90deg, rgba(0, 94, 207, 1) 0%, rgba(0, 173, 208, 1) 54%, rgba(0, 185, 161, 1) 100%);
+    transition: .3s !important;
+    color: white;
 }

@@ -116,3 +116,17 @@ export async function getServices() {
     });
     return categories;
 }
+
+export async function searchService(searchOptions) {
+    const services = [];
+    const docsRef = collection(db, 'service');
+    const q = query(docsRef, where('categoryId', "==", searchOptions.categoryId), where('specialtyId', "==", searchOptions.specialtyId));
+    const querySnapshot = await getDocs(q);
+
+    querySnapshot.forEach((doc) => {
+        services.push({
+            id: doc.id,
+            ...doc.data()});
+    });
+    return services;
+}
