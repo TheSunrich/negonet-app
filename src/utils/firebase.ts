@@ -100,3 +100,19 @@ export async function getSpecialty(categoryId) {
     });
     return specialty;
 }
+
+
+/* Obtener todos los servicios para mostrarlos */
+export async function getServices() {
+    const categories = [];
+    const docsRef = collection(db, 'service');
+    const q = query(docsRef);
+    const querySnapshot = await getDocs(q);
+    querySnapshot.forEach((doc) => {
+        categories.push({
+            id: doc.id,
+            ...doc.data()
+        });
+    });
+    return categories;
+}
