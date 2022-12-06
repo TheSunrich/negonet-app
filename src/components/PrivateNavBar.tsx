@@ -61,6 +61,11 @@ const PrivateNavBar = ({ children }) => {
                                 </a>
                                 <hr />
                                 <ul className="nav nav-pills flex-column mb-auto">
+                                <li className="nav-item">
+                                        <a href="#" className="nav-link link-light" aria-current="page">
+                                            Servicios
+                                        </a>
+                                    </li>
                                     <li className="nav-item">
                                         <a href="#" className="nav-link link-light" aria-current="page">
                                             Mis Citas
