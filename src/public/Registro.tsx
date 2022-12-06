@@ -104,9 +104,6 @@ export default function Registro() {
             [e.target.name]: e.target.value
         })
     }
-    function getEspecialty(e) {
-
-    }
     function handleDayChange(e) {
         let scheduleday = {};
         let ids = e.target.value + "s";
@@ -456,7 +453,7 @@ export default function Registro() {
                                                         <label className="form-label">Precio <b className='obligatorio'>*</b></label>
                                                         <div className="input-group">
                                                             <span className="input-group-text" id="basic-addon1">$</span>
-                                                            <input name='price' onChange={handleServiceChange} type="number" className="form-control" placeholder="159" required />
+                                                            <input name='price' onChange={handleServiceChange} type="number" className="form-control" placeholder="159" />
                                                         </div>
                                                     </div>
                                                     <div className="col-md-12">
