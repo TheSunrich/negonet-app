@@ -14,6 +14,7 @@ const MainPage = () => {
   const [state, setSate] = useState(0);
   let userData: User;
   const [user, setUser] = useState(userData);
+  const [quotes, getQuotes] = useState()
   function handleUserStateChanged(u) {
     if (u) {
       setUser({
@@ -36,7 +37,15 @@ const MainPage = () => {
   }
   if (state == 2) {
     return (
-      <div className='container-fluid'>MainPage</div>
+      <div className='container-fluid'>
+        <h3 className='m-3'>Mis Citas</h3>
+        <div className='container-fluid bg-success text-right'>
+          a
+        </div>
+        <div className='container-fluid bg-success'>
+          a
+        </div>
+      </div>
     )
   }
   return <AuthProvider

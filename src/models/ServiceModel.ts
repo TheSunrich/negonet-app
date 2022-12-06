@@ -7,6 +7,7 @@ export interface Service{
     userId?: string;
     price?: string;
     address?: Address;
+    schedule?: Schedule;
 }
 
 export interface Address {
@@ -15,4 +16,14 @@ export interface Address {
     zip?: string;
     address1?: string;
     address2?: string;
+}
+
+export interface Schedule{
+    interval?: number;
+    days?:any[]
+}
+export interface Hours{
+    startHour?: string;
+    endHour?: string;
+
 }
