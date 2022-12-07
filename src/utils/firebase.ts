@@ -161,10 +161,8 @@ export async function deleteServiceFirebase(service) {
 export async function uploadImage(image, path): Promise<string> {
     const storageRef = ref(storage, path + image.name);
     const uploadTask = await uploadBytes(storageRef, image);
-    const downloadURL = await getDownloadURL(uploadTask.ref);
-    console.log(downloadURL);
-     
-    return downloadURL;
-        
+    return  await getDownloadURL(uploadTask.ref).then((downloadURL) => {
+        return downloadURL;
+    });
         
 }

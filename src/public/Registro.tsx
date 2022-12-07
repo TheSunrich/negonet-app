@@ -189,9 +189,10 @@ export default function Registro() {
 
         // Preview image
         const file = e.target.files[0];
-        setUserImg(file);
+        console.log(file);
         const reader = new FileReader();
         reader.onloadend = () => {
+            setUserImg(file);
             setPrevUserImg(reader.result)
         };
         reader.readAsDataURL(file);
@@ -200,9 +201,10 @@ export default function Registro() {
     function handleFileChangeService(e) {
         // Preview image
         const file = e.target.files[0];
-        setServiceImg(file);
+        console.log(file);
         const reader = new FileReader();
         reader.onloadend = () => {
+            setServiceImg(file);
             setPrevServiceImg(reader.result)
         };
         reader.readAsDataURL(file);
@@ -234,19 +236,13 @@ export default function Registro() {
     }
 
     async function saveImageUser() {
-        await uploadImage(userImg, "/users/").then((url) => {
-            setUser({
-                ...user,
-                imageUrl: url
-            })
-        })
 
-
-      
     }
 
     async function saveImageService() {
+
         await uploadImage(serviceImg, "/services/").then((url) => {
+            console.log("HOLIS",url);
             setService({
                 ...service,
                 imageUrl: url
@@ -298,14 +294,18 @@ export default function Registro() {
             user.isService ? service.userId = user.uid : ""
             user.isService ? service.isActive = true : ""
             user.birthDay = new Date(moment(user.birthDay).toString());
-            await saveImageUser().then(async (url) => {
-                if(user.imageUrl){
+            await uploadImage(userImg, "/users/").then((url) => {
+                user.imageUrl = url;
+            })
+            if(user.imageUrl){
                     const tmp = { ...user };
                     tmp.email = user.email;
                     tmp.processCompleted = true;
                     await updateUser(tmp);
                     user.isService ? await createService(service) : ""
-                    user.isService ? await saveImageService() : ""
+                    user.isService ? await uploadImage(serviceImg, "/services/").then((url) => {
+                        service.imageUrl = url;
+                    }): ""
                     await singInWEmail(user.email, user.password);
                     async function singInWEmail(email, password) {
                         try {
@@ -347,7 +347,6 @@ export default function Registro() {
                 }
 
 
-            });
 
 
         }
