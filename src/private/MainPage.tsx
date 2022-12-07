@@ -122,13 +122,13 @@ const MainPage = () => {
               </form>
             </div>
           </div>
-          <div className='container-fluid border bg-light pt-4 pb-4 ms-2 text-right'>
+          <div className='container-fluid border bg-light pt-4 pb-4 ms-2 text-right servicescontainer'>
             {services.length > 0 ?
               <div className='row'>
                 {
                   services.map(element => (
                     <div key={element.id} className='col-md-3 mb-2'>
-                      <div className='row m-1 rounded shadow'>
+                      <div className='row m-1 rounded shadow bg-light'>
                         <div className='col-12 img rounded-top hover' style={{ background: `linear-gradient(rgba( 0, 0, 0, 0.5), rgba( 0, 0, 0, 0.5)), url(${element.imageUrl})`, backgroundRepeat: "no-repeat", backgroundSize: "cover", backgroundPosition: "center center", opacity: "1" }}>
                         </div>
                         <div className='col-12 info rounded-bottom '>
@@ -166,7 +166,7 @@ const MainPage = () => {
             }
           </div>
         </div>
-        <div className="modal fade" id="modalGenerarCita" tabIndex={-1} aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div className="modal" id="modalGenerarCita" tabIndex={1} aria-labelledby="exampleModalLabel" aria-hidden="true">
           <div className="modal-dialog modal-lg">
             <div className="modal-content">
               <div className="modal-header">

@@ -51,9 +51,9 @@ const PrivateNavBar = ({ children }) => {
     if (state === 2) {
         return (
             <>
-                <div className='container-fluid'>
+                <div className='container-fluid fullwidth'>
                     <div className='row'>
-                        <div className='col-auto bar'>
+                        <div className='col-2 bar'>
                             <div className="d-flex flex-column flex-shrink-0 p-3 bar text-light barwidth">
                                 <Link to="/main" relative='path' className="d-flex align-items-center link-light text-decoration-none">
                                     <span className="fs-4"><img src={logoimg} width="30" /><b className='ms-3'>Perfil</b></span>
@@ -79,9 +79,6 @@ const PrivateNavBar = ({ children }) => {
                                 {/*Esta parte es para aquellos usuarios que brindan servicio*/
                                     user.isService ?
                                         <ul className="nav nav-pills bg-light rounded flex-column mt-1">
-                                            <li className='nav-item'>
-                                                <Link to="/main/schedule" relative="path" className="nav-link link-dark">Horarios</Link>
-                                            </li>
                                             <li className='nav-item'>
                                                 <Link to="/main/appointment" relative="path" className="nav-link link-dark">Ver Citas</Link>
                                             </li>
@@ -111,6 +108,48 @@ const PrivateNavBar = ({ children }) => {
                             <Outlet />
                         </div>
                     </div>
+                </div>
+                <header className="p-3 mb-3 border-bottom navbartopmain minwidth ">
+                    <div className="container">
+                        <div className="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start">
+                            <Link to="/main" relative='path' className="d-flex align-items-center mb-2 mb-lg-0 text-light text-decoration-none">
+                                <span className="fs-4"><img src={logoimg} width="30" /><b className='ms-3'>Perfil</b></span>
+                            </Link>
+                            <ul className="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0">
+                                <li className="nav-item">
+                                    <Link to="/main" relative="path" className="nav-link px-2 link-light">Servicios</Link>
+                                </li>
+                                <li className="nav-item">
+                                    <Link to="/main/reservation" relative="path" className="nav-link px-2 link-light">Mis Citas</Link>
+                                </li>
+                                <li className='nav-item'>
+                                    <Link to="/main/information" relative="path" className="nav-link px-2 link-light">Información Personal</Link>
+                                </li>
+                                {!user.isService ?
+                                    <li className='nav-item'>
+                                        <Link to="/main/admin" relative="path" className="nav-link px-2 link-light">Dar Servicio</Link>
+                                    </li>
+                                    : ""
+                                }
+                            </ul>
+
+                            <div className="dropdown text-end">
+                                <a href="#" className="d-block link-light text-decoration-none dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                                        <img src={user.imageUrl} alt="" width="32" height="32" className="rounded-circle" />
+                                        <strong className='ms-2'>{user.firstName}</strong>
+                                    </a>
+                                    <ul className="dropdown-menu text-small shadow">
+                                        <li><a className="dropdown-item" href="#">Contáctanos</a></li>
+                                        <li><a className="dropdown-item" href="#">Aviso de Privacidad</a></li>
+                                        <li><hr className="dropdown-divider" /></li>
+                                        <li><a className="dropdown-item" href="#" onClick={logOut}>Cerrar Sesión</a></li>
+                                    </ul>
+                            </div>
+                        </div>
+                    </div>
+                </header>
+                <div className='container-fluid minwidth'>
+                    <Outlet />
                 </div>
             </>
         )
