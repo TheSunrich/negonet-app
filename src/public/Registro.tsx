@@ -369,7 +369,7 @@ export default function Registro() {
     const inputRef = useRef(null);
     const sendEmail = () => {
         emailjs.send("service_twzyttc", "template_t1kcbfq", {
-            to_name: user.name,
+            to_name: user.firstName,
             email: user.email,
         }, 'WYN-KBuNfBcx9Yi38');
     };

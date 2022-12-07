@@ -10,8 +10,9 @@ export interface User {
     imageUrl?: string;
     address?: Address,
     phone?: string;
-    birthDay?: Date;
+    birthDay?: any;
     processCompleted?: boolean;
+    backgroundColor?: string;
 }
 
 export interface Address {
