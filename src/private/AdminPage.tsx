@@ -285,21 +285,21 @@ const AdminPage = () => {
       ...element.address
     })
     let predata = schedulePredata
-    for (let i = 0; i < schedulePredata.days.length; i++) {
-      const presaved = schedulePredata.days[i];
+    for (let i = 0; i < predata.days.length; i++) {
+      const presaved = predata.days[i];
       for (let j = 0; j < schedule.days.length; j++) {
         const saved = schedule.days[j];
         if(presaved.day == saved.day){
           console.log(presaved.day, " == ", saved.day)
-          schedulePredata.days[i] = saved;
+          predata.days[i] = saved;
           break;
         }
       }
       
     }
-    console.log(schedulePredata)
+    console.log(predata)
     setSchedulePre({
-      ...schedulePredata
+      ...predata
     })
     /*setSchedulePre({
       ...element.schedule
