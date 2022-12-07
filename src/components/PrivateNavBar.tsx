@@ -48,7 +48,6 @@ const PrivateNavBar = ({ children }) => {
         console.log("logout")
         auth.signOut();
     }
-    console.log(imgurl)
     if (state === 2) {
         return (
             <>
