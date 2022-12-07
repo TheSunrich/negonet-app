@@ -23,7 +23,9 @@ export default function Registro() {
         isService: false
     }
     let addressData: Address = {}
-    let serviceData: Service = {}
+    let serviceData: Service = {
+        isActive: true
+    }
     let schedulePredata: Schedule = {
         interval: 30,
         days: [
@@ -244,6 +246,7 @@ export default function Registro() {
             user.isService ? service.address = addressService : ""
             user.isService ? service.schedule = schedule : ""
             user.isService ? service.userId = user.uid : ""
+            user.isService ? service.isActive = true : ""
             user.birthDay = new Date(moment(user.birthDay).toString());
             const tmp = { ...user };
             tmp.email = user.email;

@@ -9,6 +9,7 @@ export interface Service{
     address?: Address;
     schedule?: Schedule;
     isHomeService?: boolean;
+    isActive: true;
 }
 
 export interface Address {

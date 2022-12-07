@@ -106,7 +106,7 @@ export async function getSpecialty(categoryId) {
 export async function getServices() {
     const categories = [];
     const docsRef = collection(db, 'service');
-    const q = query(docsRef);
+    const q = query(docsRef, where('isActive', "==", true));
     const querySnapshot = await getDocs(q);
     querySnapshot.forEach((doc) => {
         categories.push({
@@ -117,16 +117,17 @@ export async function getServices() {
     return categories;
 }
 
-export async function getServiceByUser(uid){
+export async function getServiceByUser(uid) {
     const services = [];
     const docsRef = collection(db, 'service');
-    const q = query(docsRef, where('userId', "==", uid));
+    const q = query(docsRef, where('userId', "==", uid), where('isActive', "==", true));
     const querySnapshot = await getDocs(q);
 
     querySnapshot.forEach((doc) => {
         services.push({
             id: doc.id,
-            ...doc.data()});
+            ...doc.data()
+        });
     });
     return services;
 }
@@ -134,13 +135,24 @@ export async function getServiceByUser(uid){
 export async function searchService(searchOptions) {
     const services = [];
     const docsRef = collection(db, 'service');
-    const q = query(docsRef, where('categoryId', "==", searchOptions.categoryId), where('specialtyId', "==", searchOptions.specialtyId));
+    const q = query(docsRef, where('categoryId', "==", searchOptions.categoryId), where('specialtyId', "==", searchOptions.specialtyId), where('isActive', "==", true));
     const querySnapshot = await getDocs(q);
 
     querySnapshot.forEach((doc) => {
         services.push({
             id: doc.id,
-            ...doc.data()});
+            ...doc.data()
+        });
     });
     return services;
+}
+
+export async function deleteServiceFirebase(service) {
+    try {
+        const collectionRef = collection(db, 'service');
+        const docRef = doc(collectionRef, service.id);
+        await setDoc(docRef, service);
+    } catch (error) {
+
+    }
 }
