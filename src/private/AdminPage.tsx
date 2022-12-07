@@ -68,7 +68,6 @@ const AdminPage = () => {
   const [service, setService] = useState(serviceData);
   const [category, setCategories] = useState(null);
   const [specialty, setSpecialty] = useState([]);
-  const [specialtyAvailable, setAvailableS] = useState(true);
   const [addressService, setAddressService] = useState(addressData);
   const [schedule, setSchedule] = useState(scheduleData);
   const [edit, setEdit] = useState(false);
@@ -80,9 +79,6 @@ const AdminPage = () => {
     if (e.target.value != "") {
       const sp = await getSpecialty(e.target.value)
       setSpecialty(sp);
-      setAvailableS(false);
-    } else {
-      setAvailableS(true);
     }
   }
   async function handleServiceChange(e) {
@@ -184,26 +180,30 @@ const AdminPage = () => {
   }
   async function handleSubmit(e) {
     e.preventDefault();
-    service.schedule = schedule;
-    service.address = addressService;
-    service.userId = user.uid;
-    user.isService = true;
-    await createService(service);
-    await updateUser(user);
-    console.log(user)
-    Swal.fire({
-      title: 'Servicio registrado',
-      html: 'Se ha registrado exitósamente el servicio',
-      icon: 'success',
-      confirmButtonText: 'Continuar',
-      allowOutsideClick: false,
-      allowEnterKey: false,
-      allowEscapeKey: false
-    }).then((result) => {
-      if (result.isConfirmed) {
-        navigate("/main/admin");
-      }
-    })
+    if (edit) {
+
+    } else {
+      service.schedule = schedule;
+      service.address = addressService;
+      service.userId = user.uid;
+      user.isService = true;
+      await createService(service);
+      await updateUser(user);
+      console.log(user)
+      Swal.fire({
+        title: 'Servicio registrado',
+        html: 'Se ha registrado exitósamente el servicio',
+        icon: 'success',
+        confirmButtonText: 'Continuar',
+        allowOutsideClick: false,
+        allowEnterKey: false,
+        allowEscapeKey: false
+      }).then((result) => {
+        if (result.isConfirmed) {
+          navigate("/main/admin");
+        }
+      })
+    }
   }
   async function handleUserLoggedIn(u) {
     const s = await getServiceByUser(u.uid);
@@ -222,18 +222,21 @@ const AdminPage = () => {
     setSate(4);
     navigate("/login");
   }
-  function handleEditService(e, element) {
+  async function handleEditService(e, element) {
     setEdit(true);
-    console.log(element)
-    setService(element)
+    console.log(element.schedule)
+    const sp = await getSpecialty(element.categoryId)
+    setSpecialty(sp);
+    setService({ ...element })
     setSchedule({
       ...element.schedule
     })
+    console.log(service)
     setAddressService({
       ...element.address
     })
   }
-  async function getServices(){
+  async function getServices() {
     console.log(user)
     const s = await getServiceByUser(user.uid);
     setServices(s)
@@ -248,7 +251,7 @@ const AdminPage = () => {
       cancelButtonColor: '#d33',
       confirmButtonText: 'Sí, eliminar',
       cancelButtonText: "Cancelar"
-    }).then( async (result) => {
+    }).then(async (result) => {
       if (result.isConfirmed) {
         element.isActive = false;
         await deleteServiceFirebase(element);
@@ -266,6 +269,7 @@ const AdminPage = () => {
     setService(serviceData)
     setAddressService(addressData)
     setSchedule(scheduleData)
+    setSpecialty([])
   }
   if (state == 2) {
     return (
@@ -324,7 +328,7 @@ const AdminPage = () => {
                                 <option value="">Seleccionar una opción...</option>
                                 {category ?
                                   category.map(element => (
-                                    <option key={element.id} value={element.id}>{element.name}</option>
+                                    <option key={element.id} value={element.id} selected={element.id === service.categoryId}>{element.name}</option>
                                   ))
                                   :
                                   ""
@@ -334,11 +338,11 @@ const AdminPage = () => {
                             </div>
                             <div className="col-md-6">
                               <label className="form-label">Especialidad <b className='obligatorio'>*</b></label>
-                              <select name='specialtyId' onChange={handleServiceChange} id="specialtyselect" className="form-select" disabled={specialtyAvailable} required>
+                              <select name='specialtyId' onChange={handleServiceChange} id="specialtyselect" className="form-select" required>
                                 <option value="">Seleccionar una opción...</option>
                                 {specialty ?
                                   specialty.map(element => (
-                                    <option key={element.id} value={element.id}>{element.name}</option>
+                                    <option key={element.id} value={element.id} selected={element.id === service.specialtyId}>{element.name}</option>
                                   ))
                                   :
                                   ""
@@ -347,34 +351,34 @@ const AdminPage = () => {
                             </div>
                             <div className="col-md-8">
                               <label className="form-label">Nombre del Servicio <b className='obligatorio'>*</b></label>
-                              <input name='name' onChange={handleServiceChange} type="text" className="form-control" placeholder='Ejemplo: Electricista a Domicilio' required />
+                              <input name='name' onChange={handleServiceChange} type="text" className="form-control" defaultValue={service.name} placeholder='Ejemplo: Electricista a Domicilio' required />
                             </div>
                             <div className="col-md-4">
                               <label className="form-label">Precio <b className='obligatorio'>*</b></label>
                               <div className="input-group">
                                 <span className="input-group-text" id="basic-addon1">$</span>
-                                <input name='price' onChange={handleServiceChange} type="number" className="form-control" placeholder="159" />
+                                <input name='price' onChange={handleServiceChange} type="number" className="form-control" defaultValue={service.price} placeholder="159" />
                               </div>
                             </div>
                             <div className="col-md-12">
                               <label className="form-label">Descripción del Servicio <b className='obligatorio'>*</b></label>
-                              <textarea name='description' onChange={handleServiceChange} className="form-control" placeholder='Debes de ser llamativo, solo tendrás 500 caracteres disponibles' maxLength={500}></textarea>
+                              <textarea name='description' onChange={handleServiceChange} className="form-control" defaultValue={service.description} placeholder='Debes de ser llamativo, solo tendrás 500 caracteres disponibles' maxLength={500}></textarea>
                             </div>
                             <div className="col-md-12">
                               <label className="form-label">Dirección 1 <b className='obligatorio'>*</b></label>
-                              <input name='address1' onChange={handleServiceAddressChange} type="text" className="form-control" placeholder='Calle #Número Colonia' required />
+                              <input name='address1' onChange={handleServiceAddressChange} type="text" className="form-control" defaultValue={addressService.address1} placeholder='Calle #Número Colonia' required />
                             </div>
                             <div className="col-md-12">
                               <label className="form-label">Dirección 2</label>
-                              <input name='address2' onChange={handleServiceAddressChange} type="text" placeholder='Opcional: Calle #Número Colonia' className="form-control" />
+                              <input name='address2' onChange={handleServiceAddressChange} type="text" defaultValue={addressService.address2} placeholder='Opcional: Calle #Número Colonia' className="form-control" />
                             </div>
                             <div className="col-md-6">
                               <label className="form-label">Ciudad <b className='obligatorio'>*</b></label>
-                              <input name='city' onChange={handleServiceAddressChange} type="text" className="form-control" required />
+                              <input name='city' onChange={handleServiceAddressChange} type="text" defaultValue={addressService.city} className="form-control" required />
                             </div>
                             <div className="col-md-4">
                               <label className="form-label">Estado <b className='obligatorio'>*</b></label>
-                              <select name='state' onChange={handleServiceAddressChange} className="form-select" required>
+                              <select name='state' onChange={handleServiceAddressChange} defaultValue={addressService.state} className="form-select" required>
                                 <option value="">Seleccionar una opción...</option>
                                 <option value="Aguascalientes">Aguascalientes</option>
                                 <option value="Baja California">Baja California</option>
@@ -412,7 +416,7 @@ const AdminPage = () => {
                             </div>
                             <div className="col-md-2">
                               <label className="form-label">CP <b className='obligatorio'>*</b></label>
-                              <input name='zip' onChange={handleServiceAddressChange} type="number" className="form-control" required />
+                              <input name='zip' onChange={handleServiceAddressChange} type="number" className="form-control" defaultValue={addressService.zip} required />
                             </div>
                             <div className="col-12">
                               <div className="form-check">
@@ -493,7 +497,7 @@ const AdminPage = () => {
                         <button type='button' onClick={handleCleanForm} className='btn btn-secondary me-2 mt-2 mb-2'>
                           Cancelar
                         </button>
-                        <button type='button' className='btn btn-warning mt-2 mb-2'>
+                        <button type='submit' className='btn btn-warning mt-2 mb-2'>
                           Editar Servicio
                         </button>
                       </div>
