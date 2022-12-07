@@ -1,12 +1,13 @@
 import React, { useEffect, useState } from 'react'
 import { GoogleAuthProvider, onAuthStateChanged, signInWithPopup, signInWithRedirect } from 'firebase/auth';
 import AuthProvider from '../components/AuthProvider';
-import { auth, createService, getCategories, getServiceByUser, getSpecialty, updateUser, deleteServiceFirebase } from '../utils/firebase';
+import { auth, createService, getCategories, getServiceByUser, getSpecialty, updateUser, deleteServiceFirebase, editService } from '../utils/firebase';
 import { useNavigate } from 'react-router-dom';
 import Loading from '../components/Loading';
 import { User, Address } from '../models/UserModel';
 import { Schedule, Service } from '../models/ServiceModel';
 import Swal from 'sweetalert2';
+import Select from 'react-select';
 
 const AdminPage = () => {
   useEffect(() => {
@@ -64,12 +65,56 @@ const AdminPage = () => {
     interval: 30,
     days: []
   }
+  let states = [
+    "Aguascalientes",
+    "Baja California",
+    "Baja California Sur",
+    "Campeche",
+    "Chiapas",
+    "Chihuahua",
+    "Ciudad de México",
+    "Coahuila",
+    "Colima",
+    "Durango",
+    "Guanajuato",
+    "Guerrero",
+    "Hidalgo",
+    "Jalisco",
+    "México",
+    "Michoacán",
+    "Morelos",
+    "Nayarit",
+    "Nuevo León",
+    "Oaxaca",
+    "Puebla",
+    "Querétaro",
+    "Quintana Roo",
+    "San Luis Potosí",
+    "Sinaloa",
+    "Sonora",
+    "Tabasco",
+    "Tamaulipas",
+    "Tlaxcala",
+    "Veracruz",
+    "Yucatán",
+    "Zacatecas"
+  ]
+  let scheduleSelect = [
+    { value: 30, label: "30 minutos" },
+    { value: 45, label: "45 minutos" },
+    { value: 60, label: "1 hora" },
+    { value: 75, label: "1 hora 15 minutos" },
+    { value: 90, label: "1 hora 30 minutos" },
+    { value: 105, label: " 1 hora 45 minutos" },
+    { value: 120, label: "2 horas" }
+  ]
   const [user, setUser] = useState(userData);
   const [service, setService] = useState(serviceData);
   const [category, setCategories] = useState(null);
   const [specialty, setSpecialty] = useState([]);
   const [addressService, setAddressService] = useState(addressData);
   const [schedule, setSchedule] = useState(scheduleData);
+  const [schePreData, setSchedulePre] = useState(schedulePredata);
   const [edit, setEdit] = useState(false);
   async function handleCategoryChange(e) {
     setService({
@@ -130,11 +175,7 @@ const AdminPage = () => {
       const result = schedule.days.find(({ day }) => day === e.target.value);
       if (result === undefined) {
         scheduleday = {
-          day: e.target.value,
-          hours: {
-            startHour: "",
-            endHour: ""
-          }
+          day: e.target.value
         }
         schedule.days.push(scheduleday)
         setSchedule(schedule);
@@ -153,6 +194,7 @@ const AdminPage = () => {
         setSchedule(schedule);
       }
     }
+    editSchedule(schedule)
   }
   function handleStartHourChange(e, element) {
     element.startHour = (e.target.value);
@@ -162,6 +204,7 @@ const AdminPage = () => {
       schedule.days[position] = element;
       setSchedule(schedule);
     }
+    console.log(schedule)
   }
   function handleEndHourChange(e, element) {
     element.endHour = (e.target.value);
@@ -171,17 +214,41 @@ const AdminPage = () => {
       schedule.days[position] = element;
       setSchedule(schedule);
     }
+    console.log(schedule)
   }
   function handleServiceAddressChange(e) {
+    console.log(edit)
     setAddressService({
       ...addressService,
       [e.target.name]: e.target.value
     })
+    console.log(e.target.value)
   }
   async function handleSubmit(e) {
     e.preventDefault();
     if (edit) {
-
+      service.schedule = schedule;
+      service.address = addressService;
+      Swal.fire({
+        title: '¿Estás seguro que deseas editar el servicio?',
+        html: 'Esto cambiará la información que se muestra a partir de ahora, las citas realizadas previamente no se verán afectadas',
+        icon: 'question',
+        confirmButtonText: 'Editar',
+        allowOutsideClick: false,
+        allowEnterKey: false,
+        allowEscapeKey: false
+      }).then(async (result) => {
+        if (result.isConfirmed) {
+          await editService(service);
+          setEdit(false);
+          handleCleanForm(e);
+          getServices();
+          Swal.fire(
+            {title: 'Servicio editado',
+            icon: 'success'}
+          )
+        }
+      })
     } else {
       service.schedule = schedule;
       service.address = addressService;
@@ -200,6 +267,7 @@ const AdminPage = () => {
         allowEscapeKey: false
       }).then((result) => {
         if (result.isConfirmed) {
+          getServices();
           navigate("/main/admin");
         }
       })
@@ -222,6 +290,25 @@ const AdminPage = () => {
     setSate(4);
     navigate("/login");
   }
+  function editSchedule(schedule){
+    let predata = schedulePredata
+    for (let i = 0; i < predata.days.length; i++) {
+      const presaved = predata.days[i];
+      for (let j = 0; j < schedule.days.length; j++) {
+        const saved = schedule.days[j];
+        if(presaved.day == saved.day){
+          console.log(presaved.day, " == ", saved.day)
+          predata.days[i] = saved;
+          break;
+        }
+      }
+      
+    }
+    console.log(predata)
+    setSchedulePre({
+      ...predata
+    })
+  }
   async function handleEditService(e, element) {
     setEdit(true);
     console.log(element.schedule)
@@ -231,10 +318,32 @@ const AdminPage = () => {
     setSchedule({
       ...element.schedule
     })
+    console.log(schedule)
     console.log(service)
     setAddressService({
       ...element.address
     })
+    let predata = schedulePredata
+    for (let i = 0; i < predata.days.length; i++) {
+      const presaved = predata.days[i];
+      for (let j = 0; j < element.schedule.days.length; j++) {
+        const saved = element.schedule.days[j];
+        if(presaved.day == saved.day){
+          console.log(presaved.day, " == ", saved.day)
+          predata.days[i] = saved;
+          break;
+        }
+      }
+      
+    }
+    console.log(predata)
+    setSchedulePre({
+      ...predata
+    })
+    /*setSchedulePre({
+      ...element.schedule
+    })*/
+    console.log(schePreData)
   }
   async function getServices() {
     console.log(user)
@@ -266,10 +375,17 @@ const AdminPage = () => {
   }
   function handleCleanForm(e) {
     setEdit(false);
-    setService(serviceData)
+    setService({
+      ...serviceData,
+      name: "",
+      description: ""
+    })
     setAddressService(addressData)
     setSchedule(scheduleData)
+    setSchedulePre(schedulePredata)
     setSpecialty([])
+    let form = document.getElementById("serviceform") as HTMLFormElement
+    form.reset();
   }
   if (state == 2) {
     return (
@@ -287,7 +403,7 @@ const AdminPage = () => {
                 <hr className='ms-2 me-2' />
                 {services.length > 0 ?
                   services.map(element => (
-                    <div key={element.uid} className='container-fluid rounded border shadow mb-2' style={{ background: `linear-gradient(rgba( 0, 0, 0, 0.6), rgba( 0, 0, 0, 0.6)), url(${element.imageUrl})`, backgroundRepeat: "no-repeat", backgroundSize: "cover", backgroundPosition: "center center", opacity: "1" }}>
+                    <div key={element.id} className='container-fluid rounded border shadow mb-2' style={{ background: `linear-gradient(rgba( 0, 0, 0, 0.6), rgba( 0, 0, 0, 0.6)), url(${element.imageUrl})`, backgroundRepeat: "no-repeat", backgroundSize: "cover", backgroundPosition: "center center", opacity: "1" }}>
                       <div className='container-fluid pt-2 pb-2'>
                         <span className='fw-bold fs-5' style={{ color: "white" }}>{element.name}</span>
                       </div>
@@ -312,7 +428,7 @@ const AdminPage = () => {
               </div>
               <div className='col-md-8'>
                 <div className='col-12'>
-                  <form onSubmit={handleSubmit}>
+                  <form onSubmit={handleSubmit} id="serviceform">
                     <div className="accordion" id="accordionExample">
                       <div className="accordion-item">
                         <h2 className="accordion-header" id="headingOne">
@@ -378,40 +494,12 @@ const AdminPage = () => {
                             </div>
                             <div className="col-md-4">
                               <label className="form-label">Estado <b className='obligatorio'>*</b></label>
-                              <select name='state' onChange={handleServiceAddressChange} defaultValue={addressService.state} className="form-select" required>
+                              <select name='state' onChange={handleServiceAddressChange} className="form-select" required>
                                 <option value="">Seleccionar una opción...</option>
-                                <option value="Aguascalientes">Aguascalientes</option>
-                                <option value="Baja California">Baja California</option>
-                                <option value="Baja California Sur">Baja California Sur</option>
-                                <option value="Campeche">Campeche</option>
-                                <option value="Chiapas">Chiapas</option>
-                                <option value="Chihuahua">Chihuahua</option>
-                                <option value="Ciudad de México">Ciudad de México</option>
-                                <option value="Coahuila">Coahuila</option>
-                                <option value="Colima">Colima</option>
-                                <option value="Durango">Durango</option>
-                                <option value="Guanajuato">Guanajuato</option>
-                                <option value="Guerrero">Guerrero</option>
-                                <option value="Hidalgo">Hidalgo</option>
-                                <option value="Jalisco">Jalisco</option>
-                                <option value="México">México</option>
-                                <option value="Michoacán">Michoacán</option>
-                                <option value="Morelos">Morelos</option>
-                                <option value="Nayarit">Nayarit</option>
-                                <option value="Nuevo León">Nuevo León</option>
-                                <option value="Oaxaca">Oaxaca</option>
-                                <option value="Puebla">Puebla</option>
-                                <option value="Querétaro">Querétaro</option>
-                                <option value="Quintana Roo">Quintana Roo</option>
-                                <option value="San Luis Potosí">San Luis Potosí</option>
-                                <option value="Sinaloa">Sinaloa</option>
-                                <option value="Sonora">Sonora</option>
-                                <option value="Tabasco">Tabasco</option>
-                                <option value="Tamaulipas">Tamaulipas</option>
-                                <option value="Tlaxcala">Tlaxcala</option>
-                                <option value="Veracruz">Veracruz</option>
-                                <option value="Yucatán">Yucatán</option>
-                                <option value="Zacatecas">Zacatecas</option>
+                                {states.map(state => (
+                                  <option key={state} value={state} selected={(edit && (state == addressService.state))}>{state}</option>
+                                ))
+                                }
                               </select>
                             </div>
                             <div className="col-md-2">
@@ -420,7 +508,7 @@ const AdminPage = () => {
                             </div>
                             <div className="col-12">
                               <div className="form-check">
-                                <input name='isHomeService' className="form-check-input" type="checkbox" id="homeCheck" onChange={handleHomeService} />
+                                <input name='isHomeService' className="form-check-input" type="checkbox" id="homeCheck" onChange={handleHomeService} checked={service.isHomeService} />
                                 <label className="form-check-label">
                                   Puedo brindar servicio a Domicilio
                                 </label>
@@ -439,24 +527,24 @@ const AdminPage = () => {
                           <div className="accordion-body">
                             {/* Intevalo */}
                             <select name='interval' className="mb-3 form-select" aria-label="Default select example" onChange={handleIntervalChange}>
-                              <option value="" disabled>Seleccionar Intervalo...</option>
-                              <option value="30">30 minutos</option>
-                              <option value="45">45 minutos</option>
-                              <option value="60">1 hora</option>
-                              <option value="75">1 hora 15 minutos</option>
-                              <option value="90">1 hora 30 minutos</option>
-                              <option value="105">1 hora 45 minutos</option>
-                              <option value="120">2 horas</option>
+                              <option value="">Seleccionar Intervalo...</option>
+                              {schedule.days.length > 1 ?
+                                scheduleSelect.map(interval => (
+                                  <option key={interval.value} value={interval.value} selected={interval.value == schedule.interval}>{interval.label}</option>
+                                ))
+                                :
+                                scheduleSelect.map(interval => (
+                                  <option key={interval.value} value={interval.value}>{interval.label}</option>
+                                ))
+                              }
                             </select>
-                            {/* Lunes */}
-
                             {
-                              schedulePredata.days.map(element => (
+                              schePreData.days.map((element, index) => (
                                 <div key={element.day} className="row mb-3">
                                   <div className="col-sm-4">
                                     <div className="form-check">
                                       <label className="form-check-label mt-2">
-                                        <input className="form-check-input" type="checkbox" value={element.day} onChange={handleDayChange} /> {element.day}
+                                        <input className="form-check-input" name={element.day} type="checkbox" value={element.day} onChange={handleDayChange} checked={element.startHour != "" && element.endHour  != ""}/> {element.day}
                                       </label>
                                     </div>
                                   </div>
@@ -464,7 +552,7 @@ const AdminPage = () => {
                                     <div className="row mb-3">
                                       <label className="col-sm-2 col-form-label">Inicio</label>
                                       <div className="col-sm-9 offset-sm-1">
-                                        <input required disabled={true} id={element.day + "s"} type="time" className="form-control" onChange={(e) => handleStartHourChange(e, element)} defaultValue={element.startHour} />
+                                        <input name={"startHour"+element.day} required disabled={element.startHour == ""} id={element.day + "s"} type="time" className="form-control" onChange={(e) => handleStartHourChange(e, element)} defaultValue={ edit ? element.startHour : ""} />
                                       </div>
                                     </div>
                                   </div>
@@ -472,7 +560,7 @@ const AdminPage = () => {
                                     <div className="row mb-3">
                                       <label className="col-sm-2 col-form-label">Fin</label>
                                       <div className="col-sm-9 offset-sm-1">
-                                        <input required disabled={true} id={element.day + "e"} type="time" className="form-control" onChange={(e) => handleEndHourChange(e, element)} defaultValue={element.endHour} />
+                                        <input name={"endHour"+element.day} required disabled={element.endHour  == ""} id={element.day + "e"} type="time" className="form-control" onChange={(e) => handleEndHourChange(e, element)} defaultValue={ edit ? element.endHour : ""} />
                                       </div>
                                     </div>
                                   </div>

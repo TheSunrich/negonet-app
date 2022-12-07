@@ -165,4 +165,12 @@ export async function uploadImage(image, path): Promise<string> {
         return downloadURL;
     });
         
+export async function editService(service) {
+    try {
+        const collectionRef = collection(db, 'service');
+        const docRef = doc(collectionRef, service.id);
+        await setDoc(docRef, service);
+    } catch (error) {
+
+    }
 }
