@@ -194,11 +194,31 @@
 .navbartopmain{
     background-color: #1392c4;
 }
+.headertoprofile{
+    background-color: #4bccff;
+    height: 200px;
+}
 .minwidth{
     display: none;
 }
 .fullwidth{
     display: block;
+}
+.roundedimg{
+    border-radius: 50%;
+    right: 40px;
+    position: absolute;
+    top: 40px;
+    border: 3px #00000075 solid;
+    object-fit: cover;
+    width: 250px;
+    height: 250px;
+}
+.imgcover{
+    object-fit: cover;
+}
+.backgrounds{
+    background-color: #4bccff;
 }
 @media (max-width: 1330px) {
     .fullwidth{
@@ -207,4 +227,22 @@
     .minwidth{
         display: block;
     }
+    .roundedimg{
+        border-radius: 50%;
+        right: 40px;
+        position: absolute;
+        top: 90px;
+        border: 3px #00000075 solid;
+        object-fit: cover;
+        width: 250px;
+        height: 250px;
+    }
+    .headertoprofile{
+        margin-top: -20px;
+    }
   }
+@media (max-width: 992px){
+    .headertoprofile{
+        display: none;
+    }
+}
