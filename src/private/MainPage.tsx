@@ -75,6 +75,9 @@ const MainPage = () => {
     console.log(s)
     setService(s);
   }
+  async function handleSubmitService(e) {
+
+  }
   function handleUserUserNotRegistered(user) {
     navigate("/register");
   }
@@ -171,7 +174,24 @@ const MainPage = () => {
                 <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
               </div>
               <div className="modal-body">
-                ...
+                <form className='row g-3' onSubmit={handleSubmitService}>
+                  <div className="col-md-8">
+                    <label className="form-label">¿A qué nombre está el servicio? <b className='obligatorio'>*</b></label>
+                    <input name='name' type="text" className="form-control" placeholder='Te reconocerán por este nombre' required />
+                  </div>
+                  <div className="col-md-4">
+                    <label className="form-label">Edad <b className='obligatorio'>*</b></label>
+                    <input name='age' type="number" className="form-control" required />
+                  </div>
+                  <div className="col-md-12">
+                    <label className="form-label">Datos Importantes <b className='obligatorio'>*</b></label>
+                    <textarea name='information' className="form-control" placeholder='Ingresa cualquier información relevante (alergias, ubicaciones, pedido especial)' maxLength={500}></textarea>
+                  </div>
+                  <div className="col-md-4">
+                    <label className="form-label">Selecciona la fecha y hora <b className='obligatorio'>*</b></label>
+                    
+                  </div>
+                </form>
               </div>
               <div className="modal-footer">
                 <button type="button" className="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
