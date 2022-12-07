@@ -128,16 +128,25 @@ export default function InformationPage() {
       }
     })
   }
-  async function handleSubmitColor(e){
+  async function handleSubmitColor1(e){
     setColor(e.target.value)
     setUser({
       ...user,
-      backgroundColor: e.target.value
+      [e.target.name]: e.target.value
     })
+  }
+  async function handleSubmitColor2(e){
+    setUser({
+      ...user,
+      [e.target.name]: e.target.value
+    })
+    document.getElementById("responsivenavbar").style.backgroundColor = e.target.value;
+    document.getElementById("insidelateralbar").style.backgroundColor = e.target.value;
+    document.getElementById("lateralbar").style.backgroundColor = e.target.value;
   }
   async function handleUserLoggedIn(u) {
     var randomColor = Math.floor(Math.random() * 16777215).toString(16);
-    u.backgroundColor ? setColor(u.backgroundColor) : setColor("#" + randomColor);
+    u.backgroundColor1 ? setColor(u.backgroundColor1) : setColor("#" + randomColor);
     console.log(randomColor)
     const s = await getServiceByUser(u.uid);
     setServices(s)
@@ -219,13 +228,17 @@ export default function InformationPage() {
                   <label className="form-label">Correo <b className='obligatorio'>*</b></label>
                   <input name='email' onChange={handleChange} type="email" className="form-control" placeholder="example@gmail.com" value={user.email} required />
                 </div>
-                <div className="col-md-3 mb-4">
+                <div className="col-md-2 mb-4">
                   <label className="form-label">Contraseña <b className='obligatorio'>*</b></label>
                   <input name='password' onChange={handleChange} type="password" className="form-control" placeholder="********" value={user.password} required />
                 </div>
                 <div className='col-md-1 mb-1'>
-                  <label htmlFor="exampleColorInput" className="form-label">Color</label>
-                  <input type="color" className="form-control form-control-color" id="exampleColorInput" onChange={handleSubmitColor} value={ user.backgroundColor ?  user.backgroundColor : "#ffffff"}/>
+                  <label htmlFor="exampleColorInput" className="form-label">Color 1</label>
+                  <input type="color" className="form-control form-control-color" name='backgroundColor1' id="exampleColorInput" onChange={handleSubmitColor1} value={ user.backgroundColor1 ?  user.backgroundColor1 : "#ffffff"}/>
+                </div>
+                <div className='col-md-1 mb-1'>
+                  <label htmlFor="exampleColorInput" className="form-label">Color 2</label>
+                  <input type="color" className="form-control form-control-color" name='backgroundColor2' id="exampleColorInput" onChange={handleSubmitColor2} value={ user.backgroundColor2 ?  user.backgroundColor2 : "#ffffff"}/>
                 </div>
 
                 <div className='col-md-12 mt-2'>
@@ -244,7 +257,7 @@ export default function InformationPage() {
                   <label className="form-label">Ciudad <b className='obligatorio'>*</b></label>
                   <input name='city' onChange={handleAddressChange} type="text" className="form-control" value={user.address.city} required />
                 </div>
-                <div className="col-md-3">
+                <div className="col-md-2">
                   <label className="form-label">Estado <b className='obligatorio'>*</b></label>
                   <select name='state' onChange={handleAddressChange} className="form-select" required>
                     <option value="">Seleccionar una opción...</option>

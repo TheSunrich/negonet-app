@@ -53,8 +53,8 @@ const PrivateNavBar = ({ children }) => {
             <>
                 <div className='container-fluid fullwidth'>
                     <div className='row'>
-                        <div className='col-2 bar' style={{position: "fixed"}}>
-                            <div className="d-flex flex-column flex-shrink-0 p-3 bar text-light barwidth">
+                        <div className='col-2 bar' id='lateralbar' style={{position: "fixed", backgroundColor: user.backgroundColor2 ? user.backgroundColor2 : "#1392c4"}}>
+                            <div className="d-flex flex-column flex-shrink-0 p-3 bar text-light barwidth" id='insidelateralbar' style={{backgroundColor: user.backgroundColor2 ? user.backgroundColor2 : "#1392c4"}}>
                                 <Link to="/main" relative='path' className="d-flex align-items-center link-light text-decoration-none">
                                     <span className="fs-4"><img src={logoimg} width="30" /><b className='ms-3'>Perfil</b></span>
                                 </Link>
@@ -92,7 +92,7 @@ const PrivateNavBar = ({ children }) => {
                                 <hr />
                                 <div className="dropdown">
                                     <a href="#" className="d-flex align-items-center link-light text-decoration-none dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
-                                        <img src={user.imageUrl} alt="" width="32" height="32" className="rounded-circle me-2" />
+                                        <img src={user.imageUrl} alt="" width="32" height="32" className="rounded-circle me-2 imgcover"/>
                                         <strong>{user.firstName}</strong>
                                     </a>
                                     <ul className="dropdown-menu text-small shadow">
@@ -109,7 +109,7 @@ const PrivateNavBar = ({ children }) => {
                         </div>
                     </div>
                 </div>
-                <header className="p-3 mb-3 border-bottom navbartopmain minwidth ">
+                <header id="responsivenavbar" className="p-3 mb-3 border-bottom navbartopmain minwidth">
                     <div className="container">
                         <div className="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start">
                             <Link to="/main" relative='path' className="d-flex align-items-center mb-2 mb-lg-0 text-light text-decoration-none">
@@ -148,7 +148,7 @@ const PrivateNavBar = ({ children }) => {
 
                             <div className="dropdown text-end">
                                 <a href="#" className="d-block link-light text-decoration-none dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
-                                    <img src={user.imageUrl} alt="" width="32" height="32" className="rounded-circle" />
+                                    <img src={user.imageUrl} alt="" width="32" height="32" className="rounded-circle imgcover"/>
                                     <strong className='ms-2'>{user.firstName}</strong>
                                 </a>
                                 <ul className="dropdown-menu text-small shadow">

@@ -12,7 +12,8 @@ export interface User {
     phone?: string;
     birthDay?: any;
     processCompleted?: boolean;
-    backgroundColor?: string;
+    backgroundColor1?: string;
+    backgroundColor2?: string;
 }
 
 export interface Address {

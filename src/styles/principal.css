@@ -210,6 +210,13 @@
     position: absolute;
     top: 40px;
     border: 3px #00000075 solid;
+    object-fit: cover;
+}
+.imgcover{
+    object-fit: cover;
+}
+.backgrounds{
+    background-color: #4bccff;
 }
 @media (max-width: 1330px) {
     .fullwidth{
