@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { GoogleAuthProvider, onAuthStateChanged, signInWithPopup, signInWithRedirect } from 'firebase/auth';
 import AuthProvider from '../components/AuthProvider';
-import { auth, createService, getCategories, getServiceByUser, getSpecialty, updateUser, deleteServiceFirebase } from '../utils/firebase';
+import { auth, createService, getCategories, getServiceByUser, getSpecialty, updateUser, deleteServiceFirebase, editService } from '../utils/firebase';
 import { useNavigate } from 'react-router-dom';
 import Loading from '../components/Loading';
 import { User, Address } from '../models/UserModel';
@@ -175,11 +175,7 @@ const AdminPage = () => {
       const result = schedule.days.find(({ day }) => day === e.target.value);
       if (result === undefined) {
         scheduleday = {
-          day: e.target.value,
-          hours: {
-            startHour: "",
-            endHour: ""
-          }
+          day: e.target.value
         }
         schedule.days.push(scheduleday)
         setSchedule(schedule);
@@ -198,6 +194,7 @@ const AdminPage = () => {
         setSchedule(schedule);
       }
     }
+    editSchedule(schedule)
   }
   function handleStartHourChange(e, element) {
     element.startHour = (e.target.value);
@@ -207,6 +204,7 @@ const AdminPage = () => {
       schedule.days[position] = element;
       setSchedule(schedule);
     }
+    console.log(schedule)
   }
   function handleEndHourChange(e, element) {
     element.endHour = (e.target.value);
@@ -216,6 +214,7 @@ const AdminPage = () => {
       schedule.days[position] = element;
       setSchedule(schedule);
     }
+    console.log(schedule)
   }
   function handleServiceAddressChange(e) {
     console.log(edit)
@@ -228,7 +227,28 @@ const AdminPage = () => {
   async function handleSubmit(e) {
     e.preventDefault();
     if (edit) {
-
+      service.schedule = schedule;
+      service.address = addressService;
+      Swal.fire({
+        title: '¿Estás seguro que deseas editar el servicio?',
+        html: 'Esto cambiará la información que se muestra a partir de ahora, las citas realizadas previamente no se verán afectadas',
+        icon: 'question',
+        confirmButtonText: 'Editar',
+        allowOutsideClick: false,
+        allowEnterKey: false,
+        allowEscapeKey: false
+      }).then(async (result) => {
+        if (result.isConfirmed) {
+          await editService(service);
+          setEdit(false);
+          handleCleanForm(e);
+          getServices();
+          Swal.fire(
+            {title: 'Servicio editado',
+            icon: 'success'}
+          )
+        }
+      })
     } else {
       service.schedule = schedule;
       service.address = addressService;
@@ -270,6 +290,25 @@ const AdminPage = () => {
     setSate(4);
     navigate("/login");
   }
+  function editSchedule(schedule){
+    let predata = schedulePredata
+    for (let i = 0; i < predata.days.length; i++) {
+      const presaved = predata.days[i];
+      for (let j = 0; j < schedule.days.length; j++) {
+        const saved = schedule.days[j];
+        if(presaved.day == saved.day){
+          console.log(presaved.day, " == ", saved.day)
+          predata.days[i] = saved;
+          break;
+        }
+      }
+      
+    }
+    console.log(predata)
+    setSchedulePre({
+      ...predata
+    })
+  }
   async function handleEditService(e, element) {
     setEdit(true);
     console.log(element.schedule)
@@ -287,8 +326,8 @@ const AdminPage = () => {
     let predata = schedulePredata
     for (let i = 0; i < predata.days.length; i++) {
       const presaved = predata.days[i];
-      for (let j = 0; j < schedule.days.length; j++) {
-        const saved = schedule.days[j];
+      for (let j = 0; j < element.schedule.days.length; j++) {
+        const saved = element.schedule.days[j];
         if(presaved.day == saved.day){
           console.log(presaved.day, " == ", saved.day)
           predata.days[i] = saved;
@@ -336,10 +375,17 @@ const AdminPage = () => {
   }
   function handleCleanForm(e) {
     setEdit(false);
-    setService(serviceData)
+    setService({
+      ...serviceData,
+      name: "",
+      description: ""
+    })
     setAddressService(addressData)
     setSchedule(scheduleData)
+    setSchedulePre(schedulePredata)
     setSpecialty([])
+    let form = document.getElementById("serviceform") as HTMLFormElement
+    form.reset();
   }
   if (state == 2) {
     return (
@@ -382,7 +428,7 @@ const AdminPage = () => {
               </div>
               <div className='col-md-8'>
                 <div className='col-12'>
-                  <form onSubmit={handleSubmit}>
+                  <form onSubmit={handleSubmit} id="serviceform">
                     <div className="accordion" id="accordionExample">
                       <div className="accordion-item">
                         <h2 className="accordion-header" id="headingOne">
@@ -498,7 +544,7 @@ const AdminPage = () => {
                                   <div className="col-sm-4">
                                     <div className="form-check">
                                       <label className="form-check-label mt-2">
-                                        <input className="form-check-input" type="checkbox" value={element.day} onChange={handleDayChange} checked={element.startHour != ""}/> {element.day}
+                                        <input className="form-check-input" name={element.day} type="checkbox" value={element.day} onChange={handleDayChange} checked={element.startHour != "" && element.endHour  != ""}/> {element.day}
                                       </label>
                                     </div>
                                   </div>
@@ -506,7 +552,7 @@ const AdminPage = () => {
                                     <div className="row mb-3">
                                       <label className="col-sm-2 col-form-label">Inicio</label>
                                       <div className="col-sm-9 offset-sm-1">
-                                        <input required disabled={element.startHour == ""} id={element.day + "s"} type="time" className="form-control" onChange={(e) => handleStartHourChange(e, element)} defaultValue={element.startHour} />
+                                        <input name={"startHour"+element.day} required disabled={element.startHour == ""} id={element.day + "s"} type="time" className="form-control" onChange={(e) => handleStartHourChange(e, element)} defaultValue={ edit ? element.startHour : ""} />
                                       </div>
                                     </div>
                                   </div>
@@ -514,7 +560,7 @@ const AdminPage = () => {
                                     <div className="row mb-3">
                                       <label className="col-sm-2 col-form-label">Fin</label>
                                       <div className="col-sm-9 offset-sm-1">
-                                        <input required disabled={element.endHour  == ""} id={element.day + "e"} type="time" className="form-control" onChange={(e) => handleEndHourChange(e, element)} defaultValue={element.endHour} />
+                                        <input name={"endHour"+element.day} required disabled={element.endHour  == ""} id={element.day + "e"} type="time" className="form-control" onChange={(e) => handleEndHourChange(e, element)} defaultValue={ edit ? element.endHour : ""} />
                                       </div>
                                     </div>
                                   </div>
