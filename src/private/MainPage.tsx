@@ -37,8 +37,6 @@ const MainPage = () => {
   async function handleUserLoggedIn(u) {
     const s = await getServices();
     setService(s)
-    console.log(services)
-    console.log(s)
     setSate(2);
   }
   async function handleCategoryChange(e) {
@@ -121,7 +119,7 @@ const MainPage = () => {
               </form>
             </div>
           </div>
-          <div className='container-fluid border bg-light pt-4 pb-4 text-right'>
+          <div className='container-fluid border bg-light pt-4 pb-4 ms-2 text-right'>
             {services.length > 0 ?
               <div className='row'>
                 {

@@ -48,7 +48,7 @@ function App() {
             <Route path='/main/information' element={<InformationPage />} />
             <Route path='/main/schedule' element={<SchedulePage />} />
             <Route path='/main/appointment' element={<AppointmentPage />} />
-            <Route path='/main/settings' element={<SettingsPage />} />
+            <Route path='/main/settings' element={<AdminPage />} />
             <Route path='*' element={<Navigate replace to="/main" />} />
           </Route>
         </Routes>

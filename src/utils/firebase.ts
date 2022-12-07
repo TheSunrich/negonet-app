@@ -117,6 +117,20 @@ export async function getServices() {
     return categories;
 }
 
+export async function getServiceByUser(uid){
+    const services = [];
+    const docsRef = collection(db, 'service');
+    const q = query(docsRef, where('userId', "==", uid));
+    const querySnapshot = await getDocs(q);
+
+    querySnapshot.forEach((doc) => {
+        services.push({
+            id: doc.id,
+            ...doc.data()});
+    });
+    return services;
+}
+
 export async function searchService(searchOptions) {
     const services = [];
     const docsRef = collection(db, 'service');
