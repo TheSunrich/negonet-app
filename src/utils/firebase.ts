@@ -1,7 +1,7 @@
 import { initializeApp } from "firebase/app";
 import { getFirestore, collection, addDoc, getDocs, doc, getDoc, query, where, setDoc, deleteDoc } from "firebase/firestore";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
-import { getStorage, ref, uploadBytes, getDownloadURL, getBytes } from 'firebase/storage';
+import { getStorage, ref, uploadBytes, getDownloadURL, getBytes, uploadBytesResumable, } from 'firebase/storage';
 const firebaseConfig = {
     apiKey: "AIzaSyAD64vbbFCLso2nennhePArHrvykiZ8GXo",
     authDomain: "negonet-1fb9c.firebaseapp.com",
@@ -16,7 +16,7 @@ const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 const auth = getAuth(app);
 const storage = getStorage(app);
-export { db, auth, app };
+export { db, auth, app, storage };
 
 export async function userExists(uid: any) {
     const docRef = doc(db, 'user', uid);
@@ -157,6 +157,14 @@ export async function deleteServiceFirebase(service) {
     }
 }
 
+
+export async function uploadImage(image, path): Promise<string> {
+    const storageRef = ref(storage, path + image.name);
+    const uploadTask = await uploadBytes(storageRef, image);
+    return  await getDownloadURL(uploadTask.ref).then((downloadURL) => {
+        return downloadURL;
+    });
+        
 export async function editService(service) {
     try {
         const collectionRef = collection(db, 'service');

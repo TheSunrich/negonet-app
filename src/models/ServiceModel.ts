@@ -10,6 +10,7 @@ export interface Service{
     schedule?: Schedule;
     isHomeService?: boolean;
     isActive: true;
+    imageUrl?: string;
 }
 
 export interface Address {

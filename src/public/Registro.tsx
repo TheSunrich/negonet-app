@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate, useParams } from 'react-router-dom';
 import { User, Address } from '../models/UserModel';
 import { Schedule, Service } from '../models/ServiceModel';
-import { auth, createService, existsUser, getCategories, getSpecialty, updateUser } from '../utils/firebase';
+import { auth, createService, existsUser, getCategories, getSpecialty, updateUser, storage, uploadImage } from '../utils/firebase';
 import { GoogleAuthProvider, onAuthStateChanged, signInWithPopup, signInWithRedirect, signInWithEmailAndPassword, createUserWithEmailAndPassword } from 'firebase/auth';
 import AuthProvider from '../components/AuthProvider';
 import Loading from '../components/Loading';
@@ -78,6 +78,10 @@ export default function Registro() {
     const [category, setCategories] = useState(null);
     const [specialty, setSpecialty] = useState([]);
     const [specialtyAvailable, setAvailableS] = useState(true);
+    const [userImg, setUserImg] = useState(null);
+    const [serviceImg, setServiceImg] = useState(null);
+    const [prevUserImg, setPrevUserImg] = useState(null);
+    const [prevServiceImg, setPrevServiceImg] = useState(null);
     function handleChange(e) {
         setUser({
             ...user,
@@ -181,6 +185,30 @@ export default function Registro() {
             [e.target.name]: parseInt(e.target.value)
         })
     }
+    function handleFileChangeUser(e) {
+
+        // Preview image
+        const file = e.target.files[0];
+        console.log(file);
+        const reader = new FileReader();
+        reader.onloadend = () => {
+            setUserImg(file);
+            setPrevUserImg(reader.result)
+        };
+        reader.readAsDataURL(file);
+
+    }
+    function handleFileChangeService(e) {
+        // Preview image
+        const file = e.target.files[0];
+        console.log(file);
+        const reader = new FileReader();
+        reader.onloadend = () => {
+            setServiceImg(file);
+            setPrevServiceImg(reader.result)
+        };
+        reader.readAsDataURL(file);
+    }
     function handleServiceAddressChange(e) {
         setAddressService({
             ...addressService,
@@ -206,6 +234,24 @@ export default function Registro() {
             setAvailableS(true);
         }
     }
+
+    async function saveImageUser() {
+
+    }
+
+    async function saveImageService() {
+
+        await uploadImage(serviceImg, "/services/").then((url) => {
+            console.log("HOLIS",url);
+            setService({
+                ...service,
+                imageUrl: url
+            })
+        })
+
+    }
+    
+
     const [textoregistro, setTexto] = useState("Regístrate, es gratis");
 
     function handleUserStateChanged(u) {
@@ -248,43 +294,61 @@ export default function Registro() {
             user.isService ? service.userId = user.uid : ""
             user.isService ? service.isActive = true : ""
             user.birthDay = new Date(moment(user.birthDay).toString());
-            const tmp = { ...user };
-            tmp.email = user.email;
-            tmp.processCompleted = true;
-            await updateUser(tmp);
-            user.isService ? await createService(service) : ""
-            await singInWEmail(user.email, user.password);
-            async function singInWEmail(email, password) {
-                try {
-                    const res = await createUserWithEmailAndPassword(auth, email, password)
-                    let userTmp = { ...user, uid: res.user.uid }
-                    await updateUser(userTmp);
-                    user.isService ? service.userId = res.user.uid : ""
-                    console.log(service)
+            await uploadImage(userImg, "/users/").then((url) => {
+                user.imageUrl = url;
+            })
+            if(user.imageUrl){
+                    const tmp = { ...user };
+                    tmp.email = user.email;
+                    tmp.processCompleted = true;
+                    await updateUser(tmp);
                     user.isService ? await createService(service) : ""
-                }
-                catch (error) {
+                    user.isService ? await uploadImage(serviceImg, "/services/").then((url) => {
+                        service.imageUrl = url;
+                    }): ""
+                    await singInWEmail(user.email, user.password);
+                    async function singInWEmail(email, password) {
+                        try {
+                            const res = await createUserWithEmailAndPassword(auth, email, password)
+                            let userTmp = { ...user, uid: res.user.uid }
+                            await updateUser(userTmp);
+                            user.isService ? service.userId = res.user.uid : ""
+                            console.log(service)
+                            user.isService ? await createService(service) : ""
+                        }
+                        catch (error) {
+                            Swal.fire({
+                                title: 'Error al registrarse',
+                                html: 'Ocurrió un error al registrarse, intenta de nuevo',
+                                icon: 'error'
+                            })
+                            return;
+                        }
+                    }
                     Swal.fire({
-                        title: 'Error al registrarse',
-                        html: 'Ocurrió un error al registrarse, intenta de nuevo',
+                        title: 'Cuenta registrada',
+                        html: 'Se ha registrado exitósamente la cuenta',
+                        icon: 'success',
+                        confirmButtonText: 'Continuar',
+                        allowOutsideClick: false,
+                        allowEnterKey: false,
+                        allowEscapeKey: false
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            navigate("/main");
+                        }
+                    })
+                } else {
+                    Swal.fire({
+                        title: 'Error al subir la imagen',
+                        html: 'Ocurrió un error al subir la imagen, intenta de nuevo',
                         icon: 'error'
                     })
-                    return;
                 }
-            }
-            Swal.fire({
-                title: 'Cuenta registrada',
-                html: 'Se ha registrado exitósamente la cuenta',
-                icon: 'success',
-                confirmButtonText: 'Continuar',
-                allowOutsideClick: false,
-                allowEnterKey: false,
-                allowEscapeKey: false
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    navigate("/main");
-                }
-            })
+
+
+
+
         }
     }
     function handleUserLoggedIn(user) {
@@ -303,11 +367,16 @@ export default function Registro() {
     function handleUserNotLoggedIn(user) {
         setSate(4);
     }
+    function checkUser() {
+        console.log(user)
+
+    }
     const inputRef = useRef(null);
     if (state === 3 || state === 4 || state === 5) {
         return (
             <>
                 <div className='row container-fluid justify-content-center text-dark'>
+                    <button className='btn btn-primary' onClick={checkUser}>Check user</button>
                     <div className='row col-md-6 mt-4 mb-5'>
                         <form onSubmit={handleSubmit} className="row g-3">
                             <div className='col-12'>
@@ -330,6 +399,15 @@ export default function Registro() {
                                                 <div className="col-md-6">
                                                     <label className="form-label">Apellidos <b className='obligatorio'>*</b></label>
                                                     <input name='lastName' onChange={handleChange} type="text" className="form-control" required />
+                                                </div>
+                                                <div className='col-md-6'>
+                                                    <label className="form-label">Imagen de perfil <b className='obligatorio'>*</b></label>
+                                                    <div className="input-group mb-3">
+                                                        <input type="file" className="form-control" name='imageUrl' id="inputGroupFile02"  onChange={handleFileChangeUser} />
+                                                    </div>
+                                                </div>
+                                                <div className='col-md-6'>
+                                                    <img src={prevUserImg} className='img-fluid' width={80} height={80} />
                                                 </div>
                                                 <div className="col-md-4">
                                                     <label className="form-label">Teléfono <b className='obligatorio'>*</b></label>
@@ -463,6 +541,13 @@ export default function Registro() {
                                                         <label className="form-label">Descripción del Servicio <b className='obligatorio'>*</b></label>
                                                         <textarea name='description' onChange={handleServiceChange} className="form-control" placeholder='Debes de ser llamativo, solo tendrás 500 caracteres disponibles' maxLength={500}></textarea>
                                                     </div>
+                                                    <div className="col-md-6">
+                                                        <label className="form-label">Imagen del servicio <b className='obligatorio'>*</b></label>
+                                                        <input name='imageUrl' onChange={handleFileChangeService} type="file" className="form-control" />
+                                                    </div>
+                                                    <div className="col-md-6">
+                                                        <img src={prevServiceImg} alt="" className="img-fluid" width={100} height={80} />
+                                                    </div>
                                                     <div className="col-md-12">
                                                         <label className="form-label">Dirección 1 <b className='obligatorio'>*</b></label>
                                                         <input name='address1' onChange={handleServiceAddressChange} type="text" className="form-control" placeholder='Calle #Número Colonia' required />
@@ -527,7 +612,8 @@ export default function Registro() {
                                                     </div>
                                                 </div>
                                             </div>
-                                        </div>
+                                            </div>
+
                                         : ""}
                                     {user.isService ?
                                         <div className="accordion-item">
