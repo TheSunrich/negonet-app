@@ -241,24 +241,24 @@ export default function Registro() {
             setSate(5);
         } else {
             user.address = address;
-            service.address = addressService;
-            service.schedule = schedule;
-            service.userId = user.uid;
+            user.isService ? service.address = addressService : ""
+            user.isService ? service.schedule = schedule : ""
+            user.isService ? service.userId = user.uid : ""
             user.birthDay = new Date(moment(user.birthDay).toString());
             const tmp = { ...user };
             tmp.email = user.email;
             tmp.processCompleted = true;
             await updateUser(tmp);
-            await createService(service);
+            user.isService ? await createService(service) : ""
             await singInWEmail(user.email, user.password);
             async function singInWEmail(email, password) {
                 try {
                     const res = await createUserWithEmailAndPassword(auth, email, password)
                     let userTmp = { ...user, uid: res.user.uid }
                     await updateUser(userTmp);
-                    service.userId = res.user.uid;
+                    user.isService ? service.userId = res.user.uid : ""
                     console.log(service)
-                    await createService(service);
+                    user.isService ? await createService(service) : ""
                 }
                 catch (error) {
                     Swal.fire({
