@@ -299,7 +299,7 @@ export default function Registro() {
                 tmp.email = user.email;
                 tmp.processCompleted = true;
                 await updateUser(tmp);
-                
+
                 user.isService ? await uploadImage(serviceImg, "/services/").then((url) => {
                     service.imageUrl = url;
                 }) : ""
@@ -323,6 +323,7 @@ export default function Registro() {
                         return;
                     }
                 }
+                sendEmail();
                 Swal.fire({
                     title: 'Cuenta registrada',
                     html: 'Se ha registrado exitósamente la cuenta',
@@ -366,15 +367,12 @@ export default function Registro() {
         setSate(4);
     }
     const inputRef = useRef(null);
-    /*const sendEmail = (e) => {
-        e.preventDefault();
-        emailjs.sendForm('YOUR_SERVICE_ID', 'YOUR_TEMPLATE_ID', form.current, 'YOUR_PUBLIC_KEY')
-          .then((result) => {
-              console.log(result.text);
-          }, (error) => {
-              console.log(error.text);
-          });
-      };*/
+    const sendEmail = () => {
+        emailjs.send("service_twzyttc", "template_t1kcbfq", {
+            to_name: user.name,
+            email: user.email,
+        }, 'WYN-KBuNfBcx9Yi38');
+    };
     if (state === 3 || state === 4 || state === 5) {
         return (
             <>
