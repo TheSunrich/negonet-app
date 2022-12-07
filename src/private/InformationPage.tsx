@@ -174,7 +174,7 @@ export default function InformationPage() {
       <>
         <div className='row headertoprofile'>
           <div className='col-12' style={{ backgroundColor: color }}>
-            <img src={user.imageUrl} className="roundedimg bg-primary" />
+            <img src={user.imageUrl} className="roundedimg" style={{ backgroundColor: user.backgroundColor2 }}/>
           </div>
         </div>
         <div className='row bg-light'>
