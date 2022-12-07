@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { GoogleAuthProvider, onAuthStateChanged, signInWithPopup, signInWithRedirect } from 'firebase/auth';
 import AuthProvider from '../components/AuthProvider';
-import { auth, createService, getCategories, getServiceByUser, getSpecialty, updateUser, deleteServiceFirebase, editService } from '../utils/firebase';
+import { auth, createService, getCategories, getServiceByUser, getSpecialty, updateUser, deleteServiceFirebase, editService, uploadImage } from '../utils/firebase';
 import { useNavigate } from 'react-router-dom';
 import Loading from '../components/Loading';
 import { User, Address } from '../models/UserModel';
@@ -16,6 +16,8 @@ const AdminPage = () => {
   const navigate = useNavigate();
   const [state, setSate] = useState(0);
   const [services, setServices] = useState([]);
+  const [prevServiceImg, setPrevServiceImg] = useState(null);
+  const [serviceImg, setServiceImg] = useState(null);
   let userData: User;
   let serviceData: Service = {
     isActive: true
@@ -224,6 +226,28 @@ const AdminPage = () => {
     })
     console.log(e.target.value)
   }
+  function handleFileChangeService(e) {
+    // Preview image
+    const file = e.target.files[0];
+    console.log(file);
+    const reader = new FileReader();
+    reader.onloadend = () => {
+      setServiceImg(file);
+      setPrevServiceImg(reader.result)
+    };
+    reader.readAsDataURL(file);
+  }
+  async function saveImageService() {
+
+    await uploadImage(serviceImg, "/services/").then((url) => {
+      console.log("HOLIS", url);
+      setService({
+        ...service,
+        imageUrl: url
+      })
+    })
+
+  }
   async function handleSubmit(e) {
     e.preventDefault();
     if (edit) {
@@ -239,13 +263,28 @@ const AdminPage = () => {
         allowEscapeKey: false
       }).then(async (result) => {
         if (result.isConfirmed) {
+          Swal.fire({
+            title: 'Espera un momento',
+            html: 'Estamos registrando tu información en el sistema',
+            allowOutsideClick: false,
+            showConfirmButton: false,
+            allowEnterKey: false,
+            didOpen: () => {
+              Swal.showLoading(Swal.getDenyButton())
+            },
+          });
+          serviceImg ? await uploadImage(serviceImg, "/services/").then((url) => {
+            service.imageUrl = url;
+          }) : ""
           await editService(service);
           setEdit(false);
           handleCleanForm(e);
           getServices();
           Swal.fire(
-            {title: 'Servicio editado',
-            icon: 'success'}
+            {
+              title: 'Servicio editado',
+              icon: 'success'
+            }
           )
         }
       })
@@ -290,19 +329,19 @@ const AdminPage = () => {
     setSate(4);
     navigate("/login");
   }
-  function editSchedule(schedule){
+  function editSchedule(schedule) {
     let predata = schedulePredata
     for (let i = 0; i < predata.days.length; i++) {
       const presaved = predata.days[i];
       for (let j = 0; j < schedule.days.length; j++) {
         const saved = schedule.days[j];
-        if(presaved.day == saved.day){
+        if (presaved.day == saved.day) {
           console.log(presaved.day, " == ", saved.day)
           predata.days[i] = saved;
           break;
         }
       }
-      
+
     }
     console.log(predata)
     setSchedulePre({
@@ -328,13 +367,13 @@ const AdminPage = () => {
       const presaved = predata.days[i];
       for (let j = 0; j < element.schedule.days.length; j++) {
         const saved = element.schedule.days[j];
-        if(presaved.day == saved.day){
+        if (presaved.day == saved.day) {
           console.log(presaved.day, " == ", saved.day)
           predata.days[i] = saved;
           break;
         }
       }
-      
+
     }
     console.log(predata)
     setSchedulePre({
@@ -481,6 +520,13 @@ const AdminPage = () => {
                               <textarea name='description' onChange={handleServiceChange} className="form-control" defaultValue={service.description} placeholder='Debes de ser llamativo, solo tendrás 500 caracteres disponibles' maxLength={500}></textarea>
                             </div>
                             <div className="col-md-12">
+                              <label className="form-label">Imagen del servicio <b className='obligatorio'>*</b></label>
+                              <input name='imageUrl' onChange={handleFileChangeService} type="file" className="form-control" />
+                            </div>
+                            <div className="col-md-6" style={{ display: "none" }}>
+                              <img src={prevServiceImg} alt="" className="img-fluid" width={100} height={80} />
+                            </div>
+                            <div className="col-md-12">
                               <label className="form-label">Dirección 1 <b className='obligatorio'>*</b></label>
                               <input name='address1' onChange={handleServiceAddressChange} type="text" className="form-control" defaultValue={addressService.address1} placeholder='Calle #Número Colonia' required />
                             </div>
@@ -544,7 +590,7 @@ const AdminPage = () => {
                                   <div className="col-sm-4">
                                     <div className="form-check">
                                       <label className="form-check-label mt-2">
-                                        <input className="form-check-input" name={element.day} type="checkbox" value={element.day} onChange={handleDayChange} checked={element.startHour != "" && element.endHour  != ""}/> {element.day}
+                                        <input className="form-check-input" name={element.day} type="checkbox" value={element.day} onChange={handleDayChange} checked={element.startHour != "" && element.endHour != ""} /> {element.day}
                                       </label>
                                     </div>
                                   </div>
@@ -552,7 +598,7 @@ const AdminPage = () => {
                                     <div className="row mb-3">
                                       <label className="col-sm-2 col-form-label">Inicio</label>
                                       <div className="col-sm-9 offset-sm-1">
-                                        <input name={"startHour"+element.day} required disabled={element.startHour == ""} id={element.day + "s"} type="time" className="form-control" onChange={(e) => handleStartHourChange(e, element)} defaultValue={ edit ? element.startHour : ""} />
+                                        <input name={"startHour" + element.day} required disabled={element.startHour == ""} id={element.day + "s"} type="time" className="form-control" onChange={(e) => handleStartHourChange(e, element)} defaultValue={edit ? element.startHour : ""} />
                                       </div>
                                     </div>
                                   </div>
@@ -560,7 +606,7 @@ const AdminPage = () => {
                                     <div className="row mb-3">
                                       <label className="col-sm-2 col-form-label">Fin</label>
                                       <div className="col-sm-9 offset-sm-1">
-                                        <input name={"endHour"+element.day} required disabled={element.endHour  == ""} id={element.day + "e"} type="time" className="form-control" onChange={(e) => handleEndHourChange(e, element)} defaultValue={ edit ? element.endHour : ""} />
+                                        <input name={"endHour" + element.day} required disabled={element.endHour == ""} id={element.day + "e"} type="time" className="form-control" onChange={(e) => handleEndHourChange(e, element)} defaultValue={edit ? element.endHour : ""} />
                                       </div>
                                     </div>
                                   </div>
