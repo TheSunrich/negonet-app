@@ -156,3 +156,13 @@ export async function deleteServiceFirebase(service) {
 
     }
 }
+
+export async function editService(service) {
+    try {
+        const collectionRef = collection(db, 'service');
+        const docRef = doc(collectionRef, service.id);
+        await setDoc(docRef, service);
+    } catch (error) {
+
+    }
+}
