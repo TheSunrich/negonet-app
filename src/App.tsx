@@ -15,7 +15,6 @@ import MainPage from './private/MainPage';
 import PrivateNavBar from './components/PrivateNavBar';
 import ReservationPage from './private/ReservationPage';
 import InformationPage from './private/InformationPage';
-import SchedulePage from './private/SchedulePage';
 import AppointmentPage from './private/AppointmentPage';
 import SettingsPage from './private/SettingsPage';
 import AdminPage from './private/AdminPage';
@@ -46,7 +45,6 @@ function App() {
             <Route path='/main/reservation' element={<ReservationPage />} />
             <Route path='/main/admin' element={<AdminPage />} />
             <Route path='/main/information' element={<InformationPage />} />
-            <Route path='/main/schedule' element={<SchedulePage />} />
             <Route path='/main/appointment' element={<AppointmentPage />} />
             <Route path='/main/settings' element={<AdminPage />} />
             <Route path='*' element={<Navigate replace to="/main" />} />

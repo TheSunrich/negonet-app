@@ -161,3 +161,50 @@
     transition: .3s !important;
     color: white;
 }
+.servicescontainer{
+    height: 550px;
+    overflow-y: scroll;
+}
+
+.servicescontainer::-webkit-scrollbar {
+    -webkit-appearance: none;
+}
+
+.servicescontainer::-webkit-scrollbar:vertical {
+    width:10px;
+}
+
+.servicescontainer::-webkit-scrollbar-button:increment,.servicescontainer::-webkit-scrollbar-button {
+    display: none;
+} 
+
+.servicescontainer::-webkit-scrollbar:horizontal {
+    height: 10px;
+}
+
+.servicescontainer::-webkit-scrollbar-thumb {
+    background-color: #797979;
+    border-radius: 20px;
+    border: 2px solid #f1f2f3;
+}
+
+.servicescontainer::-webkit-scrollbar-track {
+    border-radius: 10px;  
+}
+.navbartopmain{
+    background-color: #1392c4;
+}
+.minwidth{
+    display: none;
+}
+.fullwidth{
+    display: block;
+}
+@media (max-width: 1330px) {
+    .fullwidth{
+        display: none;
+    }
+    .minwidth{
+        display: block;
+    }
+  }
