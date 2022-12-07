@@ -80,7 +80,7 @@ const PrivateNavBar = ({ children }) => {
                                     user.isService ?
                                         <ul className="nav nav-pills bg-light rounded flex-column mt-1">
                                             <li className='nav-item'>
-                                                <Link to="/main/appointment" relative="path" className="nav-link link-light">Ver Citas</Link>
+                                                <Link to="/main/appointment" relative="path" className="nav-link link-dark">Ver Citas</Link>
                                             </li>
                                             <li className='nav-item'>
                                                 <Link to="/main/settings" relative="path" className="nav-link link-dark">Configurar Servicio</Link>

@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react'
+import emailjs from '@emailjs/browser';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate, useParams } from 'react-router-dom';
 import { User, Address } from '../models/UserModel';
@@ -367,16 +368,11 @@ export default function Registro() {
     function handleUserNotLoggedIn(user) {
         setSate(4);
     }
-    function checkUser() {
-        console.log(user)
-
-    }
     const inputRef = useRef(null);
     if (state === 3 || state === 4 || state === 5) {
         return (
             <>
                 <div className='row container-fluid justify-content-center text-dark'>
-                    <button className='btn btn-primary' onClick={checkUser}>Check user</button>
                     <div className='row col-md-6 mt-4 mb-5'>
                         <form onSubmit={handleSubmit} className="row g-3">
                             <div className='col-12'>
@@ -400,13 +396,13 @@ export default function Registro() {
                                                     <label className="form-label">Apellidos <b className='obligatorio'>*</b></label>
                                                     <input name='lastName' onChange={handleChange} type="text" className="form-control" required />
                                                 </div>
-                                                <div className='col-md-6'>
+                                                <div className='col-md-12'>
                                                     <label className="form-label">Imagen de perfil <b className='obligatorio'>*</b></label>
                                                     <div className="input-group mb-3">
                                                         <input type="file" className="form-control" name='imageUrl' id="inputGroupFile02"  onChange={handleFileChangeUser} />
                                                     </div>
                                                 </div>
-                                                <div className='col-md-6'>
+                                                <div className='col-md-6' style={{display: "none"}}>
                                                     <img src={prevUserImg} className='img-fluid' width={80} height={80} />
                                                 </div>
                                                 <div className="col-md-4">
@@ -541,11 +537,11 @@ export default function Registro() {
                                                         <label className="form-label">Descripción del Servicio <b className='obligatorio'>*</b></label>
                                                         <textarea name='description' onChange={handleServiceChange} className="form-control" placeholder='Debes de ser llamativo, solo tendrás 500 caracteres disponibles' maxLength={500}></textarea>
                                                     </div>
-                                                    <div className="col-md-6">
+                                                    <div className="col-md-12">
                                                         <label className="form-label">Imagen del servicio <b className='obligatorio'>*</b></label>
                                                         <input name='imageUrl' onChange={handleFileChangeService} type="file" className="form-control" />
                                                     </div>
-                                                    <div className="col-md-6">
+                                                    <div className="col-md-6" style={{display:"none"}}>
                                                         <img src={prevServiceImg} alt="" className="img-fluid" width={100} height={80} />
                                                     </div>
                                                     <div className="col-md-12">
