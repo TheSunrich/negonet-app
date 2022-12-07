@@ -211,6 +211,8 @@
     top: 40px;
     border: 3px #00000075 solid;
     object-fit: cover;
+    width: 250px;
+    height: 250px;
 }
 .imgcover{
     object-fit: cover;
@@ -226,9 +228,21 @@
         display: block;
     }
     .roundedimg{
-        right: auto;
+        border-radius: 50%;
+        right: 40px;
         position: absolute;
-        top: 250px;
+        top: 90px;
         border: 3px #00000075 solid;
+        object-fit: cover;
+        width: 250px;
+        height: 250px;
+    }
+    .headertoprofile{
+        margin-top: -20px;
     }
   }
+@media (max-width: 992px){
+    .headertoprofile{
+        display: none;
+    }
+}

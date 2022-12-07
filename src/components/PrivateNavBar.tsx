@@ -109,7 +109,7 @@ const PrivateNavBar = ({ children }) => {
                         </div>
                     </div>
                 </div>
-                <header id="responsivenavbar" className="p-3 mb-3 border-bottom navbartopmain minwidth">
+                <header id="responsivenavbar" className="p-3 mb-3 border-bottom navbartopmain minwidth" style={{ backgroundColor: user.backgroundColor2 ? user.backgroundColor2 : "#1392c4"}}>
                     <div className="container">
                         <div className="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start">
                             <Link to="/main" relative='path' className="d-flex align-items-center mb-2 mb-lg-0 text-light text-decoration-none">
