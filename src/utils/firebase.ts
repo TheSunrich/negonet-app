@@ -164,6 +164,7 @@ export async function uploadImage(image, path): Promise<string> {
     return  await getDownloadURL(uploadTask.ref).then((downloadURL) => {
         return downloadURL;
     });
+}
         
 export async function editService(service) {
     try {
