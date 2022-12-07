@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { GoogleAuthProvider, onAuthStateChanged, signInWithPopup, signInWithRedirect } from 'firebase/auth';
 import AuthProvider from '../components/AuthProvider';
-import { auth, createService, getCategories, getServiceByUser, getSpecialty, updateUser } from '../utils/firebase';
+import { auth, createService, getCategories, getServiceByUser, getSpecialty, updateUser, deleteServiceFirebase } from '../utils/firebase';
 import { useNavigate } from 'react-router-dom';
 import Loading from '../components/Loading';
 import { User, Address } from '../models/UserModel';
@@ -16,7 +16,9 @@ const AdminPage = () => {
   const [state, setSate] = useState(0);
   const [services, setServices] = useState([]);
   let userData: User;
-  let serviceData: Service = {}
+  let serviceData: Service = {
+    isActive: true
+  }
   let addressData: Address = {}
   let schedulePredata: Schedule = {
     interval: 30,
@@ -69,6 +71,7 @@ const AdminPage = () => {
   const [specialtyAvailable, setAvailableS] = useState(true);
   const [addressService, setAddressService] = useState(addressData);
   const [schedule, setSchedule] = useState(scheduleData);
+  const [edit, setEdit] = useState(false);
   async function handleCategoryChange(e) {
     setService({
       ...service,
@@ -207,7 +210,9 @@ const AdminPage = () => {
     setServices(s)
     const categories = await getCategories();
     setCategories(categories)
-    setUser(u)
+    setUser({
+      ...u
+    })
     setSate(2);
   }
   function handleUserUserNotRegistered(user) {
@@ -216,6 +221,51 @@ const AdminPage = () => {
   function handleUserNotLoggedIn(user) {
     setSate(4);
     navigate("/login");
+  }
+  function handleEditService(e, element) {
+    setEdit(true);
+    console.log(element)
+    setService(element)
+    setSchedule({
+      ...element.schedule
+    })
+    setAddressService({
+      ...element.address
+    })
+  }
+  async function getServices(){
+    console.log(user)
+    const s = await getServiceByUser(user.uid);
+    setServices(s)
+  }
+  function deleteService(e, element) {
+    Swal.fire({
+      title: '¿Estás seguro?',
+      text: "Este servicio se eliminará pero seguirá estando disponible para las citas agendadas",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Sí, eliminar',
+      cancelButtonText: "Cancelar"
+    }).then( async (result) => {
+      if (result.isConfirmed) {
+        element.isActive = false;
+        await deleteServiceFirebase(element);
+        getServices();
+        Swal.fire(
+          '¡Eliminado!',
+          'El servicio se ha retirado exitosamente',
+          'success'
+        )
+      }
+    })
+  }
+  function handleCleanForm(e) {
+    setEdit(false);
+    setService(serviceData)
+    setAddressService(addressData)
+    setSchedule(scheduleData)
   }
   if (state == 2) {
     return (
@@ -241,10 +291,10 @@ const AdminPage = () => {
                         <span className='fw-bold' style={{ color: "white" }}>{element.price > 0 ? "$" + element.price : "gratuito"}</span>
                       </div>
                       <div className='container-fluid p-1 text-right justify-content-end d-flex align-items-end mb-2'>
-                        <button className='btn btn-sm btn-primary'>
+                        <button type='button' onClick={() => handleEditService(event, element)} className='btn btn-sm btn-primary'>
                           <i className="bi bi-pencil-fill"></i>
                         </button>
-                        <button className='btn btn-sm btn-danger ms-1'>
+                        <button type='button' onClick={() => deleteService(event, element)} className='btn btn-sm btn-danger ms-1'>
                           <i className="bi bi-trash3-fill"></i>
                         </button>
                       </div>
@@ -429,14 +479,26 @@ const AdminPage = () => {
                         </div>
                       </div>
                     </div>
-                    <div className='container-fluid d-flex justify-content-end align-items-end'>
-                      <button className='btn btn-secondary me-2 mt-2 mb-2'>
-                        Cancelar
-                      </button>
-                      <button className='btn btn-primary mt-2 mb-2'>
-                        Agregar Servicio
-                      </button>
-                    </div>
+                    {!edit ?
+                      <div className='container-fluid d-flex justify-content-end align-items-end'>
+                        <button type='button' onClick={handleCleanForm} className='btn btn-secondary me-2 mt-2 mb-2'>
+                          Cancelar
+                        </button>
+                        <button type='submit' className='btn btn-primary mt-2 mb-2'>
+                          Agregar Servicio
+                        </button>
+                      </div>
+                      :
+                      <div className='container-fluid d-flex justify-content-end align-items-end'>
+                        <button type='button' onClick={handleCleanForm} className='btn btn-secondary me-2 mt-2 mb-2'>
+                          Cancelar
+                        </button>
+                        <button type='button' className='btn btn-warning mt-2 mb-2'>
+                          Editar Servicio
+                        </button>
+                      </div>
+                    }
+
                   </form>
                 </div>
               </div>
