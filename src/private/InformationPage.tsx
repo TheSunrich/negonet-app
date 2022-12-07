@@ -145,9 +145,7 @@ export default function InformationPage() {
     document.getElementById("lateralbar").style.backgroundColor = e.target.value;
   }
   async function handleUserLoggedIn(u) {
-    var randomColor = Math.floor(Math.random() * 16777215).toString(16);
-    u.backgroundColor1 ? setColor(u.backgroundColor1) : setColor("#" + randomColor);
-    console.log(randomColor)
+    u.backgroundColor1 ? setColor(u.backgroundColor1) : setColor("#4bccff");
     const s = await getServiceByUser(u.uid);
     setServices(s)
     setUser({
