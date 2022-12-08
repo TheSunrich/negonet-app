@@ -58,7 +58,9 @@ const ReservationPage = () => {
     setSate(4);
     navigate("/login");
   }
-
+  async function showAlertStatus(appointment){
+    console.log(appointment);
+  }
   if (state == 2) {
     return (
       <div className='container-fluid'>
@@ -75,7 +77,7 @@ const ReservationPage = () => {
               <hr className='ms-2 me-2' />
               {appointmentPast.length > 0 ?
                 appointmentPast.map(appointment => (
-                  <div key={appointment.id} className='container-fluid p-3'>
+                  <div key={appointment.id} className='container-fluid p-3 hover' onClick={() => showAlertStatus(appointment)}>
                     <div className='container-fluid border-top border-start border-end bg-primary rounded-top img2' style={{ background: `linear-gradient(rgba( 0, 0, 0, 0.5), rgba( 0, 0, 0, 0.5)), url(${appointment.serviceImageUrl})`, backgroundRepeat: "no-repeat", backgroundSize: "cover", backgroundPosition: "center center", opacity: "1" }}>
                     </div>
                     <div className='container border-start border-bottom border-end bg-light rounded-bottom pb-2 pt-1'>
@@ -119,7 +121,7 @@ const ReservationPage = () => {
               <hr className='ms-2 me-2' />
               {appointmentActual.length > 0 ?
                 appointmentActual.map(appointment => (
-                  <div key={appointment.id} className='container-fluid p-3'>
+                  <div key={appointment.id} className='container-fluid p-3 hover' onClick={() => showAlertStatus(appointment)}>
                     <div className='container-fluid border-top border-start border-end bg-primary rounded-top img2' style={{ background: `linear-gradient(rgba( 0, 0, 0, 0.5), rgba( 0, 0, 0, 0.5)), url(${appointment.serviceImageUrl})`, backgroundRepeat: "no-repeat", backgroundSize: "cover", backgroundPosition: "center center", opacity: "1" }}>
                     </div>
                     <div className='container border-start border-bottom border-end bg-light rounded-bottom pb-2 pt-1'>
@@ -163,7 +165,7 @@ const ReservationPage = () => {
               <hr className='ms-2 me-2' />
               {appointmentFuture.length > 0 ?
                 appointmentFuture.map(appointment => (
-                  <div key={appointment.id} className='container-fluid p-3'>
+                  <div key={appointment.id} className='container-fluid p-3 hover' onClick={() => showAlertStatus(appointment)}>
                     <div className='container-fluid border-top border-start border-end bg-primary rounded-top img2' style={{ background: `linear-gradient(rgba( 0, 0, 0, 0.5), rgba( 0, 0, 0, 0.5)), url(${appointment.serviceImageUrl})`, backgroundRepeat: "no-repeat", backgroundSize: "cover", backgroundPosition: "center center", opacity: "1" }}>
                     </div>
                     <div className='container border-start border-bottom border-end bg-light rounded-bottom pb-2 pt-1'>
