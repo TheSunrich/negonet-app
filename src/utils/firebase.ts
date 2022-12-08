@@ -233,3 +233,53 @@ export async function getAppointmentAll(uid){
     });
     return appointment;
 }
+
+export async function getAppointmentActual(uid){
+    let date = new Date();
+    let today = new Date(date.getFullYear(), date.getMonth(), date.getDate());
+    let tomorrow2 = new Date(date.getFullYear(), date.getMonth(), date.getDate() + 2);
+    const appointment = [];
+    const docsRef = collection(db, 'appointment');
+    const q = query(docsRef, where('isCanceled', '==', false), where('userClientId', "==", uid), where('dateStart', ">=", today), where('dateStart', "<", tomorrow2));
+    const querySnapshot = await getDocs(q);
+    querySnapshot.forEach((doc) => {
+        appointment.push({
+            id: doc.id,
+            ...doc.data()
+        });
+    });
+    return appointment;
+}
+export async function getAppointmentPast(uid){
+    let date = new Date();
+    let today = new Date(date.getFullYear(), date.getMonth(), date.getDate());
+    let tomorrow2 = new Date(date.getFullYear(), date.getMonth(), date.getDate() + 2);
+    const appointment = [];
+    const docsRef = collection(db, 'appointment');
+    const q = query(docsRef, where('isCanceled', '==', false), where('userClientId', "==", uid), where('dateStart', "<", today));
+    const querySnapshot = await getDocs(q);
+    querySnapshot.forEach((doc) => {
+        appointment.push({
+            id: doc.id,
+            ...doc.data()
+        });
+    });
+    return appointment;
+}
+export async function getAppointmentFuture(uid){
+    let date = new Date();
+    let today = new Date(date.getFullYear(), date.getMonth(), date.getDate());
+    let tomorrow2 = new Date(date.getFullYear(), date.getMonth(), date.getDate() + 2);
+    const appointment = [];
+    const docsRef = collection(db, 'appointment');
+    const q = query(docsRef, where('isCanceled', '==', false), where('userClientId', "==", uid), where('dateStart', ">=", tomorrow2));
+    const querySnapshot = await getDocs(q);
+    querySnapshot.forEach((doc) => {
+        appointment.push({
+            id: doc.id,
+            ...doc.data()
+        });
+    });
+    return appointment;
+}
+
