@@ -103,7 +103,8 @@ export async function getSpecialty(categoryId) {
 
 
 /* Obtener todos los servicios para mostrarlos */
-export async function getServices() {
+export async function getServices(user) {
+    console.log("Traemos a este cabron",user);
     const categories = [];
     const docsRef = collection(db, 'service');
     const q = query(docsRef, where('isActive', "==", true));
@@ -174,3 +175,45 @@ export async function editService(service) {
 
     }
 }
+
+export async function checkAvailabilityService(service, dateStart, dateEnd){
+    console.log("Checamos la disponibilidad", service, dateStart, dateEnd)
+    const collectionRef = collection(db, 'appointment');
+    const q = query(collectionRef, where('dateStart', '>=', dateStart), where('serviceId', '==', service));
+    
+    return await getDocs(q).then((docs) => {
+        if (docs.empty) {
+
+            console.log("No matching documents for docID: " + service);
+            return true
+          } else {
+            // for each doc in docs
+            let available
+            // @ts-ignore
+            docs.docs.forEach(doc => {
+              let data = doc.data() as any
+              console.log("Comparando fechas", data.dateStart.toDate(), dateEnd)
+              if (data.dateStart.toDate() < dateEnd) {
+                available = false
+              }
+    
+            })
+            console.log("Qué trais", available)
+            return available == undefined
+          }
+    });
+
+}
+
+export async function addAppointment(appointment) {
+    try {
+        const collectionRef = collection(db, 'appointment');
+        const docRef = addDoc(collectionRef, appointment);
+        return docRef
+    } catch (error) {
+        return null
+
+    }
+
+}
+    
