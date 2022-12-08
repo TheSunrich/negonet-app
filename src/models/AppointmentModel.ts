@@ -10,7 +10,8 @@ export interface Appointment{
     servicePrice?: string;
     clientName?: string;
     isHomeService?: boolean;
-    address?: AddressService;
+    addressService?: AddressService;
+    addressClient?: AddressService;
     paymentType?: string;
     cardData?: {};
     age ?: number;

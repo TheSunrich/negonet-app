@@ -46,8 +46,8 @@ const MainPage = () => {
     imageUrl: "",
     schedule: {
       interval: "",
-      days:[{
-        day:"",
+      days: [{
+        day: "",
         hours: [{
           inicio: "",
           final: "",
@@ -57,12 +57,19 @@ const MainPage = () => {
     },
     id: "",
     isHomeService: false,
-    address: {
-      address1: "string",
-      address2: "string",
-      city: "string",
-      state: "string",
-      zip: "string",
+    addressService: {
+      address1: "",
+      address2: "",
+      city: "",
+      state: "",
+      zip: "",
+    },
+    addressClient: {
+      address1: "",
+      address2: "",
+      city: "",
+      state: "",
+      zip: "",
     }
   });
   const [currentShedule, setCurrentShedule] = useState({});
@@ -85,8 +92,9 @@ const MainPage = () => {
 
   async function handleUserStateChanged(u) {
     if (u) {
+      const exists = await getUser(u.uid);
       setUser({
-        ...u
+        ...exists
       })
       const categories = await getCategories();
       setCategories(categories)
@@ -182,7 +190,12 @@ const MainPage = () => {
       element.hours = horas;
     })
 
-    setCurrentServicio(service);
+    console.log(user)
+    setCurrentServicio({
+      ...service,
+      addressService: service.address,
+      addressClient: user.address
+    });
   }
   const filterDays = (days) => {
     moment.locale('es');
@@ -240,8 +253,9 @@ const MainPage = () => {
       serviceName: currentServicio.name,
       servicePrice: currentServicio.price,
       clientName: userInformation.name,
-      isHomeService: currentServicio.isHomeService,
-      address: currentServicio.address,
+      isHomeService: currentServicio.isHomeService ? true : false,
+      addressService: currentServicio.addressService,
+      addressClient: user.address,
       paymentType: userInformation.paymentType,
       cardData: userInformation.cardData,
       age: userInformation.age,
@@ -251,11 +265,15 @@ const MainPage = () => {
     }
     data.paymentType == "tarjeta" ? data.cardData = userInformation.cardData : data.cardData = null;
 
+    console.log(user)
 
     //si hay un campo indefinido, no se guarda la cita
     for (const key in data) {
+
+      console.log(key)
       if (data.hasOwnProperty(key)) {
         const element = data[key];
+        console.log(element)
         if (element === undefined) {
           Swal.fire({
             icon: 'error',
@@ -277,8 +295,15 @@ const MainPage = () => {
               icon: 'success',
               title: 'Cita agendada',
               text: 'Se ha agendado la cita correctamente',
+              allowEnterKey: false,
+              allowOutsideClick: false,
+              allowEscapeKey: false
+            }).then(element => {
+              if (element.isConfirmed) {
+                window.location.reload();
+              }
             })
-            window.location.reload();
+
           } else {
             Swal.fire({
               icon: 'error',

@@ -3,7 +3,7 @@ import React, { useState, useEffect, useRef } from 'react'
 import emailjs from '@emailjs/browser';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate, useParams } from 'react-router-dom';
-import { auth, getUser, getAppointmentActual, getAppointmentFuture, getAppointmentPast } from '../utils/firebase';
+import { auth, getUser, getAppointmentActual, getAppointmentFuture, getAppointmentPast, app, cancelAppointment } from '../utils/firebase';
 import { onAuthStateChanged } from 'firebase/auth';
 import AuthProvider from '../components/AuthProvider';
 import Loading from '../components/Loading';
@@ -58,8 +58,45 @@ const ReservationPage = () => {
     setSate(4);
     navigate("/login");
   }
-  async function showAlertStatus(appointment){
+  async function showAlertStatus(appointment) {
     console.log(appointment);
+    Swal.fire({
+      title: 'Información',
+      showCancelButton: true,
+      confirmButtonText: 'Cancelar Cita',
+      confirmButtonColor: "#dc3741",
+      cancelButtonText: "Cerrar",
+      html: '<b>' + appointment.serviceName + '</b><br/><b class="text-success">$ ' + appointment.servicePrice + '</b>' +
+        '<br/> <table class="table borderless"><tbody><tr><th class="col-6">Fecha de Inicio</th><th class="col-6">Fecha de Fin</th></tr><tr><th class="col-6 text-primary" style="font-size: 13px">' + moment(appointment.dateStart.seconds * 1000).format("LLL") + '</th><th class="col-6 text-primary" style="font-size: 13px">' + moment(appointment.dateEnd.seconds * 1000).format("LLL") + '</th></tr></tbody></table>' +
+        '<div class="container-fluid"><span>Descripción</span><br/><span class="bg-light">' + appointment.information + '</span></div>' +
+        (appointment.isHomeService ? '<div class="container-fluid mt-3"><span class="badge bg-primary">A domicilio</span></div>' : '<div class="container-fluid mt-3"><span class="badge bg-primary">En Ubicación</span></div>') +
+        (!appointment.isHomeService ? '<div class="container-fluid mt-3"><span>' + appointment.addressService.address1 + '</span><br/><span>' + appointment.addressService.address2 + '</span><br/><span>' + appointment.addressService.city + " " + appointment.addressService.state + ", " + appointment.addressService.zip + '</span></div>' : '<div class="container-fluid mt-3"><span class="badge bg-success">El profesionista llegará a tu domicilio</span></div>')
+    }).then((result) => {
+      /* Read more about isConfirmed, isDenied below */
+      if (result.isConfirmed) {
+        Swal.fire({
+          title: 'Estás a punto de cancelar',
+          text: "Si cancelas esta cita, le llegará una alerta al profesionista",
+          icon: 'warning',
+          showCancelButton: true,
+          confirmButtonColor: '#3085d6',
+          cancelButtonColor: '#d33',
+          confirmButtonText: 'Sí, Cancelar Cita',
+          cancelButtonText: "No"
+        }).then(async (result) => {
+          if (result.isConfirmed) {
+            appointment.isCanceled = true;
+            await cancelAppointment(appointment);
+            handleUserStateChanged(user);
+            Swal.fire(
+              'Cancelada',
+              'La cita ha sido cancelada',
+              'success'
+            )
+          }
+        })
+      }
+    })
   }
   if (state == 2) {
     return (

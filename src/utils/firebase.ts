@@ -283,3 +283,12 @@ export async function getAppointmentFuture(uid){
     return appointment;
 }
 
+export async function cancelAppointment(appointment){
+    try {
+        const collectionRef = collection(db, 'appointment');
+        const docRef = doc(collectionRef, appointment.id);
+        await setDoc(docRef, appointment);
+    } catch (error) {
+
+    }
+}
