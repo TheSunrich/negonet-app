@@ -1,12 +1,40 @@
-import React from 'react'
+import React, { useState } from 'react'
 import servicios from '../assets/imgs/servicios.png'
 import cocinero from '../assets/imgs/cocinero.jpg'
 import carpintero from '../assets/imgs/carpintero.jpg'
 import electricista from '../assets/imgs/electricista1.png';
 import maestra from '../assets/imgs/maestra.jpg'
 import { Link } from 'react-router-dom';
+import emailjs from '@emailjs/browser';
+import Swal from 'sweetalert2';
 
 const ContainerIndex = () => {
+    const [email, setEmail] = useState({ email: "", subject: "Correo desde la página principal", message: "" })
+    function handleChange(e) {
+        setEmail({
+            ...email,
+            [e.target.name]: e.target.value
+        })
+    }
+    async function handleSubmitEmail(e) {
+        e.preventDefault();
+        emailjs.send("service_twzyttc", "template_l8iervk", {
+            subject: email.subject,
+            email: email.email,
+            message: email.message,
+        }, 'WYN-KBuNfBcx9Yi38').then(element => {
+            Swal.fire({
+                title: 'Correo Enviado',
+                html: 'NegoNet ha recibido tu correo, te responderemos lo antes posible',
+                icon: 'success'
+            });
+            setEmail({
+                email: "",
+                subject: "Correo desde la página principal",
+                message: ""
+            })
+        })
+    }
     return (
         <>
             <div className='mainbg'>
@@ -61,13 +89,13 @@ const ContainerIndex = () => {
                             <p className="col-lg-10 fs-4">Para NegoNet es muy importante el recibir tus comentarios, este espacio es para ti, siéntete libre de escribir tus opiniones, recomendaciones y quejas.</p>
                         </div>
                         <div className="col-md-10 pe-5 mx-auto col-lg-5">
-                            <form className="p-4 p-md-5 border rounded-3 bg-light">
+                            <form onSubmit={handleSubmitEmail} className="p-4 p-md-5 border rounded-3 bg-light">
                                 <div className="form-floating mb-3">
-                                    <input type="email" className="form-control" id="floatingInput" placeholder="name@example.com"/>
+                                    <input name='email' type="email" className="form-control" id="floatingInput" placeholder="nombre@example.com" required onChange={handleChange}/>
                                         <label htmlFor="floatingInput">Correo Electrónico</label>
                                 </div>
                                 <div className="form-floating mb-3">
-                                    <input type="text   " className="form-control" id="floatingPassword" placeholder="Password"/>
+                                    <input name='message' type="text" className="form-control" id="floatingPassword" placeholder="mensaje" required onChange={handleChange}/>
                                         <label htmlFor="floatingPassword">Mensaje</label>
                                 </div>
                                 <button className="w-100 btn btn-lg btn-primary" type="submit">Enviar Mensaje</button>
