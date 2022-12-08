@@ -2,6 +2,7 @@ import { initializeApp } from "firebase/app";
 import { getFirestore, collection, addDoc, getDocs, doc, getDoc, query, where, setDoc, deleteDoc } from "firebase/firestore";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 import { getStorage, ref, uploadBytes, getDownloadURL, getBytes, uploadBytesResumable, } from 'firebase/storage';
+import { id } from "date-fns/locale";
 const firebaseConfig = {
     apiKey: "AIzaSyAD64vbbFCLso2nennhePArHrvykiZ8GXo",
     authDomain: "negonet-1fb9c.firebaseapp.com",
@@ -250,6 +251,22 @@ export async function getAppointmentActual(uid){
     });
     return appointment;
 }
+export async function getAppointmentActualProvider(uid){
+    let date = new Date();
+    let today = new Date(date.getFullYear(), date.getMonth(), date.getDate());
+    let tomorrow2 = new Date(date.getFullYear(), date.getMonth(), date.getDate() + 2);
+    const appointment = [];
+    const docsRef = collection(db, 'appointment');
+    const q = query(docsRef, where('isCanceled', '==', false), where('userProviderId', "==", uid), where('dateStart', ">=", today), where('dateStart', "<", tomorrow2));
+    const querySnapshot = await getDocs(q);
+    querySnapshot.forEach((doc) => {
+        appointment.push({
+            id: doc.id,
+            ...doc.data()
+        });
+    });
+    return appointment;
+}
 export async function getAppointmentPast(uid){
     let date = new Date();
     let today = new Date(date.getFullYear(), date.getMonth(), date.getDate());
@@ -263,6 +280,25 @@ export async function getAppointmentPast(uid){
             id: doc.id,
             ...doc.data()
         });
+    });
+    return appointment;
+}
+export async function getAppointmentCompleteProvider(uid){
+    let date = new Date();
+    let today = new Date(date.getFullYear(), date.getMonth(), date.getDate());
+    let tomorrow2 = new Date(date.getFullYear(), date.getMonth(), date.getDate() + 2);
+    const appointment = [];
+    const docsRef = collection(db, 'appointment');
+    const q = query(docsRef, where('isCanceled', '==', false), where('userProviderId', "==", uid));
+    const querySnapshot = await getDocs(q);
+    querySnapshot.forEach((doc) => {
+        if( doc.data().status== "Completado"){
+            appointment.push({
+                id: doc.id,
+                ...doc.data()
+            });
+        }
+
     });
     return appointment;
 }
@@ -281,6 +317,43 @@ export async function getAppointmentFuture(uid){
         });
     });
     return appointment;
+}
+export async function getAppointmentFutureProvider(uid){
+    let date = new Date();
+    let today = new Date(date.getFullYear(), date.getMonth(), date.getDate());
+    let tomorrow2 = new Date(date.getFullYear(), date.getMonth(), date.getDate() + 2);
+    const appointment = [];
+    const docsRef = collection(db, 'appointment');
+    const q = query(docsRef, where('isCanceled', '==', false), where('userProviderId', "==", uid), where('dateStart', ">=", tomorrow2));
+    const querySnapshot = await getDocs(q);
+    querySnapshot.forEach((doc) => {
+        if( doc.data().status !== "Completado"){
+
+        appointment.push({
+            id: doc.id,
+            ...doc.data()
+        });
+    }
+    });
+    return appointment;
+}
+
+export async function getAppointmentCancelProvider(uid){
+    let date = new Date();
+    let today = new Date(date.getFullYear(), date.getMonth(), date.getDate());
+    let tomorrow2 = new Date(date.getFullYear(), date.getMonth(), date.getDate() + 2);
+    const appointment = [];
+    const docsRef = collection(db, 'appointment');
+    const q = query(docsRef, where('isCanceled', '==', true), where('userProviderId', "==", uid));
+    const querySnapshot = await getDocs(q);
+    querySnapshot.forEach((doc) => {
+        appointment.push({
+            id: doc.id,
+            ...doc.data()
+        });
+    });
+    return appointment;
+
 }
 
 export async function cancelAppointment(appointment){

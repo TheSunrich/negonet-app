@@ -3,7 +3,7 @@ import logoimg from '../assets/imgs/servicios.png';
 import googlelogo from '../assets/imgs/google.png';
 import { Link, useLocation, useParams, Navigate } from 'react-router-dom';
 import { auth, existsUser, userExists } from '../utils/firebase';
-import { GoogleAuthProvider, onAuthStateChanged, signInWithPopup, signInWithRedirect } from 'firebase/auth';
+import { GoogleAuthProvider, onAuthStateChanged, signInWithEmailAndPassword, signInWithPopup, signInWithRedirect } from 'firebase/auth';
 import { useNavigate } from 'react-router-dom';
 import AuthProvider from '../components/AuthProvider';
 import Loading from '../components/Loading';
@@ -44,6 +44,8 @@ function Login() {
 
         console.log(exists)
         if(exists){
+
+            await signInWithEmailAndPassword(auth, credentials.email, credentials.password)
 
             setCurrentSate(5);
         }else{

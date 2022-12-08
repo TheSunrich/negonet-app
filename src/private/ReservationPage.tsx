@@ -86,6 +86,7 @@ const ReservationPage = () => {
         }).then(async (result) => {
           if (result.isConfirmed) {
             appointment.isCanceled = true;
+            appointment.status = 'Cancelado'
             await cancelAppointment(appointment);
             handleUserStateChanged(user);
             Swal.fire(
@@ -128,7 +129,7 @@ const ReservationPage = () => {
                             : ""
                           }
                           {appointment.status == "Recibido" ?
-                            <span className='badge bg-success'>{appointment.status}</span>
+                            <span className='badge bg-warning'>{appointment.status}</span>
                             : ""
                           }
                           {appointment.status == "Completado" ?
@@ -136,7 +137,7 @@ const ReservationPage = () => {
                             : ""
                           }
                           {appointment.status == "Cancelado" ?
-                            <span className='badge bg-success'>{appointment.status}</span>
+                            <span className='badge bg-danger'>{appointment.status}</span>
                             : ""
                           }
                         </div>
@@ -172,7 +173,7 @@ const ReservationPage = () => {
                             : ""
                           }
                           {appointment.status == "Recibido" ?
-                            <span className='badge bg-success'>{appointment.status}</span>
+                            <span className='badge bg-warning'>{appointment.status}</span>
                             : ""
                           }
                           {appointment.status == "Completado" ?
@@ -180,7 +181,7 @@ const ReservationPage = () => {
                             : ""
                           }
                           {appointment.status == "Cancelado" ?
-                            <span className='badge bg-success'>{appointment.status}</span>
+                            <span className='badge bg-danger'>{appointment.status}</span>
                             : ""
                           }
                         </div>
@@ -216,7 +217,7 @@ const ReservationPage = () => {
                             : ""
                           }
                           {appointment.status == "Recibido" ?
-                            <span className='badge bg-success'>{appointment.status}</span>
+                            <span className='badge bg-warning'>{appointment.status}</span>
                             : ""
                           }
                           {appointment.status == "Completado" ?
@@ -224,7 +225,7 @@ const ReservationPage = () => {
                             : ""
                           }
                           {appointment.status == "Cancelado" ?
-                            <span className='badge bg-success'>{appointment.status}</span>
+                            <span className='badge bg-danger'>{appointment.status}</span>
                             : ""
                           }
                         </div>
