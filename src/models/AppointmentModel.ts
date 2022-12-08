@@ -12,7 +12,7 @@ export interface Appointment{
     isHomeService?: boolean;
     address?: AddressService;
     paymentType?: string;
-    cardData?: CardData;
+    cardData?: {};
     age ?: number;
     information ?: string;
     isCanceled?: boolean;

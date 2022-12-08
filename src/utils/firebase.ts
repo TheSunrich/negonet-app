@@ -223,7 +223,7 @@ export async function addAppointment(appointment) {
 export async function getAppointmentAll(uid){
     const appointment = [];
     const docsRef = collection(db, 'appointment');
-    const q = query(docsRef, where('isCanceled', '==', false), where('userId', "!=", uid));
+    const q = query(docsRef, where('isCanceled', '==', false), where('userClientId', "!=", uid));
     const querySnapshot = await getDocs(q);
     querySnapshot.forEach((doc) => {
         appointment.push({

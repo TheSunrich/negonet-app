@@ -37,13 +37,48 @@ const MainPage = () => {
   const [specialtyAvailable, setAvailableS] = useState(true);
   const [search, setButtonSearch] = useState(true);
   const [searchOptions, setSearch] = useState({ categoryId: "", specialtyId: "" })
-  const [currentServicio, setCurrentServicio] = useState({});
+  const [currentServicio, setCurrentServicio] = useState({
+    name: "",
+    userId: "",
+    price: "",
+    description: "",
+    imageUrl: "",
+    schedule: {
+      interval: "",
+      days:[{
+        day:"",
+        hours: [{
+          inicio: "",
+          final: "",
+          disponible: ""
+        }]
+      }]
+    },
+    id: "",
+    isHomeService: false,
+    address: {
+      address1: "string",
+      address2: "string",
+      city: "string",
+      state: "string",
+      zip: "string",
+    }
+  });
   const [currentShedule, setCurrentShedule] = useState({});
   const [hours, setHours] = useState([]);
   const [startDate, setStartDate] = useState(null);
   const [isOpen, setIsOpen] = useState(false);
-  const [currentHour, setCurrentHour] = useState({});
-  const [userInformation, setUserInformation] = useState({});
+  const [currentHour, setCurrentHour] = useState({
+    inicio: "",
+    final: ""
+  });
+  const [userInformation, setUserInformation] = useState({
+    paymentType: "",
+    name: "",
+    age: 0,
+    information: "",
+    cardData: { cardNumber: "", dateExpire: "", cvv: "" }
+  });
   const [paymentType, setPaymentType] = useState("");
 
 
@@ -441,7 +476,7 @@ const MainPage = () => {
                     <p className='text-right bg-light border pt-2 pb-2'>{currentServicio.description}</p>
                   </div>
                   <div className='col-6 justify-content-end align-items-end d-flex pe-3'>
-                      <img src={currentServicio.imageUrl} alt="" className='img-fluid rounded roundedimg2' />
+                    <img src={currentServicio.imageUrl} alt="" className='img-fluid rounded roundedimg2' />
                   </div>
 
                 </div>
