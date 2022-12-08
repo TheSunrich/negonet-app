@@ -14,6 +14,8 @@ import 'react-datepicker/dist/react-datepicker.css'
 import { format } from 'date-fns';
 import { Appointment } from '../models/AppointmentModel';
 import * as bootstrap from "bootstrap";
+import Button from 'react-bootstrap/Button';
+import Modal from 'react-bootstrap/Modal';
 
 moment.locale('es', {
   months: 'Enero_Febrero_Marzo_Abril_Mayo_Junio_Julio_Agosto_Septiembre_Octubre_Noviembre_Diciembre'.split('_'),
@@ -88,7 +90,9 @@ const MainPage = () => {
     cardData: { cardNumber: "", dateExpire: "", cvv: "" }
   });
   const [paymentType, setPaymentType] = useState("");
+  const [show, setShow] = useState(false);
 
+  const handleClose = () => setShow(false);
 
   async function handleUserStateChanged(u) {
     if (u) {
@@ -196,6 +200,7 @@ const MainPage = () => {
       addressService: service.address,
       addressClient: user.address
     });
+    setShow(true);
   }
   const filterDays = (days) => {
     moment.locale('es');
@@ -441,9 +446,9 @@ const MainPage = () => {
                                 "$" + element.price : "gratuito"}</span>
                             </div>
                             <div className='col-12 mt-1 text-secondary text-center'>
-                              <button className='btn btn-sm btn-gradient' data-bs-toggle="modal" data-bs-target="#modalGenerarCita" onClick={() => handleAgendarCita(element)}>
-                                Contratar Servicio
-                              </button>
+                              <Button className='btn btn-sm btn-gradient' onClick={() => handleAgendarCita(element)}>
+                                Launch demo modal
+                              </Button>
                             </div>
                           </div>
 
@@ -467,119 +472,114 @@ const MainPage = () => {
             }
           </div>
         </div>
-        <div className="modal" id="modalGenerarCita" aria-labelledby="exampleModalLabel" aria-hidden="true">
-          <div className="modal-dialog modal-lg">
-            <div className="modal-content">
-              <div className="modal-header">
-                <h1 className="modal-title fs-5" id="exampleModalLabel">Agenda una Cita</h1>
-                <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        <Modal size="lg" show={show} onHide={handleClose} centered>
+          <Modal.Header closeButton>
+            <Modal.Title>Agenda una Cita</Modal.Title>
+          </Modal.Header>
+          <Modal.Body>
+            <div className='row'>
+              <div className='col-md-6 text-center'>
+                <h1 className='fs-5 text-right fw-bold mt-4'>{currentServicio.name}</h1>
+                <h3 className='text-info mt-2'><b>${currentServicio.price}</b></h3>
+                <p className='mt-4'>Descripción</p>
+                <p className='text-right bg-light border pt-2 pb-2'>{currentServicio.description}</p>
               </div>
-              <div className="modal-body">
-                <div className='row'>
-                  <div className='col-6 text-center'>
-
-                    <h1 className='fs-5 text-right fw-bold mt-4'>{currentServicio.name}</h1>
-                    <h3 className='text-info mt-2'><b>${currentServicio.price}</b></h3>
-                    <p className='mt-4'>Descripción</p>
-                    <p className='text-right bg-light border pt-2 pb-2'>{currentServicio.description}</p>
-                  </div>
-                  <div className='col-6 justify-content-end align-items-end d-flex pe-3'>
-                    <img src={currentServicio.imageUrl} alt="" className='img-fluid rounded roundedimg2' />
-                  </div>
-
-                </div>
-
-
-                <form className='row g-3 mt-4' onSubmit={handleSubmitService}>
-                  <div className="col-md-8">
-                    <label className="form-label">¿A qué nombre está el servicio? <b className='obligatorio'>*</b></label>
-                    <input name='name' type="text" className="form-control" value={user.firstName} onChange={handleUserInformation} placeholder='Te reconocerán por este nombre' required />
-                  </div>
-                  <div className="col-md-4">
-                    <label className="form-label">Edad <b className='obligatorio'>*</b></label>
-                    <input name='age' type="number" onChange={handleUserInformation} className="form-control" min={0} required />
-                  </div>
-                  <div className="col-md-12">
-                    <label className="form-label">Datos Importantes <b className='obligatorio'>*</b></label>
-                    <textarea name='information' className="form-control" onChange={handleUserInformation} placeholder='Ingresa cualquier información relevante (alergias, ubicaciones, pedido especial)' maxLength={500}></textarea>
-                  </div>
-                  <div className="col-md-6">
-                    <label className="form-label">Selecciona la fecha<b className='obligatorio'>*</b></label>
-                    <br></br>
-                    <div className="d-grid gap-2">
-                      <button className="btn btn-primary btn-block" onClick={handleClick}>
-                        {startDate ? format(startDate, 'dd/MM/yyyy') : "Seleccionar fecha y hora"}
-                      </button>
-                    </div>
-
-                    {isOpen && (
-                      <DatePicker
-                        selected={startDate}
-                        onChange={(date) => { handleChange(date) }}
-                        filterDate={(d) => filterDays(d)}
-                        minDate={new Date()}
-                        timeIntervals={currentServicio.schedule ? currentServicio.schedule.interval : 60}
-                        dateFormat="MMMM d"
-                        placeholderText="Select a weekday" inline />
-                    )}
-                  </div>
-                  <div className="col-md-6">
-                    <label className="form-label">Hora <b className='obligatorio'>*</b></label>
-                    <select name='hour' className="form-select " required onChange={handleHourSelected}>
-                      <option value="" >Seleccionar una opción...</option>
-                      {
-                        hours ?
-                          hours.map(element => (
-                            <option key={element.i} value={element.id}>{element.inicio} - {element.final}</option>
-                          ))
-                          :
-                          <option >No hay horas disponibles</option>
-                      }
-                    </select>
-                  </div>
-                  <label className="form-label">Método de pago<b className='obligatorio'>*</b></label>
-
-                  <div className="col-md-12">
-                    <div className='form-check form-check-inline'>
-                      <input className="form-check-input" type="radio" name="payment" id="inlineRadio1" value="efectivo" onChange={handlePaymentType} required />
-                      <label className="form-check-label" htmlFor="inlineRadio1">Efectivo</label>
-                    </div>
-                    <div className='form-check form-check-inline'>
-                      <input className="form-check-input" type="radio" name="payment" id="inlineRadio1" value="tarjeta" onChange={handlePaymentType} required />
-                      <label className="form-check-label" htmlFor="inlineRadio1">Tarjeta</label>
-                    </div>
-                  </div>
-
-                  {
-                    paymentType === 'tarjeta' ?
-                      <div className='row'>
-                        <div className="col-md-4">
-                          <label className="form-label">Número de tarjeta <b className='obligatorio'>*</b></label>
-                          <input name='cardNumber' type="number" className="form-control" onChange={handleUserInformation} placeholder='**** **** **** ****' required />
-                        </div>
-                        <div className="col-md-4">
-                          <label className="form-label">Fecha de expiración <b className='obligatorio'>*</b></label>
-                          <input name='dateExpire' type="text" className="form-control" onChange={handleUserInformation} placeholder='**/**' required />
-                        </div>
-                        <div className="col-md-4">
-                          <label className="form-label">Código de seguridad <b className='obligatorio'>*</b></label>
-                          <input name='cvv' type="number" className="form-control" onChange={handleUserInformation} placeholder='***' required />
-                        </div>
-                      </div>
-
-
-                      : null
-                  }
-
-                </form>
-              </div>
-              <div className="modal-footer">
-                <button type="button" className="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
-                <button type="button" className="btn btn-primary" onClick={submitAgendar}>Agendar</button>
+              <div className='col-md-6 justify-content-end align-items-end d-flex pe-3'>
+                <img src={currentServicio.imageUrl} alt="" className='img-fluid rounded roundedimg2' />
               </div>
             </div>
-          </div>
-        </div>
+            <form className='row g-3 mt-4' onSubmit={handleSubmitService}>
+              <div className="col-md-8">
+                <label className="form-label">¿A qué nombre está el servicio? <b className='obligatorio'>*</b></label>
+                <input name='name' type="text" className="form-control" value={user.firstName} onChange={handleUserInformation} placeholder='Te reconocerán por este nombre' required />
+              </div>
+              <div className="col-md-4">
+                <label className="form-label">Edad <b className='obligatorio'>*</b></label>
+                <input name='age' type="number" onChange={handleUserInformation} className="form-control" min={0} required />
+              </div>
+              <div className="col-md-12">
+                <label className="form-label">Datos Importantes <b className='obligatorio'>*</b></label>
+                <textarea name='information' className="form-control" onChange={handleUserInformation} placeholder='Ingresa cualquier información relevante (alergias, ubicaciones, pedido especial)' maxLength={500}></textarea>
+              </div>
+              <div className="col-md-6">
+                <label className="form-label">Selecciona la fecha<b className='obligatorio'>*</b></label>
+                <br></br>
+                <div className="d-grid gap-2">
+                  <button className="btn btn-primary btn-block" onClick={handleClick}>
+                    {startDate ? format(startDate, 'dd/MM/yyyy') : "Seleccionar fecha y hora"}
+                  </button>
+                </div>
+
+                {isOpen && (
+                  <DatePicker
+                    selected={startDate}
+                    onChange={(date) => { handleChange(date) }}
+                    filterDate={(d) => filterDays(d)}
+                    minDate={new Date()}
+                    timeIntervals={currentServicio.schedule ? currentServicio.schedule.interval : 60}
+                    dateFormat="MMMM d"
+                    placeholderText="Select a weekday" inline />
+                )}
+              </div>
+              <div className="col-md-6">
+                <label className="form-label">Hora <b className='obligatorio'>*</b></label>
+                <select name='hour' className="form-select " required onChange={handleHourSelected}>
+                  <option value="" >Seleccionar una opción...</option>
+                  {
+                    hours ?
+                      hours.map(element => (
+                        <option key={element.i} value={element.id}>{element.inicio} - {element.final}</option>
+                      ))
+                      :
+                      <option >No hay horas disponibles</option>
+                  }
+                </select>
+              </div>
+              <label className="form-label">Método de pago<b className='obligatorio'>*</b></label>
+
+              <div className="col-md-12">
+                <div className='form-check form-check-inline'>
+                  <input className="form-check-input" type="radio" name="payment" id="inlineRadio1" value="efectivo" onChange={handlePaymentType} required />
+                  <label className="form-check-label" htmlFor="inlineRadio1">Efectivo</label>
+                </div>
+                <div className='form-check form-check-inline'>
+                  <input className="form-check-input" type="radio" name="payment" id="inlineRadio1" value="tarjeta" onChange={handlePaymentType} required />
+                  <label className="form-check-label" htmlFor="inlineRadio1">Tarjeta</label>
+                </div>
+              </div>
+
+              {
+                paymentType === 'tarjeta' ?
+                  <div className='row'>
+                    <div className="col-md-4">
+                      <label className="form-label">Número de tarjeta <b className='obligatorio'>*</b></label>
+                      <input name='cardNumber' type="number" className="form-control" onChange={handleUserInformation} placeholder='**** **** **** ****' required />
+                    </div>
+                    <div className="col-md-4">
+                      <label className="form-label">Fecha de expiración <b className='obligatorio'>*</b></label>
+                      <input name='dateExpire' type="text" className="form-control" onChange={handleUserInformation} placeholder='**/**' required />
+                    </div>
+                    <div className="col-md-4">
+                      <label className="form-label">Código de seguridad <b className='obligatorio'>*</b></label>
+                      <input name='cvv' type="number" className="form-control" onChange={handleUserInformation} placeholder='***' required />
+                    </div>
+                  </div>
+
+
+                  : null
+              }
+
+            </form>
+          </Modal.Body>
+          <Modal.Footer>
+            <Button variant="secondary" onClick={handleClose}>
+              Cerrar
+            </Button>
+            <Button variant="primary" onClick={submitAgendar}>
+              Agendar
+            </Button>
+          </Modal.Footer>
+        </Modal>
       </>
     )
   }
