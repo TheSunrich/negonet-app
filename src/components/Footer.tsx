@@ -41,7 +41,7 @@ function Footer() {
                             <p>Entérate antes que nadie de lo nuevo que hay en NegoNet.</p>
                             <div className="d-flex flex-column flex-sm-row w-100 gap-2">
                                 <label className="visually-hidden">Correo Electrónico</label>
-                                <input type="text" className="form-control" placeholder="Email address"/>
+                                <input type="text" className="form-control" placeholder="Dirección de correo"/>
                                     <button className="btn btn-primary" type="button">Suscribirse</button>
                             </div>
                         </form>

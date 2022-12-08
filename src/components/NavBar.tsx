@@ -23,16 +23,10 @@ const NavBar = ({ children }) => {
                                 <Link to="/" relative="path" className="nav-link">Página Principal</Link>
                             </li>
                             <li className="nav-item">
-                                <a className="nav-link" href="#">Agenda una Cita</a>
-                            </li>
-                            <li className="nav-item">
                                 <Link to="/login" relative="path" className="nav-link">Iniciar Sesión</Link>
                             </li>
                             <li className="nav-item">
-                                <a className="nav-link" href="#">Dar Servicio</a>
-                            </li>
-                            <li className="nav-item">
-                                <a className="nav-link" href="#">Contáctanos</a>
+                                <a className="nav-link" href="/#contacto">Contáctanos</a>
                             </li>
                         </ul>
                     </div>

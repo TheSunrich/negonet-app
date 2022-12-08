@@ -1,72 +1,38 @@
 import React from 'react'
 import servicios from '../assets/imgs/servicios.png'
 import cocinero from '../assets/imgs/cocinero.jpg'
-import carpintero from '../assets/imgs/carpintero.png'
+import carpintero from '../assets/imgs/carpintero.jpg'
 import electricista from '../assets/imgs/electricista1.png';
 import maestra from '../assets/imgs/maestra.jpg'
+import { Link } from 'react-router-dom';
 
 const ContainerIndex = () => {
     return (
         <>
             <div className='mainbg'>
-                <div className='container-fluid containerbg'>
-                    <div className='row'>
-                        <div className='col-md-4 text-center'>
-
+                <div className="container col-xxl-8 px-4 py-5">
+                    <div className="row flex-lg-row-reverse text-light align-items-center g-5 py-5">
+                        <div className="col-10 col-sm-8 col-lg-6">
+                            <img src={carpintero} className="d-block mx-lg-auto img-fluid" alt="Bootstrap Themes" width="700" height="500" loading="lazy" />
                         </div>
-                        <div className='col-md-8 text-center animate__animated animate__headShake formbusqueda'>
-                            <div>
-                                <h1 className='mt-5 titulosearch'>Encuentra tu servicio y genera una cita</h1>
-                                <div className='container w-75 mt-2 rounded bg-light border mt-4 p-3'>
-                                    <form>
-                                        <div className='row'>
-                                            <div className='col'>
-                                                <label className='form-label'>Categoría</label>
-                                            </div>
-                                            <div className='col'>
-                                                <label className='form-label'>Especialidad</label>
-                                            </div>
-                                            <div className='col'>
-                                            </div>
-                                        </div>
-                                        <div className='row'>
-                                            <div className='col'>
-                                                <select className="form-select notrounded" aria-label="Default select example">
-                                                    <option>Seleccionar Categoría</option>
-                                                    <option value="1">One</option>
-                                                    <option value="2">Two</option>
-                                                    <option value="3">Three</option>
-                                                </select>
-                                            </div>
-                                            <div className='col'>
-                                                <select className="form-select notrounded" aria-label="Default select example">
-                                                    <option>Seleccionar Especialidad</option>
-                                                    <option value="1">One</option>
-                                                    <option value="2">Two</option>
-                                                    <option value="3">Three</option>
-                                                </select>
-                                            </div>
-                                            <div className='col text-center align-items-center justify-content-center'>
-                                                <div className="d-grid gap-2">
-                                                    <button className="btn btn-primary notrounded" type="button">Buscar Servicio</button>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </form>
-                                </div>
+                        <div className="col-lg-6 text-light">
+                            <h1 className="display-5 fw-bold lh-1 mb-3 text-light">NegoNet al Alcance de un Clic</h1>
+                            <p className="lead">¿Buscar algún servicio? únete a NegoNet y al igual que miles de usuarios, encuentra la oportunidad que resuelva tu problema de manera sencilla, NegoNet es una red de profesionistas y de clientes que buscan beneficiarse el uno al otro.</p>
+                            <div className="d-grid gap-2 d-md-flex justify-content-md-start">
+                                <Link to="/login" relative="path" className="btn btn-primary btn-lg px-4 me-md-2">Quiero Unirme</Link>
                             </div>
                         </div>
                     </div>
                 </div>
-                <div className='container-fluid containertext divinclinado text-center'>
-                    <div className='row divtextinclinado fs-5'>
+                <div className='container-fluid divbackwhite text-center'>
+                    <div className='row fs-5'>
                         <div className="col-lg-4 p-5 contents animate__animated animate__backInLeft">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="140" height="140" fill="currentColor" className="bi bi-bandaid-fill icontext" viewBox="0 0 16 16">
-                                <path d="m2.68 7.676 6.49-6.504a4 4 0 0 1 5.66 5.653l-1.477 1.529-5.006 5.006-1.523 1.472a4 4 0 0 1-5.653-5.66l.001-.002 1.505-1.492.001-.002Zm5.71-2.858a.5.5 0 1 0-.708.707.5.5 0 0 0 .707-.707ZM6.974 6.939a.5.5 0 1 0-.707-.707.5.5 0 0 0 .707.707ZM5.56 8.354a.5.5 0 1 0-.707-.708.5.5 0 0 0 .707.708Zm2.828 2.828a.5.5 0 1 0-.707-.707.5.5 0 0 0 .707.707Zm1.414-2.121a.5.5 0 1 0-.707.707.5.5 0 0 0 .707-.707Zm1.414-.707a.5.5 0 1 0-.706-.708.5.5 0 0 0 .707.708Zm-4.242.707a.5.5 0 1 0-.707.707.5.5 0 0 0 .707-.707Zm1.414-.707a.5.5 0 1 0-.707-.708.5.5 0 0 0 .707.708Zm1.414-2.122a.5.5 0 1 0-.707.707.5.5 0 0 0 .707-.707ZM8.646 3.354l4 4 .708-.708-4-4-.708.708Zm-1.292 9.292-4-4-.708.708 4 4 .708-.708Z" />
+                            <svg xmlns="http://www.w3.org/2000/svg" width="140  " height="140 " fill="currentColor" className="bi bi-hammer icontext" viewBox="0 0 16 16">
+                                <path d="M9.972 2.508a.5.5 0 0 0-.16-.556l-.178-.129a5.009 5.009 0 0 0-2.076-.783C6.215.862 4.504 1.229 2.84 3.133H1.786a.5.5 0 0 0-.354.147L.146 4.567a.5.5 0 0 0 0 .706l2.571 2.579a.5.5 0 0 0 .708 0l1.286-1.29a.5.5 0 0 0 .146-.353V5.57l8.387 8.873A.5.5 0 0 0 14 14.5l1.5-1.5a.5.5 0 0 0 .017-.689l-9.129-8.63c.747-.456 1.772-.839 3.112-.839a.5.5 0 0 0 .472-.334z" />
                             </svg>
-                            <h2 className="fw-normal mt-3 icontext">Salud</h2>
-                            <p>Contacta a los mejores especialistas de salud dentro de la aplicación</p>
-                            <p><a className="btn btn-secondary" href="#">Ver especiaistas</a></p>
+                            <h2 className="fw-normal mt-3 icontext">Profesiones</h2>
+                            <p>Encuentra cualquier profesión dentro de NegoNet y apoya la economía local</p>
+                            <p><Link to="/login" relative="path" className="btn btn-secondary">Ver Especialistas</Link></p>
                         </div>
                         <div className="col-lg-4 p-5 contents animate__animated animate__backInLeft">
                             <svg xmlns="http://www.w3.org/2000/svg" width="140" height="140" fill="currentColor" className="bi bi-gear-wide-connected icontext" viewBox="0 0 16 16">
@@ -74,7 +40,7 @@ const ContainerIndex = () => {
                             </svg>
                             <h2 className="fw-normal mt-3 icontext">Servicio</h2>
                             <p>Recibe reparaciones a domicilio de cualquier tipo de problemas</p>
-                            <p><a className="btn btn-secondary" href="#">Ver especialistas</a></p>
+                            <p><Link to="/login" relative="path" className="btn btn-secondary">Ver Especialistas</Link></p>
                         </div>
                         <div className="col-lg-4 p-5 contents animate__animated animate__backInLeft">
                             <svg xmlns="http://www.w3.org/2000/svg" width="140" height="140" fill="currentColor" className="bi bi-egg-fried icontext" viewBox="0 0 16 16">
@@ -83,40 +49,33 @@ const ContainerIndex = () => {
                             </svg>
                             <h2 className="fw-normal mt-3 icontext">Cocina</h2>
                             <p>Agenda clases especializadas con profesionales dentro del area.</p>
-                            <p><a className="btn btn-secondary" href="#">Ver especialistas</a></p>
+                            <p><Link to="/login" relative="path" className="btn btn-secondary">Ver Especialistas</Link> </p>
                         </div>
 
                     </div>
                 </div>
-                <div className='container-fluid containerwhite text-center'>
-                    <div className='container-fluid contenttext'>
-                        <div className='row'>
-                            <div className='col mh-100 justify-content-center align-self-center'>
-                                <img src={carpintero} width="550"></img>
-                            </div>
-                            <div className='col me-5 text-light mh-100'>
-                                <h1 className='me-2 text-end'>Contrata Cualquier Servicio</h1>
-                                <div className='justifytext container-fluid fs-4'>
-                                    <br />
-                                    Desde un educador privado hasta un especialista certificado que te ayude a resolver tu inconveniente o dar asesorias, la necesidad que tengas la encuentras aquí, en NegoNet.
-                                    <br />
-                                    <br />
-                                    Te brindamos la herramienta necesaria para que estés en contacto con personas y equipos de trabajo altamente capacitados, de esta forma, encontrar el servicio que necesites al alcance.
+                <div id='contacto' className="container-fluid p-5 divbackwhite">
+                    <div className="row align-items-center g-lg-5 py-5">
+                        <div className="col-lg-7 ps-5 text-center text-lg-start">
+                            <h1 className="display-4 fw-bold lh-1 mb-3">Envíanos un Mensaje</h1>
+                            <p className="col-lg-10 fs-4">Para NegoNet es muy importante el recibir tus comentarios, este espacio es para ti, siéntete libre de escribir tus opiniones, recomendaciones y quejas.</p>
+                        </div>
+                        <div className="col-md-10 pe-5 mx-auto col-lg-5">
+                            <form className="p-4 p-md-5 border rounded-3 bg-light">
+                                <div className="form-floating mb-3">
+                                    <input type="email" className="form-control" id="floatingInput" placeholder="name@example.com"/>
+                                        <label htmlFor="floatingInput">Correo Electrónico</label>
                                 </div>
-                                <div className='container-fluid text-start'>
-                                    <button className='btn btn-lg btn-light mt-5'>
-                                        Quiero saber cómo
-                                    </button>
+                                <div className="form-floating mb-3">
+                                    <input type="text   " className="form-control" id="floatingPassword" placeholder="Password"/>
+                                        <label htmlFor="floatingPassword">Mensaje</label>
                                 </div>
-                            </div>
+                                <button className="w-100 btn btn-lg btn-primary" type="submit">Enviar Mensaje</button>
+                                <hr className="my-4"/>
+                                    <small className="text-muted">Al hacer clic en Enviar, aceptas nuestros términos y condiciones</small>
+                            </form>
                         </div>
                     </div>
-                </div>
-                <div className='container-fluid containercolor divinclinado2 text-center'>
-
-                </div>
-                <div className='container-fluid containerfinal text-center'>
-                    bb
                 </div>
             </div>
         </>

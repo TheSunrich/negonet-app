@@ -65,10 +65,10 @@ function Login() {
     if (state === 4) {
         return (
             <>
-                <div className='row container-fluid justify-content-center text-dark logincontainer'>
-                    <div className='row col-md-7 mt-5 height480'>
+                <div className='row container-fluid justify-content-center align-self-center text-dark logincontainer'>
+                    <div className='row col-md-7 mt-5'>
                         <div className='col-md-6 rounded-start text-center align-self-center'>
-                            <img src={logoimg} width="380"></img>
+                            <img src={logoimg} style={{width: "100%"}}></img>
                         </div>
                         <div className='col-md-6 bg-light rounded'>
                             <div className='mb-3 mt-3 text-center'>
