@@ -13,14 +13,13 @@ import getDay from "date-fns/getDay"
 import 'react-datepicker/dist/react-datepicker.css'
 import { format } from 'date-fns';
 import { Appointment } from '../models/AppointmentModel';
-moment.lang('es', {
+moment.locale('es', {
   months: 'Enero_Febrero_Marzo_Abril_Mayo_Junio_Julio_Agosto_Septiembre_Octubre_Noviembre_Diciembre'.split('_'),
   monthsShort: 'Enero._Feb._Mar_Abr._May_Jun_Jul._Ago_Sept._Oct._Nov._Dec.'.split('_'),
   weekdays: 'Domingo_Lunes_Martes_Miercoles_Jueves_Viernes_Sabado'.split('_'),
   weekdaysShort: 'Dom._Lun._Mar._Mier._Jue._Vier._Sab.'.split('_'),
-  weekdaysMin: 'Do_Lu_Ma_Mi_Ju_Vi_Sa'.split('_')
+  weekdaysMin: 'Do_Lu_Ma_Mi_Ju_Vi_Sa'.split('_'),
 });
-
 
 const MainPage = () => {
   useEffect(() => {
@@ -37,13 +36,48 @@ const MainPage = () => {
   const [specialtyAvailable, setAvailableS] = useState(true);
   const [search, setButtonSearch] = useState(true);
   const [searchOptions, setSearch] = useState({ categoryId: "", specialtyId: "" })
-  const [currentServicio, setCurrentServicio] = useState({});
+  const [currentServicio, setCurrentServicio] = useState({
+    name: "",
+    userId: "",
+    price: "",
+    description: "",
+    imageUrl: "",
+    schedule: {
+      interval: "",
+      days:[{
+        day:"",
+        hours: [{
+          inicio: "",
+          final: "",
+          disponible: ""
+        }]
+      }]
+    },
+    id: "",
+    isHomeService: false,
+    address: {
+      address1: "string",
+      address2: "string",
+      city: "string",
+      state: "string",
+      zip: "string",
+    }
+  });
   const [currentShedule, setCurrentShedule] = useState({});
   const [hours, setHours] = useState([]);
   const [startDate, setStartDate] = useState(null);
   const [isOpen, setIsOpen] = useState(false);
-  const [currentHour, setCurrentHour] = useState({});
-  const [userInformation, setUserInformation] = useState({});
+  const [currentHour, setCurrentHour] = useState({
+    inicio: "",
+    final: ""
+  });
+  const [userInformation, setUserInformation] = useState({
+    paymentType: "",
+    name: "",
+    age: 0,
+    information: "",
+    cardData: { cardNumber: "", dateExpire: "", cvv: "" }
+  });
   const [paymentType, setPaymentType] = useState("");
 
 
@@ -441,7 +475,7 @@ const MainPage = () => {
                     <p className='text-right bg-light border pt-2 pb-2'>{currentServicio.description}</p>
                   </div>
                   <div className='col-6 justify-content-end align-items-end d-flex pe-3'>
-                      <img src={currentServicio.imageUrl} alt="" className='img-fluid rounded roundedimg2' />
+                    <img src={currentServicio.imageUrl} alt="" className='img-fluid rounded roundedimg2' />
                   </div>
 
                 </div>

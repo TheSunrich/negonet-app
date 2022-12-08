@@ -5,7 +5,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate, useParams } from 'react-router-dom';
 import { User, Address } from '../models/UserModel';
 import { Schedule, Service } from '../models/ServiceModel';
-import { auth, createService, existsUser, getCategories, getSpecialty, updateUser, storage, uploadImage, getUser, getServiceByUser } from '../utils/firebase';
+import { auth, createService, existsUser, getCategories, getSpecialty, updateUser, storage, uploadImage, getUser, getServiceByUser, getAppointmentAll } from '../utils/firebase';
 import { GoogleAuthProvider, onAuthStateChanged, signInWithPopup, signInWithRedirect, signInWithEmailAndPassword, createUserWithEmailAndPassword } from 'firebase/auth';
 import AuthProvider from '../components/AuthProvider';
 import Loading from '../components/Loading';
@@ -27,6 +27,11 @@ const ReservationPage = () => {
         ...exists
       })
       console.log(exists)
+      const apexists = await getAppointmentAll(u.uid);
+      setAppointment({
+        ...apexists
+      })
+      console.log(apexists)
       setSate(2);
     } else {
       setSate(4);
