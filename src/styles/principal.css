@@ -212,6 +212,12 @@
     width: 250px;
     height: 250px;
 }
+.roundedimg2{
+    border-radius: 50%;
+    object-fit: cover;
+    width: 350px;
+    height: 250px;
+}
 .imgcover{
     object-fit: cover;
 }

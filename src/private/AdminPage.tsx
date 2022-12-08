@@ -293,6 +293,9 @@ const AdminPage = () => {
       service.address = addressService;
       service.userId = user.uid;
       user.isService = true;
+      serviceImg ? await uploadImage(serviceImg, "/services/").then((url) => {
+        service.imageUrl = url;
+      }) : ""
       await createService(service);
       await updateUser(user);
       console.log(user)
