@@ -13,6 +13,8 @@ import getDay from "date-fns/getDay"
 import 'react-datepicker/dist/react-datepicker.css'
 import { format } from 'date-fns';
 import { Appointment } from '../models/AppointmentModel';
+import * as bootstrap from "bootstrap";
+
 moment.locale('es', {
   months: 'Enero_Febrero_Marzo_Abril_Mayo_Junio_Julio_Agosto_Septiembre_Octubre_Noviembre_Diciembre'.split('_'),
   monthsShort: 'Enero._Feb._Mar_Abr._May_Jun_Jul._Ago_Sept._Oct._Nov._Dec.'.split('_'),
@@ -126,12 +128,10 @@ const MainPage = () => {
         specialtyId: ""
       })
     }
-    console.log(searchOptions)
   }
   async function handleSearchService(e) {
     e.preventDefault();
     const s = await searchService(searchOptions);
-    console.log(s)
     setService(s);
   }
   async function handleSubmitService(e) {
@@ -149,13 +149,9 @@ const MainPage = () => {
 
     // día en español
     let cDay = moment(e).format('dddd')
-
-    console.log(cDay)
-
     if (cDay != "") {
       let day = cDay;
       let hours = currentServicio.schedule.days.filter(element => {
-        console.log(element, day)
         return element.day == day
       }).filter(element => element.hours.length > 0).filter(element => element.hours.filter(element => element.disponible).length > 0)[0].hours
 
@@ -168,7 +164,6 @@ const MainPage = () => {
       })
 
       Promise.all(finalHours).then((values) => {
-        console.log(values.filter(element => element != undefined))
         setHours(values.filter(element => element != undefined));
       });
 
@@ -185,16 +180,11 @@ const MainPage = () => {
     service.schedule.days.map((element, index) => {
       let horas = getHorasByIntervalo(element.startHour, element.endHour, interval);
       element.hours = horas;
-      console.log(element)
     })
 
     setCurrentServicio(service);
-
-
-
   }
   const filterDays = (days) => {
-
     moment.locale('es');
     //get days from currentServicio.schedule.days
     let daysAvailables = currentServicio.schedule.days.map(element => {
@@ -263,11 +253,9 @@ const MainPage = () => {
 
 
     //si hay un campo indefinido, no se guarda la cita
-    console.log(data)
     for (const key in data) {
       if (data.hasOwnProperty(key)) {
         const element = data[key];
-        console.log(element, element == undefined)
         if (element === undefined) {
           Swal.fire({
             icon: 'error',
@@ -290,7 +278,7 @@ const MainPage = () => {
               title: 'Cita agendada',
               text: 'Se ha agendado la cita correctamente',
             })
-            navigate("reservation");
+            window.location.reload();
           } else {
             Swal.fire({
               icon: 'error',
@@ -334,7 +322,6 @@ const MainPage = () => {
 
   function handleUserInformation(e) {
     e.preventDefault();
-    console.log(user);
     if (e.target.name == "cardNumber") {
       let cardData = userInformation.cardData ? userInformation.cardData : { cardNumber: "", dateExpire: "", cvv: "" };
       cardData.cardNumber = e.target.value;
@@ -354,15 +341,12 @@ const MainPage = () => {
   }
 
   function handleHourSelected(e) {
-    console.log("que pedo basura", e.target.value)
     let value = e.target.value.split("-")[0].trim();
     let hour = hours.filter(element => element.inicio == value)[0];
-    console.log(hour)
     setCurrentHour(hour)
   }
 
   function getHorasByIntervalo(inicio, fin, intervalo) {
-    console.log(inicio, fin, intervalo)
     inicio = moment(inicio, "HH:mm");
     fin = moment(fin, "HH:mm");
     let horas = [];

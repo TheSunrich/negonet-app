@@ -3,10 +3,8 @@ import React, { useState, useEffect, useRef } from 'react'
 import emailjs from '@emailjs/browser';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate, useParams } from 'react-router-dom';
-import { User, Address } from '../models/UserModel';
-import { Schedule, Service } from '../models/ServiceModel';
-import { auth, createService, existsUser, getCategories, getSpecialty, updateUser, storage, uploadImage, getUser, getServiceByUser, getAppointmentAll } from '../utils/firebase';
-import { GoogleAuthProvider, onAuthStateChanged, signInWithPopup, signInWithRedirect, signInWithEmailAndPassword, createUserWithEmailAndPassword } from 'firebase/auth';
+import { auth, getUser, getAppointmentActual, getAppointmentFuture, getAppointmentPast } from '../utils/firebase';
+import { onAuthStateChanged } from 'firebase/auth';
 import AuthProvider from '../components/AuthProvider';
 import Loading from '../components/Loading';
 import moment from 'moment';
@@ -18,6 +16,9 @@ const ReservationPage = () => {
   const navigate = useNavigate();
   const [state, setSate] = useState(0);
   const [appointment, setAppointment] = useState([]);
+  const [appointmentPast, setPast] = useState([]);
+  const [appointmentActual, setActual] = useState([]);
+  const [appointmentFuture, setFuture] = useState([]);
   const [user, setUser] = useState({});
 
   async function handleUserStateChanged(u) {
@@ -26,12 +27,21 @@ const ReservationPage = () => {
       setUser({
         ...exists
       })
-      console.log(exists)
-      const apexists = await getAppointmentAll(u.uid);
-      setAppointment({
-        ...apexists
-      })
-      console.log(apexists)
+      const past = await getAppointmentPast(u.uid);
+      setPast(
+        past
+      )
+      const actual = await getAppointmentActual(u.uid);
+      setActual(
+        actual
+      )
+      const future = await getAppointmentFuture(u.uid);
+      setFuture(
+        future
+      )
+      console.log(past)
+      console.log(actual)
+      console.log(future)
       setSate(2);
     } else {
       setSate(4);
@@ -48,7 +58,9 @@ const ReservationPage = () => {
     setSate(4);
     navigate("/login");
   }
-
+  async function showAlertStatus(appointment){
+    console.log(appointment);
+  }
   if (state == 2) {
     return (
       <div className='container-fluid'>
@@ -63,34 +75,43 @@ const ReservationPage = () => {
             <div className='bg-danger border bg-light'>
               <h5 className='mt-3'>Pasadas</h5>
               <hr className='ms-2 me-2' />
-              <div className='container-fluid p-3'>
-                <div className='container-fluid border-top border-start border-end bg-primary rounded-top img2' style={{ background: `linear-gradient(rgba( 0, 0, 0, 0.5), rgba( 0, 0, 0, 0.5)), url(${cocinero})`, backgroundRepeat: "no-repeat", backgroundSize: "cover", backgroundPosition: "center center", opacity: "1" }}>
-                </div>
-                <div className='container border-start border-bottom border-end bg-light rounded-bottom pb-2 pt-1'>
-                  <div className='row'>
-                    <div className='col-6'>
-                      <span className='text-secondary fw-bold'>Fecha: 05/12/2022</span>
+              {appointmentPast.length > 0 ?
+                appointmentPast.map(appointment => (
+                  <div key={appointment.id} className='container-fluid p-3 hover' onClick={() => showAlertStatus(appointment)}>
+                    <div className='container-fluid border-top border-start border-end bg-primary rounded-top img2' style={{ background: `linear-gradient(rgba( 0, 0, 0, 0.5), rgba( 0, 0, 0, 0.5)), url(${appointment.serviceImageUrl})`, backgroundRepeat: "no-repeat", backgroundSize: "cover", backgroundPosition: "center center", opacity: "1" }}>
                     </div>
-                    <div className='col-6 justify-content-end align-items-end d-flex'>
-                      <span className='badge bg-success'>Completado</span>
+                    <div className='container border-start border-bottom border-end bg-light rounded-bottom pb-2 pt-1'>
+                      <div className='row'>
+                        <div className='col-6'>
+                          <span className='text-secondary fw-bold'>{moment(appointment.dateStart.seconds * 1000).format("LLL")}</span>
+                        </div>
+                        <div className='col-6 justify-content-end align-items-end d-flex'>
+                          {appointment.status == "Generado" ?
+                            <span className='badge bg-primary'>{appointment.status}</span>
+                            : ""
+                          }
+                          {appointment.status == "Recibido" ?
+                            <span className='badge bg-success'>{appointment.status}</span>
+                            : ""
+                          }
+                          {appointment.status == "Completado" ?
+                            <span className='badge bg-success'>{appointment.status}</span>
+                            : ""
+                          }
+                          {appointment.status == "Cancelado" ?
+                            <span className='badge bg-success'>{appointment.status}</span>
+                            : ""
+                          }
+                        </div>
+                      </div>
                     </div>
                   </div>
+                ))
+                :
+                <div className='container-fluid p-3'>
+                  <span>No hay información disponible</span>
                 </div>
-              </div>
-              <div className='container-fluid p-3'>
-                <div className='container-fluid border-top border-start border-end bg-primary rounded-top img2' style={{ background: `linear-gradient(rgba( 0, 0, 0, 0.5), rgba( 0, 0, 0, 0.5)), url(${cocinero})`, backgroundRepeat: "no-repeat", backgroundSize: "cover", backgroundPosition: "center center", opacity: "1" }}>
-                </div>
-                <div className='container border-start border-bottom border-end bg-light rounded-bottom pb-2 pt-1'>
-                  <div className='row'>
-                    <div className='col-6'>
-                      <span className='text-secondary fw-bold'>Fecha: 05/12/2022</span>
-                    </div>
-                    <div className='col-6 justify-content-end align-items-end d-flex'>
-                      <span className='badge bg-danger'>Cancelado</span>
-                    </div>
-                  </div>
-                </div>
-              </div>
+              }
             </div>
           </div>
           {/*Citas Actuales y Por venir */}
@@ -98,34 +119,43 @@ const ReservationPage = () => {
             <div className='bg-danger border bg-light'>
               <h5 className='mt-3'>Actuales y por Venir</h5>
               <hr className='ms-2 me-2' />
-              <div className='container-fluid p-3'>
-                <div className='container-fluid border-top border-start border-end bg-primary rounded-top img2' style={{ background: `linear-gradient(rgba( 0, 0, 0, 0.5), rgba( 0, 0, 0, 0.5)), url(${cocinero})`, backgroundRepeat: "no-repeat", backgroundSize: "cover", backgroundPosition: "center center", opacity: "1" }}>
-                </div>
-                <div className='container border-start border-bottom border-end bg-light rounded-bottom pb-2 pt-1'>
-                  <div className='row'>
-                    <div className='col-6'>
-                      <span className='text-secondary fw-bold'>Fecha: 07/12/2022</span>
+              {appointmentActual.length > 0 ?
+                appointmentActual.map(appointment => (
+                  <div key={appointment.id} className='container-fluid p-3 hover' onClick={() => showAlertStatus(appointment)}>
+                    <div className='container-fluid border-top border-start border-end bg-primary rounded-top img2' style={{ background: `linear-gradient(rgba( 0, 0, 0, 0.5), rgba( 0, 0, 0, 0.5)), url(${appointment.serviceImageUrl})`, backgroundRepeat: "no-repeat", backgroundSize: "cover", backgroundPosition: "center center", opacity: "1" }}>
                     </div>
-                    <div className='col-6 justify-content-end align-items-end d-flex'>
-                      <span className='badge bg-primary'>En proceso</span>
+                    <div className='container border-start border-bottom border-end bg-light rounded-bottom pb-2 pt-1'>
+                      <div className='row'>
+                        <div className='col-6'>
+                          <span className='text-secondary fw-bold'>{moment(appointment.dateStart.seconds * 1000).format("LLL")}</span>
+                        </div>
+                        <div className='col-6 justify-content-end align-items-end d-flex'>
+                          {appointment.status == "Generado" ?
+                            <span className='badge bg-primary'>{appointment.status}</span>
+                            : ""
+                          }
+                          {appointment.status == "Recibido" ?
+                            <span className='badge bg-success'>{appointment.status}</span>
+                            : ""
+                          }
+                          {appointment.status == "Completado" ?
+                            <span className='badge bg-success'>{appointment.status}</span>
+                            : ""
+                          }
+                          {appointment.status == "Cancelado" ?
+                            <span className='badge bg-success'>{appointment.status}</span>
+                            : ""
+                          }
+                        </div>
+                      </div>
                     </div>
                   </div>
+                ))
+                :
+                <div className='container-fluid p-3'>
+                  <span>No hay información disponible</span>
                 </div>
-              </div>
-              <div className='container-fluid p-3'>
-                <div className='container-fluid border-top border-start border-end bg-primary rounded-top img2' style={{ background: `linear-gradient(rgba( 0, 0, 0, 0.5), rgba( 0, 0, 0, 0.5)), url(${cocinero})`, backgroundRepeat: "no-repeat", backgroundSize: "cover", backgroundPosition: "center center", opacity: "1" }}>
-                </div>
-                <div className='container border-start border-bottom border-end bg-light rounded-bottom pb-2 pt-1'>
-                  <div className='row'>
-                    <div className='col-6'>
-                      <span className='text-secondary fw-bold'>Fecha: 08/12/2022</span>
-                    </div>
-                    <div className='col-6 justify-content-end align-items-end d-flex'>
-                      <span className='badge bg-warning'>Mañana</span>
-                    </div>
-                  </div>
-                </div>
-              </div>
+              }
             </div>
           </div>
           {/*Citas futuras*/}
@@ -133,20 +163,43 @@ const ReservationPage = () => {
             <div className='bg-danger border bg-light'>
               <h5 className='mt-3'>Futuras</h5>
               <hr className='ms-2 me-2' />
-              <div className='container-fluid p-3'>
-                <div className='container-fluid border-top border-start border-end bg-primary rounded-top img2' style={{ background: `linear-gradient(rgba( 0, 0, 0, 0.5), rgba( 0, 0, 0, 0.5)), url(${cocinero})`, backgroundRepeat: "no-repeat", backgroundSize: "cover", backgroundPosition: "center center", opacity: "1" }}>
-                </div>
-                <div className='container border-start border-bottom border-end bg-light rounded-bottom pb-2 pt-1'>
-                  <div className='row'>
-                    <div className='col-6'>
-                      <span className='text-secondary fw-bold'>Fecha: 15/12/2022</span>
+              {appointmentFuture.length > 0 ?
+                appointmentFuture.map(appointment => (
+                  <div key={appointment.id} className='container-fluid p-3 hover' onClick={() => showAlertStatus(appointment)}>
+                    <div className='container-fluid border-top border-start border-end bg-primary rounded-top img2' style={{ background: `linear-gradient(rgba( 0, 0, 0, 0.5), rgba( 0, 0, 0, 0.5)), url(${appointment.serviceImageUrl})`, backgroundRepeat: "no-repeat", backgroundSize: "cover", backgroundPosition: "center center", opacity: "1" }}>
                     </div>
-                    <div className='col-6 justify-content-end align-items-end d-flex'>
-                      <span className='badge bg-info'>Futura</span>
+                    <div className='container border-start border-bottom border-end bg-light rounded-bottom pb-2 pt-1'>
+                      <div className='row'>
+                        <div className='col-6'>
+                          <span className='text-secondary fw-bold'>{moment(appointment.dateStart.seconds * 1000).format("LLL")}</span>
+                        </div>
+                        <div className='col-6 justify-content-end align-items-end d-flex'>
+                          {appointment.status == "Generado" ?
+                            <span className='badge bg-primary'>{appointment.status}</span>
+                            : ""
+                          }
+                          {appointment.status == "Recibido" ?
+                            <span className='badge bg-success'>{appointment.status}</span>
+                            : ""
+                          }
+                          {appointment.status == "Completado" ?
+                            <span className='badge bg-success'>{appointment.status}</span>
+                            : ""
+                          }
+                          {appointment.status == "Cancelado" ?
+                            <span className='badge bg-success'>{appointment.status}</span>
+                            : ""
+                          }
+                        </div>
+                      </div>
                     </div>
                   </div>
+                ))
+                :
+                <div className='container-fluid p-3'>
+                  <span>No hay información disponible</span>
                 </div>
-              </div>
+              }
             </div>
           </div>
         </div>
