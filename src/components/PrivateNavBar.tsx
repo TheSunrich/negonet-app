@@ -183,8 +183,8 @@ const PrivateNavBar = ({ children }) => {
                                     <strong className='ms-2'>{user.firstName}</strong>
                                 </a>
                                 <ul className="dropdown-menu text-small shadow">
-                                    <li><a className="dropdown-item" href="#">Contáctanos</a></li>
-                                    <li><a className="dropdown-item" href="#">Aviso de Privacidad</a></li>
+                                    <li><a className="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#contactoModal">Contáctanos</a></li>
+                                    <li><a className="dropdown-item"  href="https://drive.google.com/file/d/1mH58_uNMNAd1tcXJ2As2fRj51y0QC1kl/view?usp=share_link" target="_blank">Aviso de Privacidad</a></li>
                                     <li><hr className="dropdown-divider" /></li>
                                     <li><a className="dropdown-item" href="#" onClick={logOut}>Cerrar Sesión</a></li>
                                 </ul>
