@@ -15,7 +15,8 @@ export interface Appointment{
     cardData?: CardData;
     age ?: number;
     information ?: string;
-
+    isCanceled?: boolean;
+    status?: string;
 }
 
 export interface AddressService{

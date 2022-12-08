@@ -60,7 +60,7 @@ const MainPage = () => {
     }
   }
   async function handleUserLoggedIn(u) {
-    const s = await getServices(userData);
+    const s = await getServices(u);
     setService(s)
     setSate(2);
   }
@@ -175,7 +175,7 @@ const MainPage = () => {
             return 4;
           case "Viernes":
             return 5;
-          case "Sabado":
+          case "Sábado":
             return 6;
           case "Domingo":
             return 0;
@@ -186,7 +186,6 @@ const MainPage = () => {
       let today = new Date();
 
       const day = days.getDay();
-
       return daysAvailables.includes(day)
 
   }
@@ -223,6 +222,8 @@ const MainPage = () => {
       cardData: userInformation.cardData,
       age: userInformation.age,
       information: userInformation.information,
+      isCanceled: false,
+      status: "Generado"
     }
     data.paymentType == "tarjeta" ? data.cardData = userInformation.cardData : data.cardData = null;
 

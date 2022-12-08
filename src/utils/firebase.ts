@@ -104,18 +104,17 @@ export async function getSpecialty(categoryId) {
 
 /* Obtener todos los servicios para mostrarlos */
 export async function getServices(user) {
-    console.log("Traemos a este cabron",user);
-    const categories = [];
+    const service = [];
     const docsRef = collection(db, 'service');
-    const q = query(docsRef, where('isActive', "==", true));
+    const q = query(docsRef, where('isActive', "==", true), where('userId', "!=", user.uid));
     const querySnapshot = await getDocs(q);
     querySnapshot.forEach((doc) => {
-        categories.push({
+        service.push({
             id: doc.id,
             ...doc.data()
         });
     });
-    return categories;
+    return service;
 }
 
 export async function getServiceByUser(uid) {
@@ -217,3 +216,20 @@ export async function addAppointment(appointment) {
 
 }
     
+
+
+/* obtener appointments */
+
+export async function getAppointmentAll(uid){
+    const appointment = [];
+    const docsRef = collection(db, 'appointment');
+    const q = query(docsRef, where('isCanceled', '==', false), where('userId', "!=", uid));
+    const querySnapshot = await getDocs(q);
+    querySnapshot.forEach((doc) => {
+        appointment.push({
+            id: doc.id,
+            ...doc.data()
+        });
+    });
+    return appointment;
+}
