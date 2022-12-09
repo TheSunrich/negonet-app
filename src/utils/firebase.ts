@@ -241,7 +241,7 @@ export async function getAppointmentActual(uid){
     let tomorrow2 = new Date(date.getFullYear(), date.getMonth(), date.getDate() + 2);
     const appointment = [];
     const docsRef = collection(db, 'appointment');
-    const q = query(docsRef, where('isCanceled', '==', false), where('userClientId', "==", uid), where('dateStart', ">=", today), where('dateStart', "<", tomorrow2));
+    const q = query(docsRef, where('userClientId', "==", uid), where('dateStart', ">=", today), where('dateStart', "<", tomorrow2));
     const querySnapshot = await getDocs(q);
     querySnapshot.forEach((doc) => {
         appointment.push({
@@ -273,7 +273,7 @@ export async function getAppointmentPast(uid){
     let tomorrow2 = new Date(date.getFullYear(), date.getMonth(), date.getDate() + 2);
     const appointment = [];
     const docsRef = collection(db, 'appointment');
-    const q = query(docsRef, where('isCanceled', '==', false), where('userClientId', "==", uid), where('dateStart', "<", today));
+    const q = query(docsRef, where('userClientId', "==", uid), where('dateStart', "<", today));
     const querySnapshot = await getDocs(q);
     querySnapshot.forEach((doc) => {
         appointment.push({
@@ -286,7 +286,7 @@ export async function getAppointmentPast(uid){
 export async function getAppointmentCompleteProvider(uid){
     let date = new Date();
     let today = new Date(date.getFullYear(), date.getMonth(), date.getDate());
-    let tomorrow2 = new Date(date.getFullYear(), date.getMonth(), date.getDate() + 2);
+    let tomorrow2 = new Date(date.getFullYear(), date.getMonth(), date.getDate() + 1);
     const appointment = [];
     const docsRef = collection(db, 'appointment');
     const q = query(docsRef, where('isCanceled', '==', false), where('userProviderId', "==", uid));
@@ -308,7 +308,7 @@ export async function getAppointmentFuture(uid){
     let tomorrow2 = new Date(date.getFullYear(), date.getMonth(), date.getDate() + 2);
     const appointment = [];
     const docsRef = collection(db, 'appointment');
-    const q = query(docsRef, where('isCanceled', '==', false), where('userClientId', "==", uid), where('dateStart', ">=", tomorrow2));
+    const q = query(docsRef, where('userClientId', "==", uid), where('dateStart', ">=", tomorrow2));
     const querySnapshot = await getDocs(q);
     querySnapshot.forEach((doc) => {
         appointment.push({
@@ -321,7 +321,7 @@ export async function getAppointmentFuture(uid){
 export async function getAppointmentFutureProvider(uid){
     let date = new Date();
     let today = new Date(date.getFullYear(), date.getMonth(), date.getDate());
-    let tomorrow2 = new Date(date.getFullYear(), date.getMonth(), date.getDate() + 2);
+    let tomorrow2 = new Date(date.getFullYear(), date.getMonth(), date.getDate() + 1);
     const appointment = [];
     const docsRef = collection(db, 'appointment');
     const q = query(docsRef, where('isCanceled', '==', false), where('userProviderId', "==", uid), where('dateStart', ">=", tomorrow2));
@@ -341,7 +341,7 @@ export async function getAppointmentFutureProvider(uid){
 export async function getAppointmentCancelProvider(uid){
     let date = new Date();
     let today = new Date(date.getFullYear(), date.getMonth(), date.getDate());
-    let tomorrow2 = new Date(date.getFullYear(), date.getMonth(), date.getDate() + 2);
+    let tomorrow2 = new Date(date.getFullYear(), date.getMonth(), date.getDate() + 1);
     const appointment = [];
     const docsRef = collection(db, 'appointment');
     const q = query(docsRef, where('isCanceled', '==', true), where('userProviderId', "==", uid));

@@ -7,7 +7,7 @@ import { GoogleAuthProvider, onAuthStateChanged, signInWithEmailAndPassword, sig
 import { useNavigate } from 'react-router-dom';
 import AuthProvider from '../components/AuthProvider';
 import Loading from '../components/Loading';
-
+import Swal from 'sweetalert2';
 function Login() {
     /*
     0: inicializado
@@ -49,7 +49,7 @@ function Login() {
 
             setCurrentSate(5);
         }else{
-            console.log("No existe el usuario");
+            Swal.fire({title:"Error", text:"Usuario o contraseña incorrectos", icon:"error"})
         }
     }
     const navigate = useNavigate();
