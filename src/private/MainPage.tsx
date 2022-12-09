@@ -447,7 +447,7 @@ const MainPage = () => {
                             </div>
                             <div className='col-12 mt-1 text-secondary text-center'>
                               <Button className='btn btn-sm btn-gradient' onClick={() => handleAgendarCita(element)}>
-                                Launch demo modal
+                                Generar Cita
                               </Button>
                             </div>
                           </div>

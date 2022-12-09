@@ -7,7 +7,7 @@ import Loading from '../components/Loading';
 import moment from 'moment';
 import Swal from 'sweetalert2';
 import { useEffect, useState } from 'react';
-import { auth, getUser, getAppointmentPast, getAppointmentActual, cancelAppointment, getAppointmentFuture, getAppointmentActualProvider, getAppointmentFutureProvider, getAppointmentPastProvider, getAppointmentCancelProvider, getAppointmentCompleteProvider } from '../utils/firebase';
+import { auth, getUser, getAppointmentPast, getAppointmentActual, cancelAppointment, getAppointmentFuture, getAppointmentActualProvider, getAppointmentFutureProvider, getAppointmentCancelProvider, getAppointmentCompleteProvider } from '../utils/firebase';
 import { onAuthStateChanged } from 'firebase/auth';
 
 const AppointmentPage = () => {
